@@ -1,4 +1,10 @@
 /**
+ * `APP_URL` stores the endpoint of Google App Script
+ */
+const APP_URL =
+  "https://script.google.com/macros/s/AKfycbwBdzSzb9o6OBd2MLcWr2URp_3D2EKcsI7o6WwLpn4I-gVNQyhYxNbhZGVDShPY29L-6Q/exec";
+
+/**
  * `timeline` stores the steps of the experiment
  */
 const timeline = [];
@@ -45,7 +51,7 @@ const mmm_sSurvey = {
     "<h3>媒體使用習慣問卷</h3><p>以下問題旨在了解您同時使用不同媒體的頻率。</p>",
   data: { task: "mmm_s_survey" },
 };
-// timeline.push(mmm_sSurvey);
+timeline.push(mmm_sSurvey);
 
 // Polychronic–Monochronic Tendency Scale (PMTS)
 const pmtsScale = ["非常不同意", "不同意", "普通", "同意", "非常同意"];
@@ -109,30 +115,6 @@ const interBlockQuestions = [
   {
     prompt: "我偏好同時進行兩件或更多活動。",
     name: "INTER_1",
-    labels: pmtsScale,
-    required: true,
-  },
-  {
-    prompt: "我通常會同時進行兩件或更多活動。",
-    name: "INTER_2",
-    labels: pmtsScale,
-    required: true,
-  },
-  {
-    prompt: "同時做兩件以上的事是我運用時間最有效率的方式。",
-    name: "INTER_3",
-    labels: pmtsScale,
-    required: true,
-  },
-  {
-    prompt: "對於同時做一件以上的事情，我感到很自在。",
-    name: "PMTS_4",
-    labels: pmtsScale,
-    required: true,
-  },
-  {
-    prompt: "我喜歡同時處理兩件或更多活動。",
-    name: "PMTS_5",
     labels: pmtsScale,
     required: true,
   },
@@ -388,7 +370,7 @@ const trialsLow = [
     Trial: 30,
     CorrectAnswer: "n",
   },
-].slice(0, 10);
+].slice(0, 5);
 const trialsMed = [
   {
     Subject: "Online shopping deal",
@@ -634,7 +616,7 @@ const trialsMed = [
     Trial: 30,
     CorrectAnswer: "w",
   },
-].slice(0, 10);
+].slice(0, 5);
 const trialsHigh = [
   {
     Subject: "System update",
@@ -885,7 +867,7 @@ const trialsHigh = [
     Trial: 30,
     CorrectAnswer: "w",
   },
-].slice(0, 10);
+].slice(0, 5);
 function shuffle(array) {
   let currentIndex = array.length;
 
@@ -969,9 +951,31 @@ timeline.push(
 const jsPsych = initJsPsych({
   show_progress_bar: true,
   on_finish: () => {
-    document.body.innerText = JSON.stringify({
-      experimentData: jsPsych.data.get().json(),
+    const experimentResult = jsPsych.data.get().json();
+    const data = JSON.parse(experimentResult);
+
+    const dataToSave = {
+      experimentData: JSON.stringify(
+        data.map((e) => {
+          delete e.stimulus;
+          delete e.plugin_version;
+          return e;
+        }),
+      ),
       videoEvents: videoEvents,
+    };
+    const prolificId = jsPsych.data.getURLVariable("PROLIFIC_PID") || "unknown";
+
+    fetch(APP_URL, {
+      method: "POST",
+      mode: "no-cors",
+      body: JSON.stringify({
+        prolific_id: prolificId,
+        data: dataToSave,
+      }),
+    }).then((response) => {
+      // window.location.href = "about:blank";
+      // "https://app.prolific.com/submissions/complete?cc=你的完成碼";
     });
   },
 });
