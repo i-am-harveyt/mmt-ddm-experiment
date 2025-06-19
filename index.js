@@ -1,8 +1,8 @@
 /**
  * `APP_URL` stores the endpoint of Google App Script
  */
-const APP_URL =
-  "https://script.google.com/macros/s/AKfycbwBdzSzb9o6OBd2MLcWr2URp_3D2EKcsI7o6WwLpn4I-gVNQyhYxNbhZGVDShPY29L-6Q/exec";
+const APP_URL = "http://localhost:8080";
+// "https://script.google.com/macros/s/AKfycbwBdzSzb9o6OBd2MLcWr2URp_3D2EKcsI7o6WwLpn4I-gVNQyhYxNbhZGVDShPY29L-6Q/exec";
 
 /**
  * `timeline` stores the steps of the experiment
@@ -13,10 +13,10 @@ const timeline = [];
  * Experiment Settings
  */
 const params = {
-  trialsPerBlock: 10,
+  trialsPerBlock: 20,
   popupFreq: { low: 2, med: 5, high: 8 },
-  trialDuration: 10_000,
-  popupDuration: 3_000,
+  trialDuration: 15000,
+  popupDuration: 3000,
 };
 
 // --- 1. Questionnaires ---
@@ -51,7 +51,7 @@ const mmm_sSurvey = {
     "<h3>媒體使用習慣問卷</h3><p>以下問題旨在了解您同時使用不同媒體的頻率。</p>",
   data: { task: "mmm_s_survey" },
 };
-timeline.push(mmm_sSurvey);
+// timeline.push(mmm_sSurvey);
 
 // Polychronic–Monochronic Tendency Scale (PMTS)
 const pmtsScale = ["非常不同意", "不同意", "普通", "同意", "非常同意"];
@@ -99,13 +99,14 @@ const pmtsSurvey = {
 const instructions = {
   type: jsPsychInstructions,
   pages: [
-    "<h2>實驗說明</h2><p>歡迎參與本次實驗。</p><p>接下來，您的任務是同時進行兩項工作。</p><p><b>主要任務：</b>您會在畫面左側看到一系列的電子郵件，請您盡快且正確地判斷每封郵件是「工作相關」還是「非工作相關」。</p><p>請按 <b>w 鍵</b> 代表「工作相關」，按 <b>n 鍵</b> 代表「非工作相關」。</p>",
-    "<b>次要任務：</b>在進行郵件分類的同時，畫面右側會播放一部影片。請您盡量觀看並理解影片內容，實驗結束後會有相關問題。</p><p>您可以隨時點擊影片下方的「<b>暫停/播放</b>」按鈕來控制影片。這個操作完全由您自己決定。</p>",
-    "實驗過程中，畫面可能會隨機出現一些干擾訊息。請您盡力完成您的主要任務。</p><p>準備好後，請按「繼續」開始。",
+    "<h2>實驗說明</h2><p>歡迎參與本次實驗。</p><p>接下來，您的任務是同時進行兩項工作。</p>",
+    "<p><b>主要任務：</b>您會在畫面左側看到一系列的電子郵件，請您盡快且正確地判斷每封郵件是「工作相關」還是「非工作相關」。</p><p>請按 <b>w 鍵</b> 代表「工作相關」，按 <b>n 鍵</b> 代表「非工作相關」。</p>",
+    "<p><b>次要任務：</b>在進行郵件分類的同時，畫面左側有一個訊息欄，你可以透過這個欄位迅速的處理客戶訊息。</p><p>我們將會紀錄您處理的比率，並且為您顯示在螢幕上。</p>",
+    "<p>實驗過程中，畫面可能會隨機出現一些干擾訊息。請您盡力完成您的主要任務。</p><p>準備好後請按 \"Next\" 開始。",
   ],
   show_clickable_nav: true,
-  button_label_next: "繼續",
-  button_label_previous: "返回",
+  button_label_next: "Next",
+  button_label_previous: "Previous",
 };
 timeline.push(instructions);
 
@@ -126,12 +127,167 @@ const interBlockSurvey = {
   data: { task: "pmts_survey" },
 };
 
-// --- 4. Primary Task ---
+// --- 4. Secondary Task ---
+function renderContactPanel() { }
+
+const RESPONSE_BEHAVIOR = [
+  "收到，我們將立刻為您查詢",
+  "請提供你的訂單編號",
+  "該問題已經轉交技術部門，我們會盡快回覆您",
+];
+/**
+ * Renders only the chat history and reply area for a given contact.
+ * @param {Object} history - The chat history object.
+ * @param {string} contactName - The name of the contact whose chat to display.
+ */
+function renderChatDisplay(history, contactName) {
+  const messages = history[contactName] || [];
+  return `
+    <div id="chat-history" style='
+      flex-grow: 1;
+      height: 100%;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 10px;
+      overflow-y: auto;
+      margin-bottom: 10px;
+      max-height: 200px; /* Or adjust as needed */
+    '>
+      ${messages
+      .map(
+        (m) => `
+          <p style="margin: 6px 0;">
+            <strong>${m.sender === 'User' ? 'You' : m.sender}<br/></strong> ${m.text}
+          </p>
+          `
+      )
+      .join("")}
+    </div>
+
+    <!-- 回覆區塊 -->
+    <div>
+      <div style="display: flex; gap: 8px; margin-bottom: 5px;">
+        <input
+          type="text"
+          id="chat-input"
+          name="chat-input"
+          placeholder="Select a template or type..."
+          readonly
+          tabindex="-1"
+          onmousedown="event.preventDefault()"
+          style="
+          flex: 1;
+          padding: 8px;
+          font-size: 14px;
+          border: 1px solid #bbb;
+          border-radius: 4px;"
+        />
+        <button
+          id="chat-send"
+          style="
+          padding: 8px 14px;
+          font-size: 14px;
+          background-color: #007bff;
+          color: white;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;"
+        >
+          Send
+        </button>
+      </div>
+      <!-- 模板訊息選單 -->
+      <div id="chat-templates" style="display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 5px;">
+        ${RESPONSE_BEHAVIOR.map(
+        (template) => `
+          <button
+            class="chat-template-btn"
+            style="
+              padding: 5px 10px;
+              font-size: 12px;
+              background-color: #e9ecef;
+              border: 1px solid #ced4da;
+              border-radius: 4px;
+              cursor: pointer;
+            "
+            onclick="document.getElementById('chat-input').value = '${template}'"
+          >
+            ${template}
+          </button>
+        `
+      ).join("")}
+      </div>
+    </div>
+  `;
+}
+
+/**
+ * @param {Object} history
+ */
+function renderMessagingPanel(history, currentContactName) {
+  return `
+	  <div id="messaging-panel-container" style='
+		background-color: #f7f7f7;
+		border-right: 1px solid #ddd;
+		display: flex;
+		padding: 10px;
+		gap: 20px;
+	  '>
+		<div
+			id="contacts"
+			style="
+			padding: 15px;
+			background-color: #ffffff;
+			border-radius: 8px;
+			box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+			display: flex;
+			flex-direction: column;
+			gap: 12px;
+			"
+		>
+			${Object.keys(history).map((k) => {
+    return `
+					<div
+						id="contact-${k}"
+						style="
+						justify-content: center;
+						text-align: center;
+						border: 2px solid #e0e0e0;
+						border-radius: 50%;
+						width: 40px;
+						height: 40px;
+						padding: 2px;
+						background-color: #f8f9fa;
+						transition: all 0.2s ease;
+						cursor: pointer;
+						display: flex;
+						align-items: center;
+						justify-content: center;
+						"
+						onclick="switchChatView('${k}')"
+						onmouseover="this.style.backgroundColor= (currentContact === '${k}' ? '#d0eaff' : '#e9ecef');"
+						onmouseout="updateContactHighlights();"
+					>
+						${k.toUpperCase()[0]}
+					</div>
+					`;
+  }).join("")}
+		</div>
+		<!-- Chat display area (history and reply box) -->
+		<div id="chat-display-area" style="flex: 1; display: flex; flex-direction: column; padding: 10px; min-width: 300px;">
+			${renderChatDisplay(history, currentContactName)}
+		</div>
+	  </div>
+`;
+}
+
+// --- 5. Primary Task ---
 // Task Settings
 const trialsLow = [
   {
     Subject: "Birthday reminder",
-    Body: "Don’t forget our movie night this Saturday! Snacks on me.",
+    Body: "Don't forget our movie night this Saturday! Snacks on me.",
     Type: "Non-work-related",
     Block: 1,
     Trial: 1,
@@ -227,7 +383,7 @@ const trialsLow = [
   },
   {
     Subject: "Pet photos",
-    Body: "Reminder: Mom’s birthday dinner is at 7 PM tonight.",
+    Body: "Reminder: Mom's birthday dinner is at 7 PM tonight.",
     Type: "Non-work-related",
     Block: 1,
     Trial: 13,
@@ -235,7 +391,7 @@ const trialsLow = [
   },
   {
     Subject: "Vacation memories",
-    Body: "Don’t forget our movie night this Saturday! Snacks on me.",
+    Body: "Don't forget our movie night this Saturday! Snacks on me.",
     Type: "Non-work-related",
     Block: 1,
     Trial: 14,
@@ -332,7 +488,7 @@ const trialsLow = [
   },
   {
     Subject: "Game night",
-    Body: "Reminder: Mom’s birthday dinner is at 7 PM tonight.",
+    Body: "Reminder: Mom's birthday dinner is at 7 PM tonight.",
     Type: "Non-work-related",
     Block: 1,
     Trial: 26,
@@ -370,7 +526,7 @@ const trialsLow = [
     Trial: 30,
     CorrectAnswer: "n",
   },
-].slice(0, 5);
+].slice(0, params.trialsPerBlock);
 const trialsMed = [
   {
     Subject: "Online shopping deal",
@@ -561,7 +717,7 @@ const trialsMed = [
   },
   {
     Subject: "Pet photos",
-    Body: "Don’t forget our movie night this Saturday! Snacks on me.",
+    Body: "Don't forget our movie night this Saturday! Snacks on me.",
     Type: "Non-work-related",
     Block: 2,
     Trial: 24,
@@ -616,7 +772,7 @@ const trialsMed = [
     Trial: 30,
     CorrectAnswer: "w",
   },
-].slice(0, 5);
+].slice(0, params.trialsPerBlock);
 const trialsHigh = [
   {
     Subject: "System update",
@@ -744,7 +900,7 @@ const trialsHigh = [
   },
   {
     Subject: "Birthday reminder",
-    Body: "Don’t forget our movie night this Saturday! Snacks on me.",
+    Body: "Don't forget our movie night this Saturday! Snacks on me.",
     Type: "Non-work-related",
     Interruption: true,
     Block: 3,
@@ -844,7 +1000,7 @@ const trialsHigh = [
   },
   {
     Subject: "Netflix show",
-    Body: "Reminder: Mom’s birthday dinner is at 7 PM tonight.",
+    Body: "Reminder: Mom's birthday dinner is at 7 PM tonight.",
     Type: "Non-work-related",
     Interruption: true,
     Block: 3,
@@ -853,7 +1009,7 @@ const trialsHigh = [
   },
   {
     Subject: "Online shopping deal",
-    Body: "Reminder: Mom’s birthday dinner is at 7 PM tonight.",
+    Body: "Reminder: Mom's birthday dinner is at 7 PM tonight.",
     Type: "Non-work-related",
     Block: 3,
     Trial: 29,
@@ -867,7 +1023,7 @@ const trialsHigh = [
     Trial: 30,
     CorrectAnswer: "w",
   },
-].slice(0, 5);
+].slice(0, params.trialsPerBlock);
 function shuffle(array) {
   let currentIndex = array.length;
 
@@ -884,13 +1040,91 @@ function shuffle(array) {
     ];
   }
 }
-const POPUP_MESSAGES = [
-  "Limited Offer! Get 50% off now!",
-  "Your subscription is expiring!",
-  "Unlock premium features today!",
-  "Flash Sale: 70% OFF!",
-  "Security alert: Update now!",
-];
+const POPUP_MESSAGES = [];
+
+let chatHistory = {
+  Alice: [
+    { sender: "Alice", text: "我已經把文件上傳到共用資料夾了。" },
+    { sender: "Alice", text: "請問您現在有空嗎？我想請教一個問題。" },
+  ],
+  Bob: [
+    { sender: "Bob", text: "我需要那個報告，可以今天給我嗎？" },
+    { sender: "Bob", text: "帳單什麼時候需要付款？" },
+  ],
+  Charles: [
+    { sender: "Charles", text: "上次會議的記錄在哪裡可以找到？" },
+  ],
+  David: [
+    { sender: "David", text: "這個功能好像有點問題，能幫我看看嗎？" },
+    { sender: "David", text: "我對新的政策有些疑問。" },
+  ],
+  Eve: [
+    { sender: "Eve", text: "請問產品的詳細規格是什麼？" },
+  ],
+  Frank: [
+    { sender: "Frank", text: "我想要預約下週二的諮詢。" },
+    { sender: "Frank", text: "謝謝你的協助！" },
+  ],
+  Grace: [
+    { sender: "Grace", text: "我的訂單狀態是什麼？" },
+  ],
+  Henry: [
+    { sender: "Henry", text: "可以提供一下你們的聯絡方式嗎？" },
+    { sender: "Henry", text: "這個問題我之前問過了，還沒解決。" },
+  ],
+  Ivy: [
+    { sender: "Ivy", text: "我需要更改我的帳戶資訊。" },
+  ],
+  Jack: [
+    { sender: "Jack", text: "請問這個服務的費用是多少？" },
+    { sender: "Jack", text: "我找不到相關的說明文件。" },
+  ],
+};
+// Initialize currentContact to the first contact in chatHistory or a default
+let currentContact = Object.keys(chatHistory)[0] || "Alice";
+function renderEmailTask(trial) {
+  return `
+		<div style='
+			flex: 2;
+			padding: 40px;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			background-color: #fff;
+			position: relative; /* To position the countdown timer */'
+		>
+			<div id="countdown-timer" style="
+        position: absolute; top: 15px; right: 20px;
+        font-size: 1.1em; color: #555; background-color: #f0f0f0;
+        padding: 5px 10px; border-radius: 5px;"></div>
+			<h2 style='margin: 0 0 20px;'>${trial.Subject}</h2>
+			<p style='font-size: 16px; margin-bottom: 30px;'>${trial.Body}</p>
+			<p style='font-weight: bold;'>Press 'w' for Work-related, 'n' for Non-work</p>
+		</div>
+	`;
+}
+function buildStimulus(trial, history, currentContactName, popup) {
+  return `
+	<div style='
+		position: relative;
+		width: 80dvw; height: 80dvh;
+		display: flex;
+		border: 1px solid #ccc;
+		font-family: sans-serif;
+		box-shadow: 0 0 10px rgba(0,0,0,0.1);
+	'>
+		<!-- Popup -->
+		${popup}
+
+		<!-- Chat Panel -->
+		${renderMessagingPanel(history, currentContactName)}
+
+		<!-- Email Task Panel -->
+		${renderEmailTask(trial)}
+	</div>
+	`;
+}
 const trialBlocks = createPrimaryTasks().map((block) => {
   return block.map((trial) => {
     const popup = trial.Interruption
@@ -912,24 +1146,47 @@ const trialBlocks = createPrimaryTasks().map((block) => {
       : "";
     return {
       type: jsPsychHtmlKeyboardResponse,
-      stimulus: `
-		<div style='position:relative;'>
-			${popup}
-			<div style='background:white; padding:20px;'>
-				<h2>${trial.Subject}</h2>
-				<p>${trial.Body}</p>
-				<p><strong>Press 'w' for Work-related, 'n' for Non-work</strong></p>
-			</div>
-		</div>`,
+      stimulus: buildStimulus(trial, chatHistory, currentContact, popup),
       choices: ["w", "n"],
+      trial_duration: params.trialDuration,
       data: {
         block: trial.Block,
         trialIndex: trial.Trial,
+        timestamp: (new Date()).toISOString(),
       },
-      on_finish: (data) => {
+      on_load: function () {
+        // Initialize chat panel listeners and view
+        addChatInputListeners();
+        updateContactHighlights();
+        scrollToChatBottom();
+
+        // Countdown timer logic
+        const timerElement = document.getElementById('countdown-timer');
+        let timeLeft = Math.floor(params.trialDuration / 1000);
+
+        if (timerElement) {
+          timerElement.innerText = `Time: ${timeLeft}s`;
+        }
+
+        // Store intervalId on the trial object to clear it in on_finish
+        this.countdownIntervalId = setInterval(() => {
+          timeLeft--;
+          if (timerElement) {
+            timerElement.textContent = `Time: ${Math.max(0, timeLeft)}s`;
+          }
+          if (timeLeft <= 0) {
+            clearInterval(this.countdownIntervalId);
+          }
+        }, 1000);
+      },
+      on_finish: function (data) {
+        // Clear the interval when the trial finishes
+        if (this.countdownIntervalId) {
+          clearInterval(this.countdownIntervalId);
+        }
+        // 'trial' here is from the closure of the .map(trial => ...)
         data.correct = data.response === trial.CorrectAnswer;
-      },
-      trial_duration: params.trialDuration,
+      }
     };
   });
 });
@@ -938,6 +1195,90 @@ function createPrimaryTasks() {
   shuffle(arr);
   return arr;
 }
+
+/**
+ * `chatMessageLog` stores the log of chat messages sent by the participant.
+ */
+const chatMessageLog = [];
+
+function scrollToChatBottom() {
+  const chatHistoryDiv = document.getElementById('chat-history');
+  if (chatHistoryDiv) {
+    chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight;
+  }
+}
+
+function handleSendMessage() {
+  const chatInput = document.getElementById('chat-input');
+  const messageText = chatInput.value.trim();
+
+  if (messageText && currentContact && chatHistory[currentContact]) {
+    chatHistory[currentContact].push({ sender: 'User', text: messageText });
+
+    const chatDisplayArea = document.getElementById("chat-display-area");
+    if (chatDisplayArea) {
+      chatDisplayArea.innerHTML = renderChatDisplay(chatHistory, currentContact);
+      addChatInputListeners(); // Re-attach listeners
+      scrollToChatBottom();
+    }
+    chatInput.value = ''; // Clear input
+
+    const currentTrial = jsPsych.getCurrentTrial();
+    const trialData = currentTrial ? currentTrial.data : { block: undefined, trialIndex: undefined };
+    const globalTrialIndex = jsPsych.getProgress().current_trial_global_idx;
+
+    chatMessageLog.push({
+      blockType: trialData.block,        // 主要任務的區塊類型
+      trialIndex: trialData.trialIndex,  // 主要任務的試驗編號
+      globalTrialIndex: globalTrialIndex,  // 全域試驗索引，用於精確映射
+      repliedContact: currentContact,    // 回覆的聯絡人
+      replyContent: messageText,         // 回覆的內容
+      replyTimeStamp: (new Date()).toISOString(), // 回覆的時間戳
+    });
+  }
+}
+function addChatInputListeners() {
+  const chatInput = document.getElementById('chat-input');
+  if (chatInput) {
+    chatInput.addEventListener('keydown', (event) => {
+      event.stopPropagation(); // Prevent jsPsych from capturing keydown
+    });
+    // onmousedown is handled inline
+  }
+
+  const sendButton = document.getElementById('chat-send');
+  if (sendButton) {
+    sendButton.removeEventListener('click', handleSendMessage); // Remove old listener if any
+    sendButton.addEventListener('click', handleSendMessage);
+  }
+}
+
+function updateContactHighlights() {
+  Object.keys(chatHistory).forEach(contactKey => {
+    const contactDiv = document.getElementById(`contact-${contactKey}`);
+    if (contactDiv) {
+      if (contactKey === currentContact) {
+        contactDiv.style.borderColor = '#007bff';
+        contactDiv.style.backgroundColor = '#e9ecef'; // Active background
+      } else {
+        contactDiv.style.borderColor = '#e0e0e0';
+        contactDiv.style.backgroundColor = '#f8f9fa'; // Default background
+      }
+    }
+  });
+}
+
+function switchChatView(contactName) {
+  currentContact = contactName;
+  const chatDisplayArea = document.getElementById("chat-display-area");
+  if (chatDisplayArea) {
+    chatDisplayArea.innerHTML = renderChatDisplay(chatHistory, currentContact);
+    addChatInputListeners();
+  }
+  updateContactHighlights();
+  scrollToChatBottom();
+}
+
 timeline.push(
   ...[
     trialBlocks[0],
@@ -949,6 +1290,7 @@ timeline.push(
 );
 
 const jsPsych = initJsPsych({
+  default_iti: 1000,
   show_progress_bar: true,
   on_finish: () => {
     const experimentResult = jsPsych.data.get().json();
@@ -962,8 +1304,9 @@ const jsPsych = initJsPsych({
           return e;
         }),
       ),
-      videoEvents: videoEvents,
+      chatLog: JSON.stringify(chatMessageLog), // 新增聊天日誌
     };
+    document.body.innerHTML = JSON.stringify(dataToSave);
     const prolificId = jsPsych.data.getURLVariable("PROLIFIC_PID") || "unknown";
 
     fetch(APP_URL, {
