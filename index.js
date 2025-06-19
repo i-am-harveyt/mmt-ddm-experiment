@@ -111,7 +111,6 @@ const instructions = {
 timeline.push(instructions);
 
 // --- 3. Inter-block Questionnaire
-const interBlockScale = ["非常不同意", "不同意", "普通", "同意", "非常同意"];
 const interBlockQuestions = [
   {
     prompt: "我偏好同時進行兩件或更多活動。",
@@ -128,8 +127,6 @@ const interBlockSurvey = {
 };
 
 // --- 4. Secondary Task ---
-function renderContactPanel() { }
-
 const RESPONSE_BEHAVIOR = [
   "收到，我們將立刻為您查詢",
   "請提供你的訂單編號",
@@ -137,150 +134,107 @@ const RESPONSE_BEHAVIOR = [
 ];
 /**
  * Renders only the chat history and reply area for a given contact.
- * @param {Object} history - The chat history object.
- * @param {string} contactName - The name of the contact whose chat to display.
+ * @param {Object} event - The customer event object to display.
  */
-function renderChatDisplay(history, contactName) {
-  const messages = history[contactName] || [];
+function renderCurrentEventDisplay(event) {
+  if (!event) {
+    return "<p style='padding: 10px; text-align: center;'>No pending customer messages.</p>";
+  }
   return `
-    <div id="chat-history" style='
-      flex-grow: 1;
-      height: 100%;
-      background-color: #fff;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      padding: 10px;
-      overflow-y: auto;
-      margin-bottom: 10px;
-      max-height: 200px; /* Or adjust as needed */
-    '>
-      ${messages
-      .map(
-        (m) => `
-          <p style="margin: 6px 0;">
-            <strong>${m.sender === 'User' ? 'You' : m.sender}<br/></strong> ${m.text}
-          </p>
-          `
-      )
-      .join("")}
-    </div>
-
-    <!-- 回覆區塊 -->
-    <div>
-      <div style="display: flex; gap: 8px; margin-bottom: 5px;">
-        <input
-          type="text"
-          id="chat-input"
-          name="chat-input"
-          placeholder="Select a template or type..."
-          readonly
-          tabindex="-1"
-          onmousedown="event.preventDefault()"
-          style="
-          flex: 1;
-          padding: 8px;
-          font-size: 14px;
-          border: 1px solid #bbb;
-          border-radius: 4px;"
-        />
-        <button
-          id="chat-send"
-          style="
-          padding: 8px 14px;
-          font-size: 14px;
-          background-color: #007bff;
-          color: white;
-          border: none;
-          border-radius: 4px;
-          cursor: pointer;"
-        >
-          Send
-        </button>
-      </div>
-      <!-- 模板訊息選單 -->
-      <div id="chat-templates" style="display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 5px;">
-        ${RESPONSE_BEHAVIOR.map(
-        (template) => `
-          <button
-            class="chat-template-btn"
-            style="
-              padding: 5px 10px;
-              font-size: 12px;
-              background-color: #e9ecef;
-              border: 1px solid #ced4da;
-              border-radius: 4px;
-              cursor: pointer;
-            "
-            onclick="document.getElementById('chat-input').value = '${template}'"
+    <div id="current-event-${event.id}" class="event-item" data-event-id="${event.id}" style="padding: 16px; background-color: #ffffff; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.08);">
+      <h4 style="margin-top: 0; margin-bottom: 8px; color: #343a40; font-size: 0.95em; font-weight: 600;">From: ${event.contactName}</h4>
+      <p style="margin-bottom: 18px; color: #495057; font-size: 0.9em; line-height: 1.5;">${event.text}</p>
+      <div class="response-options" style="display: flex; flex-direction: column; gap: 8px;">
+        ${RESPONSE_BEHAVIOR.map(response => `
+          <button 
+            class="response-btn" 
+            data-response="${response}"
           >
-            ${template}
+            ${response}
           </button>
-        `
-      ).join("")}
+        `).join('')}
       </div>
     </div>
   `;
 }
 
-/**
- * @param {Object} history
- */
-function renderMessagingPanel(history, currentContactName) {
+function renderMessagingPanel() {
+  // This function now primarily sets up the structure.
+  // The actual event and counts will be filled by updateMessagingPanelDisplay.
   return `
 	  <div id="messaging-panel-container" style='
-		background-color: #f7f7f7;
-		border-right: 1px solid #ddd;
+		background-color: #f8f9fa; /* Softer background */
+		border-right: 1px solid #e9ecef; /* Softer border */
 		display: flex;
-		padding: 10px;
+		flex-direction: column;
+		padding: 15px; /* Increased padding */
 		gap: 20px;
+        flex: 1; /* Allow it to take space */
+        min-width: 350px; /* Ensure minimum width */
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; /* Modern font stack */
 	  '>
-		<div
-			id="contacts"
-			style="
-			padding: 15px;
-			background-color: #ffffff;
-			border-radius: 8px;
-			box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-			display: flex;
-			flex-direction: column;
-			gap: 12px;
-			"
-		>
-			${Object.keys(history).map((k) => {
-    return `
-					<div
-						id="contact-${k}"
-						style="
-						justify-content: center;
-						text-align: center;
-						border: 2px solid #e0e0e0;
-						border-radius: 50%;
-						width: 40px;
-						height: 40px;
-						padding: 2px;
-						background-color: #f8f9fa;
-						transition: all 0.2s ease;
-						cursor: pointer;
-						display: flex;
-						align-items: center;
-						justify-content: center;
-						"
-						onclick="switchChatView('${k}')"
-						onmouseover="this.style.backgroundColor= (currentContact === '${k}' ? '#d0eaff' : '#e9ecef');"
-						onmouseout="updateContactHighlights();"
-					>
-						${k.toUpperCase()[0]}
-					</div>
-					`;
-  }).join("")}
+		<div id="event-display-area" style="flex-grow: 1; min-height: 200px;">
+			<!-- Current event will be rendered here by updateMessagingPanelDisplay -->
 		</div>
-		<!-- Chat display area (history and reply box) -->
-		<div id="chat-display-area" style="flex: 1; display: flex; flex-direction: column; padding: 10px; min-width: 300px;">
-			${renderChatDisplay(history, currentContactName)}
+		<div id="messaging-footer" style="padding: 12px 15px; border-top: 1px solid #dee2e6; font-size: 0.85em; color: #495057; background-color: #e9ecef; border-radius: 0 0 6px 6px;">
+			<p style="margin: 5px 0;">Pending Messages: <span id="pending-count">0</span></p>
+			<p style="margin: 5px 0;">Handled Messages: <span id="handled-count">0</span></p>
 		</div>
 	  </div>
 `;
 }
+
+function updateMessagingPanelDisplay() {
+  const currentPendingEvent = customerServiceEvents.find(event => event.status === 'pending');
+  const pendingCount = customerServiceEvents.filter(event => event.status === 'pending').length;
+  const handledCount = customerServiceEvents.filter(event => event.status === 'handled').length;
+
+  const eventDisplayArea = document.getElementById('event-display-area');
+  if (eventDisplayArea) {
+    eventDisplayArea.innerHTML = renderCurrentEventDisplay(currentPendingEvent);
+  }
+
+  const pendingCountEl = document.getElementById('pending-count');
+  const handledCountEl = document.getElementById('handled-count');
+  if (pendingCountEl) pendingCountEl.textContent = pendingCount;
+  if (handledCountEl) handledCountEl.textContent = handledCount;
+}
+
+function handleEventResponse(eventId, responseText) {
+  const eventIndex = customerServiceEvents.findIndex(e => e.id === eventId);
+  if (eventIndex === -1) return;
+
+  const event = customerServiceEvents[eventIndex];
+  event.status = 'handled';
+  event.chosenResponse = responseText;
+  event.handledTimestamp = new Date().toISOString();
+
+  const currentTrial = jsPsych.getCurrentTrial();
+  const trialData = currentTrial ? currentTrial.data : { block: undefined, trialIndex: undefined };
+  const globalTrialIndex = jsPsych.getProgress().current_trial_global_idx;
+
+  handledEventLog.push({
+    eventId: event.id,
+    contactName: event.contactName,
+    originalText: event.text,
+    response: responseText,
+    timestamp: event.handledTimestamp,
+    blockType: trialData.block,        // Primary task block type
+    trialIndex: trialData.trialIndex,  // Primary task trial index
+    globalTrialIndex: globalTrialIndex,  // Global trial index
+  });
+
+  const eventElement = document.getElementById(`current-event-${eventId}`);
+  if (eventElement) {
+    eventElement.classList.add('handled');
+    setTimeout(() => {
+      updateMessagingPanelDisplay(); // Re-render after fade out
+    }, 500); // Must match CSS transition duration
+  } else {
+    updateMessagingPanelDisplay(); // Fallback if element somehow not found
+  }
+}
+
 
 // --- 5. Primary Task ---
 // Task Settings
@@ -1040,48 +994,85 @@ function shuffle(array) {
     ];
   }
 }
-const POPUP_MESSAGES = [];
 
-let chatHistory = {
-  Alice: [
-    { sender: "Alice", text: "我已經把文件上傳到共用資料夾了。" },
-    { sender: "Alice", text: "請問您現在有空嗎？我想請教一個問題。" },
-  ],
-  Bob: [
-    { sender: "Bob", text: "我需要那個報告，可以今天給我嗎？" },
-    { sender: "Bob", text: "帳單什麼時候需要付款？" },
-  ],
-  Charles: [
-    { sender: "Charles", text: "上次會議的記錄在哪裡可以找到？" },
-  ],
-  David: [
-    { sender: "David", text: "這個功能好像有點問題，能幫我看看嗎？" },
-    { sender: "David", text: "我對新的政策有些疑問。" },
-  ],
-  Eve: [
-    { sender: "Eve", text: "請問產品的詳細規格是什麼？" },
-  ],
-  Frank: [
-    { sender: "Frank", text: "我想要預約下週二的諮詢。" },
-    { sender: "Frank", text: "謝謝你的協助！" },
-  ],
-  Grace: [
-    { sender: "Grace", text: "我的訂單狀態是什麼？" },
-  ],
-  Henry: [
-    { sender: "Henry", text: "可以提供一下你們的聯絡方式嗎？" },
-    { sender: "Henry", text: "這個問題我之前問過了，還沒解決。" },
-  ],
-  Ivy: [
-    { sender: "Ivy", text: "我需要更改我的帳戶資訊。" },
-  ],
-  Jack: [
-    { sender: "Jack", text: "請問這個服務的費用是多少？" },
-    { sender: "Jack", text: "我找不到相關的說明文件。" },
-  ],
+const POPUP_MESSAGES = [
+  // 工作相關
+  "提醒：下午三點有部門會議。",
+  "專案 A 的進度報告已更新，請查閱。",
+  "IT部門通知：系統將於今晚 10 點進行維護。",
+  "請確認您的差旅報銷單已提交。",
+  "新的工作流程指南已發布，請大家熟悉。",
+  // 工作無關
+  "週末有空一起去看電影嗎？",
+  "樓下咖啡廳今天買一送一！",
+  "誰訂的午餐外賣到了？",
+  "這週末天氣好像不錯，適合出遊。",
+  "推薦一本好書給你！",
+  // 客戶反饋 (感激)
+  "非常感謝您的快速協助，問題解決了！",
+  "你們的服務真是太棒了，超出我的預期！",
+  // 客戶反饋 (抱怨/問題)
+  "我對上次的處理結果不太滿意，可以重新檢視嗎？",
+  "為什麼我的問題還沒有得到解決？已經等很久了。",
+  "系統又出現錯誤了，請盡快修復！"
+];
+
+
+const initialChatData = {
+    Alice: [
+        { sender: "Alice", text: "我已經把文件上傳到共用資料夾了。" },
+        { sender: "Alice", text: "請問您現在有空嗎？我想請教一個問題。" },
+    ],
+    Bob: [
+        { sender: "Bob", text: "我需要那個報告，可以今天給我嗎？" },
+        { sender: "Bob", text: "帳單什麼時候需要付款？" },
+    ],
+    Charles: [
+        { sender: "Charles", text: "上次會議的記錄在哪裡可以找到？" },
+    ],
+    David: [
+        { sender: "David", text: "這個功能好像有點問題，能幫我看看嗎？" },
+        { sender: "David", text: "我對新的政策有些疑問。" },
+    ],
+    Eve: [{ sender: "Eve", text: "請問產品的詳細規格是什麼？" }],
+    Frank: [
+        { sender: "Frank", text: "我想要預約下週二的諮詢。" },
+        { sender: "Frank", text: "謝謝你的協助！" },
+    ],
+    Grace: [{ sender: "Grace", text: "我的訂單狀態是什麼？" }],
+    Henry: [
+        { sender: "Henry", text: "可以提供一下你們的聯絡方式嗎？" },
+        { sender: "Henry", text: "這個問題我之前問過了，還沒解決。" },
+    ],
+    Ivy: [{ sender: "Ivy", text: "我需要更改我的帳戶資訊。" }],
+    Jack: [
+        { sender: "Jack", text: "請問這個服務的費用是多少？" },
+        { sender: "Jack", text: "我找不到相關的說明文件。" },
+    ],
 };
-// Initialize currentContact to the first contact in chatHistory or a default
-let currentContact = Object.keys(chatHistory)[0] || "Alice";
+
+const customerServiceEvents = [];
+let eventIdCounter = 0;
+for (const contactName in initialChatData) {
+    if (initialChatData.hasOwnProperty(contactName)) {
+        initialChatData[contactName].forEach(message => {
+            if (message.sender === contactName) { // Assuming messages from contact are events
+                customerServiceEvents.push({
+                    id: `evt${++eventIdCounter}`,
+                    contactName: contactName,
+                    text: message.text,
+                    status: 'pending', // 'pending', 'handled'
+                    timestamp: new Date(Date.now() - Math.random() * 100000).toISOString(), // Add some jitter for ordering
+                    chosenResponse: null,
+                });
+            }
+        });
+    }
+}
+customerServiceEvents.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp)); // Ensure chronological order
+
+const handledEventLog = []; // Replaces chatMessageLog
+
 function renderEmailTask(trial) {
   return `
 		<div style='
@@ -1104,7 +1095,7 @@ function renderEmailTask(trial) {
 		</div>
 	`;
 }
-function buildStimulus(trial, history, currentContactName, popup) {
+function buildStimulus(trial, popup) {
   return `
 	<div style='
 		position: relative;
@@ -1118,7 +1109,7 @@ function buildStimulus(trial, history, currentContactName, popup) {
 		${popup}
 
 		<!-- Chat Panel -->
-		${renderMessagingPanel(history, currentContactName)}
+		${renderMessagingPanel()}
 
 		<!-- Email Task Panel -->
 		${renderEmailTask(trial)}
@@ -1128,25 +1119,13 @@ function buildStimulus(trial, history, currentContactName, popup) {
 const trialBlocks = createPrimaryTasks().map((block) => {
   return block.map((trial) => {
     const popup = trial.Interruption
-      ? `
-		<div
-			style="
-				position:fixed;
-				bottom:20px;
-				right:20px;
-				background:#ffe08a;
-				border:2px solid black;
-				padding:10px;
-				z-index:9999;"
-		>
-			<p><strong>
-			${POPUP_MESSAGES[Math.floor(Math.random() * POPUP_MESSAGES.length)]}
-			</strong></p>
-		</div>`
+      ? `<div class="jspsych-popup-message">
+        <p><strong>${POPUP_MESSAGES[Math.floor(Math.random() * POPUP_MESSAGES.length)]}</strong></p>
+		    </div>`
       : "";
     return {
       type: jsPsychHtmlKeyboardResponse,
-      stimulus: buildStimulus(trial, chatHistory, currentContact, popup),
+      stimulus: buildStimulus(trial, popup),
       choices: ["w", "n"],
       trial_duration: params.trialDuration,
       data: {
@@ -1156,9 +1135,25 @@ const trialBlocks = createPrimaryTasks().map((block) => {
       },
       on_load: function () {
         // Initialize chat panel listeners and view
-        addChatInputListeners();
-        updateContactHighlights();
-        scrollToChatBottom();
+        updateMessagingPanelDisplay(); // Initial render of the messaging panel content
+
+        // Event delegation for response buttons
+        const messagingPanelContainer = document.getElementById('messaging-panel-container');
+        if (messagingPanelContainer && !messagingPanelContainer.dataset.listenerAttached) {
+            messagingPanelContainer.addEventListener('click', function(event) {
+                if (event.target.classList.contains('response-btn')) {
+                    const eventItemElement = event.target.closest('.event-item');
+                    if (eventItemElement) {
+                        const eventId = eventItemElement.dataset.eventId;
+                        const responseText = event.target.dataset.response;
+                        handleEventResponse(eventId, responseText);
+                        event.target.blur(); // << 從按鈕移除焦點
+                    }
+                }
+            });
+            messagingPanelContainer.dataset.listenerAttached = 'true'; // Mark that listener is attached
+        }
+
 
         // Countdown timer logic
         const timerElement = document.getElementById('countdown-timer');
@@ -1196,87 +1191,62 @@ function createPrimaryTasks() {
   return arr;
 }
 
-/**
- * `chatMessageLog` stores the log of chat messages sent by the participant.
- */
-const chatMessageLog = [];
-
-function scrollToChatBottom() {
-  const chatHistoryDiv = document.getElementById('chat-history');
-  if (chatHistoryDiv) {
-    chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight;
-  }
-}
-
-function handleSendMessage() {
-  const chatInput = document.getElementById('chat-input');
-  const messageText = chatInput.value.trim();
-
-  if (messageText && currentContact && chatHistory[currentContact]) {
-    chatHistory[currentContact].push({ sender: 'User', text: messageText });
-
-    const chatDisplayArea = document.getElementById("chat-display-area");
-    if (chatDisplayArea) {
-      chatDisplayArea.innerHTML = renderChatDisplay(chatHistory, currentContact);
-      addChatInputListeners(); // Re-attach listeners
-      scrollToChatBottom();
+function addCustomStyles() {
+  const style = document.createElement('style');
+  style.textContent = `
+    .event-item {
+      transition: opacity 0.5s ease-out, transform 0.5s ease-out, max-height 0.5s ease-out;
+      overflow: hidden;
+      max-height: 500px; /* Initial max-height for transition, ensure it's enough for content */
     }
-    chatInput.value = ''; // Clear input
-
-    const currentTrial = jsPsych.getCurrentTrial();
-    const trialData = currentTrial ? currentTrial.data : { block: undefined, trialIndex: undefined };
-    const globalTrialIndex = jsPsych.getProgress().current_trial_global_idx;
-
-    chatMessageLog.push({
-      blockType: trialData.block,        // 主要任務的區塊類型
-      trialIndex: trialData.trialIndex,  // 主要任務的試驗編號
-      globalTrialIndex: globalTrialIndex,  // 全域試驗索引，用於精確映射
-      repliedContact: currentContact,    // 回覆的聯絡人
-      replyContent: messageText,         // 回覆的內容
-      replyTimeStamp: (new Date()).toISOString(), // 回覆的時間戳
-    });
-  }
-}
-function addChatInputListeners() {
-  const chatInput = document.getElementById('chat-input');
-  if (chatInput) {
-    chatInput.addEventListener('keydown', (event) => {
-      event.stopPropagation(); // Prevent jsPsych from capturing keydown
-    });
-    // onmousedown is handled inline
-  }
-
-  const sendButton = document.getElementById('chat-send');
-  if (sendButton) {
-    sendButton.removeEventListener('click', handleSendMessage); // Remove old listener if any
-    sendButton.addEventListener('click', handleSendMessage);
-  }
-}
-
-function updateContactHighlights() {
-  Object.keys(chatHistory).forEach(contactKey => {
-    const contactDiv = document.getElementById(`contact-${contactKey}`);
-    if (contactDiv) {
-      if (contactKey === currentContact) {
-        contactDiv.style.borderColor = '#007bff';
-        contactDiv.style.backgroundColor = '#e9ecef'; // Active background
-      } else {
-        contactDiv.style.borderColor = '#e0e0e0';
-        contactDiv.style.backgroundColor = '#f8f9fa'; // Default background
-      }
+    .event-item.handled {
+      opacity: 0;
+      transform: scale(0.95) translateY(-20px);
+      max-height: 0 !important; /* Ensure it collapses */
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+      margin-bottom: 0 !important;
+      border-width: 0 !important;
     }
-  });
-}
+    .response-btn {
+      padding: 10px 15px;
+      font-size: 0.875em; /* 14px */
+      background-color: #3498db; /* A pleasant blue */
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      text-align: left;
+      transition: background-color 0.2s ease, box-shadow 0.2s ease;
+      font-weight: 500;
+      display: block; /* Make them full width within their container */
+      width: 100%;
+      box-sizing: border-box; /* Ensures padding doesn't add to width */
+    }
+    .response-btn:hover {
+      background-color: #2980b9; /* Darker blue on hover */
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .response-btn:active {
+      background-color: #2471a3; /* Even darker blue on active/click */
+    }
+    .jspsych-popup-message {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      background-color: #ffffff; /* Clean white background */
+      color: #333; /* Darker text for readability */
+      border: 1px solid #dee2e6; /* Softer border */
+      border-radius: 6px; /* Rounded corners */
+      padding: 12px 18px; /* Comfortable padding */
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+      z-index: 10000; /* Ensure it's on top */
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      font-size: 0.9em;
+    }
 
-function switchChatView(contactName) {
-  currentContact = contactName;
-  const chatDisplayArea = document.getElementById("chat-display-area");
-  if (chatDisplayArea) {
-    chatDisplayArea.innerHTML = renderChatDisplay(chatHistory, currentContact);
-    addChatInputListeners();
-  }
-  updateContactHighlights();
-  scrollToChatBottom();
+  `;
+  document.head.appendChild(style);
 }
 
 timeline.push(
@@ -1289,8 +1259,9 @@ timeline.push(
   ],
 );
 
+addCustomStyles(); // Add the CSS for animations
+
 const jsPsych = initJsPsych({
-  default_iti: 1000,
   show_progress_bar: true,
   on_finish: () => {
     const experimentResult = jsPsych.data.get().json();
@@ -1304,7 +1275,7 @@ const jsPsych = initJsPsych({
           return e;
         }),
       ),
-      chatLog: JSON.stringify(chatMessageLog), // 新增聊天日誌
+      handledEvents: JSON.stringify(handledEventLog), // Save handled events log
     };
     document.body.innerHTML = JSON.stringify(dataToSave);
     const prolificId = jsPsych.data.getURLVariable("PROLIFIC_PID") || "unknown";
