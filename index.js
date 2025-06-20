@@ -100,7 +100,7 @@ const instructions = {
   type: jsPsychInstructions,
   pages: [
     "<h2>實驗說明</h2><p>歡迎參與本次實驗。</p><p>接下來，您的任務是同時進行兩項工作。</p>",
-    "<p><b>主要任務：</b>您會在畫面左側看到一系列的電子郵件，請您盡快且正確地判斷每封郵件是「工作相關」還是「非工作相關」。</p><p>請按 <b>w 鍵</b> 代表「工作相關」，按 <b>n 鍵</b> 代表「非工作相關」。</p>",
+    "<p><b>主要任務：</b>您會在畫面右側看到一系列的電子郵件，請您盡快且正確地判斷每封郵件是「工作相關」還是「非工作相關」。</p><p>請點擊郵件下方的<b>「工作相關」</b>或<b>「非工作相關」</b>按鈕進行分類。</p>",
     "<p><b>次要任務：</b>在進行郵件分類的同時，畫面左側有一個訊息欄，你可以透過這個欄位迅速的處理客戶訊息。</p><p>我們將會紀錄您處理的比率，並且為您顯示在螢幕上。</p>",
     "<p>實驗過程中，畫面可能會隨機出現一些干擾訊息。請您盡力完成您的主要任務。</p><p>準備好後請按 \"Next\" 開始。",
   ],
@@ -141,19 +141,9 @@ function renderCurrentEventDisplay(event) {
     return "<p style='padding: 10px; text-align: center;'>No pending customer messages.</p>";
   }
   return `
-    <div id="current-event-${event.id}" class="event-item" data-event-id="${event.id}" style="padding: 16px; background-color: #ffffff; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.08);">
+    <div class="event-content-wrapper" data-event-id="${event.id}" style="padding: 16px; background-color: #ffffff; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.08);">
       <h4 style="margin-top: 0; margin-bottom: 8px; color: #343a40; font-size: 0.95em; font-weight: 600;">From: ${event.contactName}</h4>
       <p style="margin-bottom: 18px; color: #495057; font-size: 0.9em; line-height: 1.5;">${event.text}</p>
-      <div class="response-options" style="display: flex; flex-direction: column; gap: 8px;">
-        ${RESPONSE_BEHAVIOR.map(response => `
-          <button 
-            class="response-btn" 
-            data-response="${response}"
-          >
-            ${response}
-          </button>
-        `).join('')}
-      </div>
     </div>
   `;
 }
@@ -175,6 +165,15 @@ function renderMessagingPanel() {
 	  '>
 		<div id="event-display-area" style="flex-grow: 1; min-height: 200px;">
 			<!-- Current event will be rendered here by updateMessagingPanelDisplay -->
+    </div>
+		<div id="response-options-container" style="display: flex; flex-direction: column; gap: 8px; margin-top: 15px;">
+			${RESPONSE_BEHAVIOR.map(response => `
+				<button 
+					class="response-btn" 
+					data-response="${response}"
+				>
+					${response}
+				</button>`).join('')}
 		</div>
 		<div id="messaging-footer" style="padding: 12px 15px; border-top: 1px solid #dee2e6; font-size: 0.85em; color: #495057; background-color: #e9ecef; border-radius: 0 0 6px 6px;">
 			<p style="margin: 5px 0;">Pending Messages: <span id="pending-count">0</span></p>
@@ -198,6 +197,12 @@ function updateMessagingPanelDisplay() {
   const handledCountEl = document.getElementById('handled-count');
   if (pendingCountEl) pendingCountEl.textContent = pendingCount;
   if (handledCountEl) handledCountEl.textContent = handledCount;
+
+  const responseButtonsContainer = document.getElementById('response-options-container');
+  if (responseButtonsContainer) {
+    const buttons = responseButtonsContainer.querySelectorAll('.response-btn');
+    buttons.forEach(btn => btn.disabled = !currentPendingEvent);
+  }
 }
 
 function handleEventResponse(eventId, responseText) {
@@ -224,9 +229,9 @@ function handleEventResponse(eventId, responseText) {
     globalTrialIndex: globalTrialIndex,  // Global trial index
   });
 
-  const eventElement = document.getElementById(`current-event-${eventId}`);
-  if (eventElement) {
-    eventElement.classList.add('handled');
+  const eventContentWrapper = document.querySelector('#event-display-area .event-content-wrapper');
+  if (eventContentWrapper && eventContentWrapper.dataset.eventId === eventId) {
+    eventContentWrapper.classList.add('handled');
     setTimeout(() => {
       updateMessagingPanelDisplay(); // Re-render after fade out
     }, 500); // Must match CSS transition duration
@@ -1019,55 +1024,55 @@ const POPUP_MESSAGES = [
 
 
 const initialChatData = {
-    Alice: [
-        { sender: "Alice", text: "我已經把文件上傳到共用資料夾了。" },
-        { sender: "Alice", text: "請問您現在有空嗎？我想請教一個問題。" },
-    ],
-    Bob: [
-        { sender: "Bob", text: "我需要那個報告，可以今天給我嗎？" },
-        { sender: "Bob", text: "帳單什麼時候需要付款？" },
-    ],
-    Charles: [
-        { sender: "Charles", text: "上次會議的記錄在哪裡可以找到？" },
-    ],
-    David: [
-        { sender: "David", text: "這個功能好像有點問題，能幫我看看嗎？" },
-        { sender: "David", text: "我對新的政策有些疑問。" },
-    ],
-    Eve: [{ sender: "Eve", text: "請問產品的詳細規格是什麼？" }],
-    Frank: [
-        { sender: "Frank", text: "我想要預約下週二的諮詢。" },
-        { sender: "Frank", text: "謝謝你的協助！" },
-    ],
-    Grace: [{ sender: "Grace", text: "我的訂單狀態是什麼？" }],
-    Henry: [
-        { sender: "Henry", text: "可以提供一下你們的聯絡方式嗎？" },
-        { sender: "Henry", text: "這個問題我之前問過了，還沒解決。" },
-    ],
-    Ivy: [{ sender: "Ivy", text: "我需要更改我的帳戶資訊。" }],
-    Jack: [
-        { sender: "Jack", text: "請問這個服務的費用是多少？" },
-        { sender: "Jack", text: "我找不到相關的說明文件。" },
-    ],
+  Alice: [
+    { sender: "Alice", text: "我已經把文件上傳到共用資料夾了。" },
+    { sender: "Alice", text: "請問您現在有空嗎？我想請教一個問題。" },
+  ],
+  Bob: [
+    { sender: "Bob", text: "我需要那個報告，可以今天給我嗎？" },
+    { sender: "Bob", text: "帳單什麼時候需要付款？" },
+  ],
+  Charles: [
+    { sender: "Charles", text: "上次會議的記錄在哪裡可以找到？" },
+  ],
+  David: [
+    { sender: "David", text: "這個功能好像有點問題，能幫我看看嗎？" },
+    { sender: "David", text: "我對新的政策有些疑問。" },
+  ],
+  Eve: [{ sender: "Eve", text: "請問產品的詳細規格是什麼？" }],
+  Frank: [
+    { sender: "Frank", text: "我想要預約下週二的諮詢。" },
+    { sender: "Frank", text: "謝謝你的協助！" },
+  ],
+  Grace: [{ sender: "Grace", text: "我的訂單狀態是什麼？" }],
+  Henry: [
+    { sender: "Henry", text: "可以提供一下你們的聯絡方式嗎？" },
+    { sender: "Henry", text: "這個問題我之前問過了，還沒解決。" },
+  ],
+  Ivy: [{ sender: "Ivy", text: "我需要更改我的帳戶資訊。" }],
+  Jack: [
+    { sender: "Jack", text: "請問這個服務的費用是多少？" },
+    { sender: "Jack", text: "我找不到相關的說明文件。" },
+  ],
 };
 
 const customerServiceEvents = [];
 let eventIdCounter = 0;
 for (const contactName in initialChatData) {
-    if (initialChatData.hasOwnProperty(contactName)) {
-        initialChatData[contactName].forEach(message => {
-            if (message.sender === contactName) { // Assuming messages from contact are events
-                customerServiceEvents.push({
-                    id: `evt${++eventIdCounter}`,
-                    contactName: contactName,
-                    text: message.text,
-                    status: 'pending', // 'pending', 'handled'
-                    timestamp: new Date(Date.now() - Math.random() * 100000).toISOString(), // Add some jitter for ordering
-                    chosenResponse: null,
-                });
-            }
+  if (initialChatData.hasOwnProperty(contactName)) {
+    initialChatData[contactName].forEach(message => {
+      if (message.sender === contactName) { // Assuming messages from contact are events
+        customerServiceEvents.push({
+          id: `evt${++eventIdCounter}`,
+          contactName: contactName,
+          text: message.text,
+          status: 'pending', // 'pending', 'handled'
+          timestamp: new Date(Date.now() - Math.random() * 100000).toISOString(), // Add some jitter for ordering
+          chosenResponse: null,
         });
-    }
+      }
+    });
+  }
 }
 customerServiceEvents.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp)); // Ensure chronological order
 
@@ -1076,22 +1081,41 @@ const handledEventLog = []; // Replaces chatMessageLog
 function renderEmailTask(trial) {
   return `
 		<div style='
-			flex: 2;
-			padding: 40px;
+			flex: 2; /* Takes up more space than the chat panel */
+			padding: 25px;
 			display: flex;
 			flex-direction: column;
-			align-items: center;
-			justify-content: center;
-			background-color: #fff;
-			position: relative; /* To position the countdown timer */'
+			background-color: #f9f9f9; /* Light grey background for the panel */
+			position: relative; /* To position the countdown timer */
+            font-family: Arial, Helvetica, sans-serif; /* Common email font */
+            color: #333; /* Default text color */
+        '
 		>
 			<div id="countdown-timer" style="
         position: absolute; top: 15px; right: 20px;
         font-size: 1.1em; color: #555; background-color: #f0f0f0;
         padding: 5px 10px; border-radius: 5px;"></div>
-			<h2 style='margin: 0 0 20px;'>${trial.Subject}</h2>
-			<p style='font-size: 16px; margin-bottom: 30px;'>${trial.Body}</p>
-			<p style='font-weight: bold;'>Press 'w' for Work-related, 'n' for Non-work</p>
+
+            <div class="email-header" style="margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #e0e0e0;">
+                <div style="margin-bottom: 8px;">
+                    <span style="font-weight: bold; color: #666; min-width: 70px; display: inline-block;">From:</span>
+                    <span style="color: #2a2a2a;">sender@example.com</span>
+                </div>
+                <div style="margin-bottom: 8px;">
+                    <span style="font-weight: bold; color: #666; min-width: 70px; display: inline-block;">Subject:</span>
+                    <span style="color: #2a2a2a; font-weight: bold; font-size: 1.1em;">${trial.Subject}</span>
+                </div>
+                <div>
+                    <span style="font-weight: bold; color: #666; min-width: 70px; display: inline-block;">Date:</span>
+                    <span style="color: #444; font-size: 0.9em;">${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                </div>
+            </div>
+
+            <div class="email-body-container" style="flex-grow: 1; background-color: #ffffff; border: 1px solid #dcdcdc; border-radius: 4px; padding: 20px; overflow-y: auto; margin-bottom: 20px; min-height: 200px;">
+    			<p style='font-size: 1em; line-height: 1.6; margin: 0;'>${trial.Body.replace(/\n/g, "<br>")}</p>
+            </div>
+
+			<!-- Buttons will be added by jsPsychHtmlButtonResponse plugin -->
 		</div>
 	`;
 }
@@ -1124,9 +1148,10 @@ const trialBlocks = createPrimaryTasks().map((block) => {
 		    </div>`
       : "";
     return {
-      type: jsPsychHtmlKeyboardResponse,
+      type: jsPsychHtmlButtonResponse, // Changed plugin type
       stimulus: buildStimulus(trial, popup),
-      choices: ["w", "n"],
+      button_html: ['<button class="jspsych-btn">%choice%</button>', '<button class="jspsych-btn">%choice%</button>'], // Provide button HTML as an array
+      choices: ["Work-related", "Non-work-related"], // Button labels
       trial_duration: params.trialDuration,
       data: {
         block: trial.Block,
@@ -1140,18 +1165,22 @@ const trialBlocks = createPrimaryTasks().map((block) => {
         // Event delegation for response buttons
         const messagingPanelContainer = document.getElementById('messaging-panel-container');
         if (messagingPanelContainer && !messagingPanelContainer.dataset.listenerAttached) {
-            messagingPanelContainer.addEventListener('click', function(event) {
-                if (event.target.classList.contains('response-btn')) {
-                    const eventItemElement = event.target.closest('.event-item');
-                    if (eventItemElement) {
-                        const eventId = eventItemElement.dataset.eventId;
-                        const responseText = event.target.dataset.response;
-                        handleEventResponse(eventId, responseText);
-                        event.target.blur(); // << 從按鈕移除焦點
-                    }
-                }
-            });
-            messagingPanelContainer.dataset.listenerAttached = 'true'; // Mark that listener is attached
+          messagingPanelContainer.addEventListener('click', function (event) {
+            if (event.target.classList.contains('response-btn')) {
+              const responseText = event.target.dataset.response;
+              // Get eventId from the currently displayed event content
+              const eventContentWrapper = document.querySelector('#event-display-area .event-content-wrapper');
+
+              if (eventContentWrapper && eventContentWrapper.dataset.eventId) {
+                const eventId = eventContentWrapper.dataset.eventId;
+                handleEventResponse(eventId, responseText);
+                event.target.blur(); // << 從按鈕移除焦點
+              } else {
+                console.warn("Response button clicked, but no event content found or eventId is missing.");
+              }
+            }
+          });
+          messagingPanelContainer.dataset.listenerAttached = 'true'; // Mark that listener is attached
         }
 
 
@@ -1180,7 +1209,16 @@ const trialBlocks = createPrimaryTasks().map((block) => {
           clearInterval(this.countdownIntervalId);
         }
         // 'trial' here is from the closure of the .map(trial => ...)
-        data.correct = data.response === trial.CorrectAnswer;
+        // data.response will be the index of the button clicked if choices are strings.
+        // Or, if jsPsychHtmlButtonResponse stores the string label, this is simpler.
+        // Let's assume data.response is the string label of the button.
+        let response_key = '';
+        if (data.response === "Work-related") { // jsPsychHtmlButtonResponse returns index, so map to label
+          response_key = 'w';
+        } else if (data.response === "Non-work-related") {
+          response_key = 'n';
+        }
+        data.correct = response_key === trial.CorrectAnswer;
       }
     };
   });
@@ -1194,12 +1232,12 @@ function createPrimaryTasks() {
 function addCustomStyles() {
   const style = document.createElement('style');
   style.textContent = `
-    .event-item {
+    .event-content-wrapper {
       transition: opacity 0.5s ease-out, transform 0.5s ease-out, max-height 0.5s ease-out;
       overflow: hidden;
       max-height: 500px; /* Initial max-height for transition, ensure it's enough for content */
     }
-    .event-item.handled {
+    .event-content-wrapper.handled {
       opacity: 0;
       transform: scale(0.95) translateY(-20px);
       max-height: 0 !important; /* Ensure it collapses */
@@ -1266,6 +1304,13 @@ const jsPsych = initJsPsych({
   on_finish: () => {
     const experimentResult = jsPsych.data.get().json();
     const data = JSON.parse(experimentResult);
+
+    // Map button response index to actual choice string for saving
+    data.forEach(trialData => {
+      if (trialData.choices && Number.isInteger(trialData.response) && trialData.choices[trialData.response]) {
+        trialData.response_label = trialData.choices[trialData.response];
+      }
+    });
 
     const dataToSave = {
       experimentData: JSON.stringify(
