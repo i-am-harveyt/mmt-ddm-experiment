@@ -100,8 +100,8 @@ const instructions = {
   type: jsPsychInstructions,
   pages: [
     "<h2>實驗說明</h2><p>歡迎參與本次實驗。</p><p>接下來，您的任務是同時進行兩項工作。</p>",
-    "<p><b>主要任務：</b>您會在畫面右側看到一系列的電子郵件，請您盡快且正確地判斷每封郵件是「工作相關」還是「非工作相關」。</p><p>請點擊郵件下方的<b>「工作相關」</b>或<b>「非工作相關」</b>按鈕進行分類。</p>",
-    "<p><b>次要任務：</b>在進行郵件分類的同時，畫面左側有一個訊息欄，你可以透過這個欄位迅速的處理客戶訊息。</p><p>我們將會紀錄您處理的比率，並且為您顯示在螢幕上。</p>",
+    "<p><b>主要任務：</b>您會在畫面右側看到一個訊息欄，請您盡快且正確地處理客戶的回應事件。</p><p>請點擊訊息下方的回應選項進行處理。</p>",
+    "<p><b>次要任務：</b>在處理客戶回應的同時，畫面左側會出現一系列的電子郵件，請您判斷每封郵件是「工作相關」還是「非工作相關」。</p><p>請點擊郵件下方的<b>「工作相關」</b>或<b>「非工作相關」</b>按鈕進行分類。</p>",
     "<p>實驗過程中，畫面可能會隨機出現一些干擾訊息。請您盡力完成您的主要任務。</p><p>準備好後請按 \"Next\" 開始。",
   ],
   show_clickable_nav: true,
@@ -154,8 +154,8 @@ function renderMessagingPanel() {
   return `
 	  <div id="messaging-panel-container" style='
 		background-color: #f8f9fa; /* Softer background */
-		border-right: 1px solid #e9ecef; /* Softer border */
-		display: flex;
+		border-left: 1px solid #e9ecef; /* Softer border, changed from border-right */
+		display: flex; 
 		flex-direction: column;
 		padding: 15px; /* Increased padding */
 		gap: 20px;
@@ -1125,18 +1125,18 @@ function buildStimulus(trial, popup) {
 		position: relative;
 		width: 80dvw; height: 80dvh;
 		display: flex;
-		border: 1px solid #ccc;
+		border: 1px solid #ccc; 
 		font-family: sans-serif;
 		box-shadow: 0 0 10px rgba(0,0,0,0.1);
 	'>
 		<!-- Popup -->
 		${popup}
 
-		<!-- Chat Panel -->
-		${renderMessagingPanel()}
-
 		<!-- Email Task Panel -->
 		${renderEmailTask(trial)}
+
+		<!-- Messaging Panel (formerly Chat Panel) -->
+		${renderMessagingPanel()}
 	</div>
 	`;
 }
@@ -1149,7 +1149,7 @@ const trialBlocks = createPrimaryTasks().map((block) => {
       : "";
     return {
       type: jsPsychHtmlButtonResponse, // Changed plugin type
-      stimulus: buildStimulus(trial, popup),
+      stimulus: buildStimulus(trial, popup), 
       button_html: ['<button class="jspsych-btn">%choice%</button>', '<button class="jspsych-btn">%choice%</button>'], // Provide button HTML as an array
       choices: ["Work-related", "Non-work-related"], // Button labels
       trial_duration: params.trialDuration,
@@ -1160,6 +1160,17 @@ const trialBlocks = createPrimaryTasks().map((block) => {
       },
       on_load: function () {
         // Initialize chat panel listeners and view
+
+        // Trigger popup animation
+        const popupElement = document.querySelector('.jspsych-popup-message');
+        if (popupElement) {
+          setTimeout(() => {
+            popupElement.classList.add('show');
+            // Optional: Remove 'show' class after a duration to hide it again.
+            // setTimeout(() => popupElement.classList.remove('show'), params.popupDuration);
+          }, 100); // Short delay to ensure class is added after initial render
+        }
+
         updateMessagingPanelDisplay(); // Initial render of the messaging panel content
 
         // Event delegation for response buttons
@@ -1283,6 +1294,17 @@ function addCustomStyles() {
       font-size: 0.9em;
     }
 
+    .jspsych-popup-message {
+      /* Existing styles... */
+      transition: bottom 0.3s ease-out, opacity 0.3s ease-out; /* Add transition */
+      bottom: -100px; /* Start position below screen */
+      opacity: 0; /* Start invisible */
+    }
+
+    .jspsych-popup-message.show {
+      bottom: 25px; /* Ending position */
+      opacity: 1; /* Ending opacity */
+    }
   `;
   document.head.appendChild(style);
 }
