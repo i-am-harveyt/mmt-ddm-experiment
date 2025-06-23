@@ -223,7 +223,6 @@ const comprehensionLoop = {
 
 // timeline.push(instructions);
 // timeline.push(comprehensionLoop);
-timeline.push(comprehensionLoop);
 
 // --- 3. Inter-block Questionnaire
 const interBlockQuestions = [
@@ -520,430 +519,425 @@ const customerServiceEventReference = {
 
 // --- Secondary Task (Email) Data Setup ---
 const allEmailStimuli = [
-  // --- Block 1 ---
   {
     Subject: "Movie night this weekend?",
     Sender: "sarah.connor@gmail.com",
     Body: "Hey!\n\nJust a friendly reminder about movie night this Saturday. I'm planning on bringing snacks, so if you could grab the drinks, that would be awesome. Let me know if you're still good to go. Can't wait!\n\nSee ya,\nSarah",
     Type: "Non-work-related",
-    Block: 1, Trial: 1, CorrectAnswer: "n",
+    CorrectAnswer: "n",
   },
   {
     Subject: "URGENT: System Maintenance Tonight",
     Sender: "it-support@metacortex.com",
     Body: "Dear Team,\n\nThis is a notification that we will be conducting a system-wide update tonight from 10 PM to 2 AM. During this time, access to network drives and other internal services may be intermittent. Please save all your work and log out before the maintenance window to avoid any data loss.\n\nThank you for your cooperation,\nIT Support",
     Type: "Work-related",
-    Block: 1, Trial: 2, CorrectAnswer: "w",
+    CorrectAnswer: "w",
   },
   {
     Subject: "Upcoming Q3 Training Schedule",
     Sender: "hr-noreply@metacortex.com",
     Body: "Hi all,\n\nThe new training schedule for Q3 is now available on the company portal. All employees are required to complete the mandatory 'Cybersecurity Awareness' course by the end of the quarter. Please review the available slots and sign up for a session that fits your schedule.\n\nBest,\nHR Department",
     Type: "Work-related",
-    Block: 1, Trial: 3, CorrectAnswer: "w",
+    CorrectAnswer: "w",
   },
   {
     Subject: "Action Required: Updated Onboarding Guide",
     Sender: "hr-noreply@metacortex.com",
     Body: "Hi Managers,\n\nThe onboarding guide for new hires has been updated to reflect our new hybrid work policies. Please ensure you are using the latest version for all new team members to provide them with the correct information. The updated guide can be found in the 'HR Resources' shared drive.\n\nThanks,\nHR",
     Type: "Work-related",
-    Block: 1, Trial: 4, CorrectAnswer: "w",
+    CorrectAnswer: "w",
   },
   {
     Subject: "Reminder: Project Phoenix Deadline",
     Sender: "project-manager@metacortex.com",
     Body: "Team,\n\nThis is a quick reminder that the final deadline for Project Phoenix is this Friday. Please make sure all your deliverables are submitted and documentation is updated by EOD. Let's finish strong!\n\nThanks,\nAlex",
     Type: "Work-related",
-    Block: 1, Trial: 5, CorrectAnswer: "w",
+    CorrectAnswer: "w",
   },
   {
     Subject: "Update to Remote Work Policy",
     Sender: "hr-noreply@metacortex.com",
     Body: "Dear Employees,\n\nPlease be advised that there has been an update to the company's remote work policy, effective next Monday. You can find the revised document on the intranet under 'Company Policies'. Please familiarize yourself with the changes.\n\nSincerely,\nHuman Resources",
     Type: "Work-related",
-    Block: 1, Trial: 6, CorrectAnswer: "w",
+    CorrectAnswer: "w",
   },
   {
     Subject: "You HAVE to see this show!",
     Sender: "emily.jones@outlook.com",
     Body: "OMG, did you see the latest episode of that Netflix drama? The ending was absolutely wild! We need to talk about it ASAP. Are you free to catch up tomorrow?\n\n- Em",
     Type: "Non-work-related",
-    Block: 1, Trial: 7, CorrectAnswer: "n",
+    CorrectAnswer: "n",
   },
   {
     Subject: "Mike's Birthday Tomorrow!",
     Sender: "john.doe@yahoo.com",
     Body: "Hey,\n\nJust wanted to remind you that it's Mike's birthday tomorrow! A few of us are chipping in for a gift. Let me know if you want to contribute. We're also grabbing cake in the breakroom around 3 PM.\n\n- John",
     Type: "Non-work-related",
-    Block: 1, Trial: 8, CorrectAnswer: "n",
+    CorrectAnswer: "n",
   },
   {
     Subject: "Flash sale on running shoes",
     Sender: "deals@greatfinds.com",
     Body: "Hi there,\n\nJust saw a flash sale on running shoes—50% off until midnight! Thought you might be interested since you mentioned needing a new pair. Here's the link: [link]\n\nCheers!",
     Type: "Non-work-related",
-    Block: 1, Trial: 9, CorrectAnswer: "n",
+    CorrectAnswer: "n",
   },
   {
     Subject: "Action Required: Complete Your Annual Security Training",
     Sender: "hr-noreply@metacortex.com",
     Body: "Hello everyone,\n\nThis is a reminder about the mandatory annual security training. Records show that you have not yet completed this requirement. Please complete it by the end of the month to maintain network access. You can access the training portal through the employee dashboard.\n\nThank you,\nHR Department",
     Type: "Work-related",
-    Block: 1, Trial: 10, CorrectAnswer: "w",
+    CorrectAnswer: "w",
   },
   {
     Subject: "FWD: Client Proposal Revisions",
     Sender: "project-manager@metacortex.com",
     Body: "Hi Team,\n\nThe client has requested revisions to the proposal we submitted last week. Please see the attached document with their comments and feedback. Let's schedule a brief meeting tomorrow to discuss our plan of action.\n\nBest,\nSarah",
     Type: "Work-related",
-    Block: 1, Trial: 11, CorrectAnswer: "w",
+    CorrectAnswer: "w",
   },
   {
     Subject: "Got to show you this pic of Whiskers",
     Sender: "crazycatlady@yahoo.com",
     Body: "I have to show you this picture of my cat, Whiskers, sleeping in a tiny cardboard box. He looks so ridiculous and cute! Hope this brightens your day!\n\n- Linda",
     Type: "Non-work-related",
-    Block: 1, Trial: 12, CorrectAnswer: "n",
+    CorrectAnswer: "n",
   },
   {
     Subject: "Lunch tomorrow?",
     Sender: "foodie_friend@outlook.com",
     Body: "Hey,\n\nAre we still on for lunch tomorrow? I was thinking we could try that new cafe downtown that everyone's talking about. Let me know what you think!\n\nTalk soon,\nYour Pal",
     Type: "Non-work-related",
-    Block: 1, Trial: 13, CorrectAnswer: "n",
+    CorrectAnswer: "n",
   },
   {
     Subject: "New Photos: Beach Trip!",
     Sender: "gamenight-squad@googlegroups.com",
     Body: "Hey everyone,\n\nI've finally uploaded the photos from our beach trip last weekend! There are some really great ones. You can check them out in the shared album here: [link].\n\n- Mark",
     Type: "Non-work-related",
-    Block: 1, Trial: 14, CorrectAnswer: "n",
+    CorrectAnswer: "n",
   },
   {
     Subject: "FWD: Quarterly Report",
     Sender: "finance-dept@metacortex.com",
     Body: "Hi,\n\nPlease find the attached Q2 financial report. Review the numbers for your department and let me know if you have any questions before our meeting on Friday.\n\nRegards,\nFinance Department",
     Type: "Work-related",
-    Block: 1, Trial: 15, CorrectAnswer: "w",
+    CorrectAnswer: "w",
   },
   {
     Subject: "Concert tickets for Friday!",
     Sender: "live.music.lover@gmail.com",
     Body: "Hey! I managed to get two tickets for that band we like on Friday night. Are you free to go? Let me know ASAP before I offer the other one to someone else!\n\n- Dave",
     Type: "Non-work-related",
-    Block: 1, Trial: 16, CorrectAnswer: "n",
+    CorrectAnswer: "n",
   },
   {
     Subject: "Can you review this draft?",
     Sender: "project-manager@metacortex.com",
     Body: "Hi,\n\nCould you please take a look at the attached document? It's the draft for the client presentation tomorrow. I'd appreciate your feedback on the content and flow.\n\nThanks,\nEmily",
     Type: "Work-related",
-    Block: 1, Trial: 17, CorrectAnswer: "w",
+    CorrectAnswer: "w",
   },
   {
     Subject: "REMINDER: Time sheets due by 5 PM today",
     Sender: "management-noreply@metacortex.com",
     Body: "Hi Team,\n\nThis is a friendly reminder to submit your time sheets for the week by 5 PM today. Please ensure all project hours are logged accurately. Your timely submission is greatly appreciated.\n\nThanks,\nManagement",
     Type: "Work-related",
-    Block: 1, Trial: 18, CorrectAnswer: "w",
+    CorrectAnswer: "w",
   },
   {
     Subject: "Found: Water bottle in conference room 3B",
     Sender: "kevin-finance@metacortex.com",
     Body: "Hi all,\n\nSomeone left a blue metal water bottle in conference room 3B after the 10am meeting. I've left it on the counter in the kitchen on the 3rd floor.\n\nCheers,\nKevin",
     Type: "Non-work-related",
-    Block: 1, Trial: 19, CorrectAnswer: "n",
+    CorrectAnswer: "n",
   },
   {
     Subject: "Draft of Q4 report attached for your review",
     Sender: "finance-dept@metacortex.com",
     Body: "Hi,\n\nAttached is the draft of the Q4 performance report. Please review it and provide any feedback or corrections by end of business on Wednesday.\n\nThanks,\n[Name]",
     Type: "Work-related",
-    Block: 1, Trial: 20, CorrectAnswer: "w",
+    CorrectAnswer: "w",
   },
-
-  // --- Block 2 ---
   {
     Subject: "Team Lunch Next Week!",
     Sender: "social-committee@metacortex.com",
     Body: "Hi Team,\n\nTo celebrate our recent project success, we're organizing a team lunch next week! Please vote for your preferred restaurant in the poll linked below so we can make a reservation. Hope to see you all there!\n\nCheers,\nSocial Committee",
     Type: "Work-related",
-    Block: 2, Trial: 1, CorrectAnswer: "w",
+    CorrectAnswer: "w",
   },
   {
     Subject: "Reminder: Team Sync-up Tomorrow",
     Sender: "project-manager@metacortex.com",
     Body: "Hi Team,\n\nJust a quick heads-up: our weekly team sync-up call is scheduled for 10 AM tomorrow. Please come prepared with your updates and any potential blockers.\n\nThanks,\nAlex",
     Type: "Work-related",
-    Block: 2, Trial: 2, CorrectAnswer: "w",
+    CorrectAnswer: "w",
   },
   {
     Subject: "Yoga this weekend?",
     Sender: "jess@gmail.com",
     Body: "Hey!\n\nWant to join me for a yoga class? I found a studio that offers the first class for free. Could be a fun way to relax this weekend!\n\nLet me know,\nJess",
     Type: "Non-work-related",
-    Block: 2, Trial: 3, CorrectAnswer: "n",
+    CorrectAnswer: "n",
   },
   {
     Subject: "Your action is required: Performance Review",
     Sender: "hr-noreply@metacortex.com",
     Body: "Hi,\n\nThis is a reminder that your quarterly self-assessment is due by this Friday. Please log in to the Performance Portal to complete your review. Your manager will not be able to finalize their assessment until you have submitted yours.\n\nRegards,\nHuman Resources",
     Type: "Work-related",
-    Block: 2, Trial: 4, CorrectAnswer: "w",
+    CorrectAnswer: "w",
   },
   {
     Subject: "FW: Client Feedback on the Mockups",
     Sender: "client.services@metacortex.com",
     Body: "Hi Team,\n\nThe client has provided some feedback on the latest design mockups. Overall, they are very positive but have a few minor revision requests. I've attached their comments. Let's discuss tomorrow morning.\n\nRegards,\nSarah",
     Type: "Work-related",
-    Block: 2, Trial: 5, CorrectAnswer: "w",
+    CorrectAnswer: "w",
   },
   {
     Subject: "This cat video will make your day",
     Sender: "foodie_friend@outlook.com",
     Body: "You have to see this cat video I found, it's hilarious! I promise it will make your day. Here's the link.\n\nEnjoy,\nTom",
     Type: "Non-work-related",
-    Block: 2, Trial: 6, CorrectAnswer: "n",
+    CorrectAnswer: "n",
   },
   {
     Subject: "Your Amazon.com order has shipped",
     Sender: "shipment-tracking@amazon.com",
     Body: "Hello,\n\nGood news! Your order #123-4567890-1234567 has shipped and is expected to arrive by Tuesday, October 26th. You can track your package here: [Tracking Link].\n\nThank you for shopping with us,\nAmazon.com",
     Type: "Non-work-related",
-    Block: 2, Trial: 7, CorrectAnswer: "n",
+    CorrectAnswer: "n",
   },
   {
     Subject: "Meeting Follow-up: Action Items",
     Sender: "project-manager@metacortex.com",
     Body: "Hi All,\n\nThanks for the productive meeting today. As discussed, I've attached a summary of the action items and owners. Please review and let me know if I missed anything.\n\nBest,\nDavid",
     Type: "Work-related",
-    Block: 2, Trial: 8, CorrectAnswer: "w",
+    CorrectAnswer: "w",
   },
   {
     Subject: "New message from your LinkedIn connection",
     Sender: "messaging-noreply@linkedin.com",
     Body: "Hi,\n\nYou have a new message from John Smith regarding a potential job opportunity. Log in to LinkedIn to view the message and respond.\n\nThank you,\nThe LinkedIn Team",
     Type: "Non-work-related",
-    Block: 2, Trial: 9, CorrectAnswer: "n",
+    CorrectAnswer: "n",
   },
   {
     Subject: "Expense Report Reminder",
     Sender: "finance-dept@metacortex.com",
     Body: "Dear employee,\n\nThis is a reminder that all expense reports for the previous month must be submitted by the 15th. Please submit your expenses through the portal to ensure timely reimbursement.\n\nThank you,\nFinance",
     Type: "Work-related",
-    Block: 2, Trial: 10, CorrectAnswer: "w",
+    CorrectAnswer: "w",
   },
   {
     Subject: "Your flight is confirmed: NYC to SFO",
     Sender: "confirmations@kayak.com",
     Body: "Hi,\n\nYour flight booking is confirmed! Please review your itinerary below and ensure all details are correct.\n\nFlight: UA 456\nDeparture: NYC (JFK) - 8:00 AM\nArrival: SFO - 11:30 AM\n\nSafe travels,\nThe Kayak Team",
     Type: "Non-work-related",
-    Block: 2, Trial: 11, CorrectAnswer: "n",
+    CorrectAnswer: "n",
   },
   {
     Subject: "Welcome to the team, Jessica!",
     Sender: "manager-noreply@metacortex.com",
     Body: "All,\n\nPlease join me in giving a warm welcome to our new Marketing Specialist, Jessica Day, who is starting with us today! Jessica will be sitting with the marketing team on the 4th floor. Please stop by and say hello!\n\nBest,\n[Manager Name]",
     Type: "Work-related",
-    Block: 2, Trial: 12, CorrectAnswer: "w",
+    CorrectAnswer: "w",
   },
   {
     Subject: "Anyone interested in a fantasy football league?",
     Sender: "kevin-finance@metacortex.com",
     Body: "Hey football fans,\n\nI'm thinking of starting a fantasy football league this year. Looking for about 8-10 people. Let me know if you're interested and I'll send out another email with the details.\n\n- Kevin",
     Type: "Non-work-related",
-    Block: 2, Trial: 13, CorrectAnswer: "n",
+    CorrectAnswer: "n",
   },
   {
     Subject: "Your order from DoorDash is on its way",
     Sender: "noreply@doordash.com",
     Body: "Great news! Your order from The Sandwich Shop is now on its way and should arrive in approximately 15 minutes. Get ready to eat!\n\nThanks for using DoorDash.",
     Type: "Non-work-related",
-    Block: 2, Trial: 14, CorrectAnswer: "n",
+    CorrectAnswer: "n",
   },
   {
     Subject: "Action Required: Update your contact information",
     Sender: "hr-noreply@metacortex.com",
     Body: "Hi everyone,\n\nWe are updating our emergency contact list. Please take a moment to log in to the employee portal and verify that your contact information is up to date.\n\nThank you,\nHR",
     Type: "Work-related",
-    Block: 2, Trial: 15, CorrectAnswer: "w",
+    CorrectAnswer: "w",
   },
   {
     Subject: "Volunteers needed for user testing session",
     Sender: "ux-research@metacortex.com",
     Body: "Hi Team,\n\nThe UX team is looking for internal volunteers to participate in a 30-minute user testing session for our new mobile app. Your feedback will be invaluable. If you are interested, please sign up for a time slot here: [link].\n\nThanks,\nUX Research Team",
     Type: "Work-related",
-    Block: 2, Trial: 16, CorrectAnswer: "w",
+    CorrectAnswer: "w",
   },
   {
     Subject: "Your monthly bank statement is ready",
     Sender: "no-reply@chase.com",
     Body: "Dear Customer,\n\nYour monthly statement is now available to view online. Please log in to your account to see your latest statement and account activity.\n\nSincerely,\nChase Bank",
     Type: "Non-work-related",
-    Block: 2, Trial: 17, CorrectAnswer: "n",
+    CorrectAnswer: "n",
   },
   {
     Subject: "Building access update for this weekend",
     Sender: "facilities-noreply@metacortex.com",
     Body: "All Employees,\n\nPlease be advised that due to scheduled maintenance on the main entrance, building access this weekend will be restricted to the west-side entrance only. Your access cards have been updated accordingly. Normal access will resume on Monday.\n\nThank you,\nFacilities",
     Type: "Work-related",
-    Block: 2, Trial: 18, CorrectAnswer: "w",
+    CorrectAnswer: "w",
   },
   {
     Subject: "Checking in!",
     Sender: "mom@family.net",
     Body: "Hi sweetie,\n\nJust wanted to check in and see how you're doing. Are you remembering to eat your vegetables? Give me a call when you have a moment.\n\nLove,\nMom",
     Type: "Non-work-related",
-    Block: 2, Trial: 19, CorrectAnswer: "n",
+    CorrectAnswer: "n",
   },
   {
     Subject: "Please approve: Q3 Marketing Budget",
     Sender: "finance-dept@metacortex.com",
     Body: "Hi Managers,\n\nThe Q3 marketing budget proposal is now ready for your review and approval in the finance portal. Please provide your approval by EOD Friday so we can proceed with resource allocation.\n\nThanks,\nFinance",
     Type: "Work-related",
-    Block: 2, Trial: 20, CorrectAnswer: "w",
+    CorrectAnswer: "w",
   },
-
-  // --- Block 3 ---
   {
     Subject: "Great news! Client loved the presentation",
     Sender: "client.services@metacortex.com",
     Body: "Hi there,\n\nI just got off the phone with the client. They were extremely pleased with our last presentation! They gave us the green light to proceed to the next phase. Great job, everyone! Let's keep up the excellent work.\n\nBest,\nClient Services",
     Type: "Work-related",
-    Block: 3, Trial: 1, CorrectAnswer: "w",
+    CorrectAnswer: "w",
   },
   {
     Subject: "Book recommendation?",
     Sender: "pat@gmail.com",
     Body: "Hey, do you have a recommendation for a good book to read? I just finished my last one and I'm looking for something new. I'm open to anything!\n\nThanks,\nPat",
     Type: "Non-work-related",
-    Block: 3, Trial: 2, CorrectAnswer: "n",
+    CorrectAnswer: "n",
   },
   {
     Subject: "Can we reschedule our 1:1?",
     Sender: "project-manager@metacortex.com",
     Body: "Hi,\n\nSomething urgent has come up and I need to reschedule our 1:1 meeting today. Are you free tomorrow afternoon at the same time? Let me know what works for you.\n\nSorry for the last-minute change,\nMichael",
     Type: "Work-related",
-    Block: 3, Trial: 3, CorrectAnswer: "w",
+    CorrectAnswer: "w",
   },
   {
     Subject: "Weekend BBQ at my place!",
     Sender: "party.planner.extraordinaire@yahoo.com",
     Body: "Hi!\n\nI'm hosting a BBQ at my place this Saturday, starting around 4 PM. It's going to be very casual, just some food, music, and good company. Let me know if you can make it so I have a headcount!\n\n- P",
     Type: "Non-work-related",
-    Block: 3, Trial: 4, CorrectAnswer: "n",
+    CorrectAnswer: "n",
   },
   {
     Subject: "Office Maintenance Notification",
     Sender: "facilities-noreply@metacortex.com",
     Body: "Hello,\n\nPlease be aware that the restrooms on the 3rd floor will be closed for maintenance tomorrow from 9 AM to 12 PM. Please use the facilities on the 2nd or 4th floor during this time. We apologize for any inconvenience.\n\nThank you,\nFacilities Management",
     Type: "Work-related",
-    Block: 3, Trial: 5, CorrectAnswer: "w",
+    CorrectAnswer: "w",
   },
   {
     Subject: "Your weekly screen time report",
     Sender: "noreply@apple.com",
     Body: "Hi,\n\nYour screen time was down 15% last week for an average of 3 hours, 12 minutes per day. Your most used apps were Messages, Mail, and Instagram. You can view your full report on your device.\n\n- Apple",
     Type: "Non-work-related",
-    Block: 3, Trial: 6, CorrectAnswer: "n",
+    CorrectAnswer: "n",
   },
   {
     Subject: "Where should we have the team offsite?",
     Sender: "project-manager@metacortex.com",
     Body: "Hi Team,\n\nIt's time to start planning our annual team offsite! We have budget for a two-day event. Please reply to this email with your suggestions for activities or locations. Let's make it a memorable one!\n\nBest,\nAngela",
     Type: "Work-related",
-    Block: 3, Trial: 7, CorrectAnswer: "w",
+    CorrectAnswer: "w",
   },
   {
     Subject: "Happy Hour this Friday?",
     Sender: "emily.jones@outlook.com",
     Body: "Hey!\n\nA few of us are planning to go for happy hour this Friday after work to unwind. Would you be interested in joining? We're thinking of that place near the office with the rooftop patio.\n\n- Emily",
     Type: "Non-work-related",
-    Block: 3, Trial: 8, CorrectAnswer: "n",
+    CorrectAnswer: "n",
   },
   {
     Subject: "New IT Ticketing System",
     Sender: "it-support@metacortex.com",
     Body: "Hello Team,\n\nNext Monday, we will be launching a new IT ticketing system to better track and resolve your support requests. Training sessions will be held next week, and a guide will be available on the intranet. We appreciate your cooperation during this transition.\n\nThank you,\nIT Support",
     Type: "Work-related",
-    Block: 3, Trial: 9, CorrectAnswer: "w",
+    CorrectAnswer: "w",
   },
   {
     Subject: "Your Netflix bill is due soon",
     Sender: "info@mailer.netflix.com",
     Body: "Hi,\n\nThis is a reminder that your Netflix subscription will automatically renew on October 28th, 2023. No action is required to keep enjoying your favorite shows and movies.\n\n- The Netflix Team",
     Type: "Non-work-related",
-    Block: 3, Trial: 10, CorrectAnswer: "n",
+    CorrectAnswer: "n",
   },
   {
     Subject: "Out of Office: [My Name]",
     Sender: "employee@metacortex.com",
     Body: "Hello,\n\nI will be out of the office starting Thursday and will return on Monday. I will have limited access to email. For urgent matters, please contact [Colleague's Name].\n\nThank you.",
     Type: "Work-related",
-    Block: 3, Trial: 11, CorrectAnswer: "w",
+    CorrectAnswer: "w",
   },
   {
     Subject: "Funny article I thought you'd like",
     Sender: "sam@gmail.com",
     Body: "Hey,\n\nI came across this article today and it made me laugh out loud. Thought you might get a kick out of it too. Here's the link: [link].\n\nLet me know what you think!\n- Sam",
     Type: "Non-work-related",
-    Block: 3, Trial: 12, CorrectAnswer: "n",
+    CorrectAnswer: "n",
   },
   {
     Subject: "Donuts in the kitchen!",
     Sender: "social-committee@metacortex.com",
     Body: "Happy Friday!\n\nThere are donuts in the kitchen on the 2nd floor to celebrate the end of the week. Help yourself!\n\n- The Social Committee",
     Type: "Work-related",
-    Block: 3, Trial: 13, CorrectAnswer: "w",
+    CorrectAnswer: "w",
   },
   {
     Subject: "Q4 Planning Meeting - Canceled",
     Sender: "project-manager@metacortex.com",
     Body: "Hi Team,\n\nI am canceling our Q4 planning meeting that was scheduled for this afternoon. I will send out a new invitation shortly with a revised agenda. Sorry for any inconvenience.\n\nThanks,\n[Name]",
     Type: "Work-related",
-    Block: 3, Trial: 14, CorrectAnswer: "w",
+    CorrectAnswer: "w",
   },
   {
     Subject: "Your Uber receipt",
     Sender: "uber.receipts@uber.com",
     Body: "Thanks for riding with Uber. We've sent you a receipt for your recent trip. You can view the full details here: [link].\n\nWe hope to see you again soon!",
     Type: "Non-work-related",
-    Block: 3, Trial: 15, CorrectAnswer: "n",
+    CorrectAnswer: "n",
   },
   {
     Subject: "New hire announcement: John Smith",
     Sender: "hr-noreply@metacortex.com",
     Body: "Team,\n\nPlease join me in welcoming John Smith to the engineering team! John starts on Monday and will be working on the new platform initiative. Please make him feel welcome!\n\nBest,\nHR",
     Type: "Work-related",
-    Block: 3, Trial: 16, CorrectAnswer: "w",
+    CorrectAnswer: "w",
   },
   {
     Subject: "Your library books are due soon",
     Sender: "noreply@nypl.org",
     Body: "Dear Patron,\n\nThis is a friendly reminder that the following items are due for return in 3 days: 'The Midnight Library'. You can renew them online if needed.\n\nThank you,\nNew York Public Library",
     Type: "Non-work-related",
-    Block: 3, Trial: 17, CorrectAnswer: "n",
+    CorrectAnswer: "n",
   },
   {
     Subject: "Agenda for tomorrow's all-hands meeting",
     Sender: "ceo-office@metacortex.com",
     Body: "Hi Everyone,\n\nAttached is the agenda for our quarterly all-hands meeting tomorrow. We will be discussing our Q3 results and our goals for Q4. There will be a Q&A session at the end, so please come with your questions.\n\nSee you there,\nCEO Office",
     Type: "Work-related",
-    Block: 3, Trial: 18, CorrectAnswer: "w",
+    CorrectAnswer: "w",
   },
   {
     Subject: "Update to our Terms of Service",
     Sender: "no-reply@dropbox.com",
     Body: "Hi,\n\nWe've updated our Terms of Service. These changes will take effect on November 1st. You can review the new terms by logging into your account. No action is needed from your side.\n\nThanks,\nThe Dropbox Team",
     Type: "Non-work-related",
-    Block: 3, Trial: 19, CorrectAnswer: "n",
+    CorrectAnswer: "n",
   },
   {
     Subject: "Cake in the breakroom!",
     Sender: "social-committee@metacortex.com",
     Body: "Hi everyone,\n\nTo celebrate Maria's work anniversary, there's cake in the main breakroom on the 4th floor. Come grab a slice!\n\nCheers,\nSocial Committee",
     Type: "Work-related",
-    Block: 3, Trial: 20, CorrectAnswer: "w",
+    CorrectAnswer: "w",
   },
 ];
 
@@ -1032,7 +1026,7 @@ shuffle(primaryTaskBlockConfigs); // Shuffle the order of interruption condition
 const trialBlocks = [];
 let csEventCursor = 0;
 
-for (const config of primaryTaskBlockConfigs) {
+for (const [blockIndex, config] of primaryTaskBlockConfigs.entries()) {
   const numEventsForBlock = params.trialsPerBlock;
   let blockSpecificCsEvents;
 
@@ -1050,6 +1044,12 @@ for (const config of primaryTaskBlockConfigs) {
   }
 
   const currentBlockPrimaryTasks = createPrimaryTaskSet(blockSpecificCsEvents, params.trialsPerBlock, config.interruptCount, config.label);
+
+  // 新增：標記 blockIndex/blockLabel
+  currentBlockPrimaryTasks.forEach(event => {
+    event.blockIndex = blockIndex;
+    event.blockLabel = config.label;
+  });
 
   const blockTrials = currentBlockPrimaryTasks.map((cs_event, trialInBlockIndex) => {
     const popupData = POPUP_MESSAGES[Math.floor(Math.random() * POPUP_MESSAGES.length)];
@@ -1210,7 +1210,7 @@ for (const config of primaryTaskBlockConfigs) {
             </div>
             <div id="primary-task-panel" style='
               flex: 1; 
-              padding: 0 0 20px 0;
+              padding: 0;
               display: flex; 
               flex-direction: column; 
               gap: 15px; 
@@ -1226,8 +1226,9 @@ for (const config of primaryTaskBlockConfigs) {
                   <button class="panel-btn-close" title="Close" style="width:18px;height:18px;border:none;background:transparent;cursor:pointer;font-size:15px;line-height:1;color:#d93025;">&#10005;</button>
                 </div>
               </div>
-              <div id="primary-task-countdown-timer" style="
-                text-align: right; 
+              <div style="
+                display: flex;
+                justify-content: space-between;
                 font-size: 14px; 
                 color: #5f6368; 
                 padding: 8px 0; 
@@ -1236,25 +1237,14 @@ for (const config of primaryTaskBlockConfigs) {
                 border-radius: 4px;
                 padding: 8px 12px;
                 border: 1px solid #e8eaed;
-              "></div>
-              ${renderCurrentEventDisplay(cs_event)}
-              <div id="messaging-footer-primary" style="
-                padding: 12px 16px; 
-                border-top: 1px solid #e8eaed; 
-                font-size: 14px;
-                color: #5f6368; 
-                background-color: #ffffff; 
-                border-radius: 8px; 
-                margin-top: auto;
-                border: 1px solid #e8eaed;
-                display: flex; /* Use flexbox for layout */
-                justify-content: space-around; /* Distribute items evenly */
-                align-items: center; /* Center items vertically */
               ">
                 <p style="margin: 0;">Pending: <span id="pending-cs-count" style="font-weight: 500;">0</span></p>
                 <p style="margin: 0;">Handled: <span id="handled-cs-count" style="font-weight: 500;">0</span></p>
                 <p style="margin: 0; color: #d93025;">Missed: <span id="missed-cs-count" style="font-weight: 500;">0</span></p>
+
+                <div id="primary-task-countdown-timer"></div>
               </div>
+              ${renderCurrentEventDisplay(cs_event)}
               <div id="primary-task-buttons" style="margin-top: 18px; display: flex; gap: 10px;"></div>
             </div>
           </div>
@@ -1483,9 +1473,27 @@ for (const config of primaryTaskBlockConfigs) {
         });
 
         // --- Primary Task (Customer Service) UI Updates ---
-        const pendingCount = customerServiceEvents.filter(event => event.status === 'pending').length;
-        const handledCount = customerServiceEvents.filter(event => event.status === 'handled').length;
-        const missedCount = customerServiceEvents.filter(event => event.status === 'missed').length;
+        // 取得目前 block 的所有 event id
+        let blockEventIds = [];
+        for (const block of trialBlocks) {
+          if (block.some(trial => trial.data.customer_event_id === cs_event.id)) {
+            blockEventIds = block.map(trial => trial.data.customer_event_id);
+            break;
+          }
+        }
+        // 統計這個 block 的 pending/handled/missed
+        const pendingCount = blockEventIds.filter(id => {
+          const event = customerServiceEvents.find(e => e.id === id);
+          return event && event.status === 'pending';
+        }).length;
+        const handledCount = blockEventIds.filter(id => {
+          const event = customerServiceEvents.find(e => e.id === id);
+          return event && event.status === 'handled';
+        }).length;
+        const missedCount = blockEventIds.filter(id => {
+          const event = customerServiceEvents.find(e => e.id === id);
+          return event && event.status === 'missed';
+        }).length;
 
         const pendingCountEl = document.getElementById('pending-cs-count');
         const handledCountEl = document.getElementById('handled-cs-count');
@@ -1756,6 +1764,22 @@ function addCustomStyles() {
       padding: 0;
       margin: 0 auto;
       background: #f5f6fa;
+    }
+    #messaging-footer-primary {
+      margin-bottom: 0 !important;
+      padding-bottom: 4px;
+    }
+    #primary-task-buttons {
+      margin-top: 0px !important;
+      padding-bottom: 20px !important;
+    }
+    #primary-task-panel {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+    #primary-task-buttons {
+      margin-top: auto !important;
     }
   `;
   document.head.appendChild(style);
