@@ -1,8 +1,7 @@
 /**
  * `APP_URL` stores the endpoint of Google App Script
  */
-const APP_URL = "http://localhost:8080";
-// "https://script.google.com/macros/s/AKfycbwBdzSzb9o6OBd2MLcWr2URp_3D2EKcsI7o6WwLpn4I-gVNQyhYxNbhZGVDShPY29L-6Q/exec";
+const APP_URL = "https://script.google.com/macros/s/AKfycbwBdzSzb9o6OBd2MLcWr2URp_3D2EKcsI7o6WwLpn4I-gVNQyhYxNbhZGVDShPY29L-6Q/exec";
 
 /**
  * `timeline` stores the steps of the experiment
