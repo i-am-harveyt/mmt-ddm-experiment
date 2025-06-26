@@ -13,23 +13,22 @@ const timeline = [];
  * Experiment Settings
  */
 const params = {
-  trialsPerBlock: 10,
+  trialsPerBlock: 30,
   popupFreq: { low: 2, med: 5, high: 8 },
   trialDuration: 20_000,
   popupDuration: 4_000,
 };
 
 // --- 1. Questionnaires ---
-
 const welcome = {
   type: jsPsychInstructions,
   pages: [
     `
-    <h1>歡迎參與本實驗</h1>
+    <h1>Welcome to the Experiment</h1>
     <p>
-    感謝您參與本次實驗。<br/>
-    接下來將請你填寫問卷，並進行實驗。<br/>
-    整體流程將包含三個段落，並於每個段落間與最後提供一次問卷調查。
+    Thank you for participating in this experiment.<br/>
+    Next, you'll be asked to complete a questionnaire and then proceed with the experiment itself.<br/>
+    The entire process is divided into three sections, with a questionnaire at the end of each section and a final one at the very end.
     </p>
     `
   ],
@@ -166,7 +165,7 @@ const pmtsQuestions = [
 const pmtsSurvey = {
   type: jsPsychSurveyLikert,
   questions: pmtsQuestions,
-  preamble: "<h3>個人處事風格問卷</h3>",
+  preamble: "<h3>Personal Work Style Questionnaire</h3>",
   data: { task: "pmts_survey" },
 };
 timeline.push(pmtsSurvey);
@@ -176,50 +175,61 @@ const instructions = {
   type: jsPsychInstructions,
   pages: [
     `
-    <h1>歡迎參與本實驗</h1>
+    <h1>Welcome to the Experiment</h1>
     <p>
-    感謝您參與本次實驗。整體流程將包含三個段落，並於開始前、中段與結束時各提供一次問卷調查。
+    Thank you for participating in this experiment.<br/>
+    The entire process will consist of three sections, with a questionnaire provided at the beginning, middle, and end.
     </p>
     <p>
-    接下來，您將扮演一位客服人員，並同時執行兩項任務。這兩項任務會分別呈現在螢幕左側與右側的並排區域中。
+    Next, you will act as a customer service representative and perform two tasks simultaneously.<br/>
+    These two tasks will be presented in side-by-side areas on the left and right sides of the screen.
     </p>`,
 
     `
-    <h2>說明 1 / 4：任務一</h2>
+    <h2>Instruction 1 / 4: Task One</h2>
     <p>
-    您將在螢幕右側看到一個客戶訊息欄。我們將為每則訊息設置 ${params.trialDuration / 1_000} 秒的回應時限，並顯示於畫面上。
+    You will see a customer message panel on the right side of the screen.<br/>
+    We will set a response time limit of ${params.trialDuration / 1_000} seconds for each message, which will be displayed on the screen.
     </p>
+    <img src="static/Exp_Instruction_rhs.png" alt="Task One" style="width: 55dvw; height: auto;">
     <p>
-    請依據訊息內容快速且正確地選擇下方的回應選項：<br/>
-    ─ 若為訂單或流程相關問題，請點選「請提供你的訂單編號」。<br/>
-    ─ 若為技術問題，請點選「該問題已經轉交技術部門，我們會盡快回覆您」。
+    Please quickly and accurately select the correct response option below based on the message content:<br/>
+    ─ If it's an order or process-related question, please click "Please provide your order number."<br/>
+    ─ If it's a technical issue, please click "The issue has been forwarded to the technical department, and we will get back to you as soon as possible."
     </p>`,
 
     `
-    <h2>說明 2 / 4：任務二</h2>
+    <h2>Instruction 2 / 4: Task Two</h2>
     <p>
-    同時，螢幕左側會持續出現數封電子郵件，請您判斷其內容是否與工作相關。
+    At the same time, several emails will continuously appear on the left side of the screen.<br/>
+    Please determine whether their content is work-related.
     </p>
+    <img src="static/Exp_Instruction_lhs.png" alt="Task Two" style="width: 55dvw; height: auto;">
     <p>
-    每封郵件下方均有兩個按鈕：<b>「工作相關」</b>與<b>「非工作相關」</b>，請據實點選以完成分類。
+    Below each email, there are two buttons: <b>"Work-Related"</b> and <b>"Not Work-Related"</b>. Please click honestly to complete the classification.
     </p>`,
 
     `
-    <h2>說明 3 / 4：其他提示</h2>
+    <h2>Instruction 3 / 4: Other Tips</h2>
     <p>
-    實驗過程中，畫面上可能隨機跳出來自 email、Slack、或 Teams 的訊息提示，將以彈出視窗形式呈現。
+    During the experiment, message prompts from email, Slack, or Teams may randomly pop up on the screen as a modal window.
     </p>
+    <img src="static/Exp_Instruction_popup.png" alt="Task Two" style="width: 55dvw; height: auto;">
     <p>
-    每則提示將會自動於 ${params.popupDuration / 1_000} 秒後關閉，無須額外操作。
+    There is a dismiss button in the upper right corner of the prompt; clicking it will make it disappear. <br/>
+    If not dismissed beforehand, each prompt will automatically close after ${params.popupDuration / 1_000} seconds.<br/>
     </p>`,
 
     `
-    <h2>說明 4 / 4：任務完成與提醒</h2>
+    <h2>Instruction 4 / 4: Task Completion and Reminder</h2>
     <p>
-    實驗將於您完成所有任務一後自動結束。若您計畫執行次要任務，請務必留意時間與節奏。
+    The experiment will automatically end once you complete all of Task One.<br/>
+    If you plan to perform the secondary task, please be mindful of your time and pace.
     </p>
     <p>
-    請盡力完成兩項任務，準備就緒後，請點選「Next」開始實驗。
+    Please do your best to complete both tasks.<br/>
+    Once you are ready, please click "Next" to start the comprehension check.<br/>
+    <b>If you do not pass the comprehension check, please re-read the instructions and answer again.</b>
     </p>`,
   ],
   show_clickable_nav: true,
@@ -230,35 +240,34 @@ const instructions = {
 // --- Comprehension Check ---
 const comprehensionQuestions = [
   {
-    prompt: "當你在客服訊息欄看到『我無法登入帳戶』時，應該選哪個回應？",
+    prompt: "When you see 'I can't log in to my account' in the customer message panel, which response should you choose?",
     options: [
-      "請提供你的訂單編號",
-      "該問題已經轉交技術部門，我們會盡快回覆您",
-      "不需要回應"
+      "Please provide your order number.",
+      "The issue has been forwarded to the technical department, and we will get back to you as soon as possible.",
+      "No response needed."
     ],
     required: true,
     correct: 1
   },
   {
-    prompt: "Email 任務中，遇到『公司政策更新通知』應該如何分類？",
+    prompt: "In the Email task, how should you categorize 'Company Policy Update Notification'?",
     options: [
-      "工作相關",
-      "非工作相關"
+      "Work-Related",
+      "Not Work-Related"
     ],
     required: true,
     correct: 0
   },
   {
-    prompt: "彈出訊息（popup）出現時，你需要點擊或回應嗎？",
+    prompt: "When a pop-up message appears, do you need to click or respond to it?",
     options: [
-      "需要，否則無法繼續",
-      "不需要，會自動消失"
+      "Yes, otherwise you can't continue.",
+      "No, it will disappear automatically."
     ],
     required: true,
     correct: 1
   }
 ];
-
 const comprehensionCheck = {
   type: jsPsychSurveyMultiChoice,
   questions: comprehensionQuestions.map(q => ({
@@ -266,8 +275,8 @@ const comprehensionCheck = {
     options: q.options,
     required: q.required
   })),
-  preamble: "<h3>理解檢核題</h3><p>請回答下列問題，確保你已經了解實驗規則。</p>",
-  button_label: "提交",
+  preamble: "<h3>Comprehension Check</h3><p>Please answer the following questions to ensure you understand the experiment rules.</p>",
+  button_label: "Submit",
   on_finish: function (data) {
     let responses = data.response;
     const correctAnswers = comprehensionQuestions.map(q => q.correct);
@@ -290,7 +299,7 @@ const comprehensionLoop = {
   loop_function: function (data) {
     const last = data.values().slice(-1)[0];
     if (!last.comprehension_passed) {
-      alert("有些題目答錯了，請再閱讀說明並重新作答。");
+      alert("Some questions were answered incorrectly. Please read the instructions again and answer again.");
       return true; // 重新顯示說明+檢核
     }
     return false; // 通過，進入正式實驗
@@ -391,8 +400,8 @@ const interBlockSurvey = {
 
 // Primary Task (Customer Service) - Now tracked by jsPsych
 const RESPONSE_BEHAVIOR = [
-  "請提供你的訂單編號",
-  "該問題已經轉交技術部門，我們會盡快回覆您",
+  "Please provide your order number.",
+  "The issue has been forwarded to the technical department, and we will get back to you as soon as possible.",
 ];
 
 function renderCurrentEventDisplay(event) {
@@ -477,14 +486,32 @@ function shuffle(array) {
 }
 
 const POPUP_MESSAGES = [
-  { app: "Email", sender: "Alice", message: "週末的聚會你會來嗎？" },
-  { app: "Line", sender: "媽媽", message: "記得明天回家吃飯。" },
-  { app: "Slack", sender: "HR", message: "請記得填寫本月的出勤紀錄。" },
-  { app: "Teams", sender: "主管", message: "下午三點有會議，請準時參加。" },
-  { app: "Email", sender: "Bob", message: "這週五有空一起打球嗎？" },
-  { app: "Line", sender: "同學群組", message: "下週要不要一起去看電影？" },
-  { app: "Slack", sender: "設計師", message: "新版本的設計稿已經上傳。" },
-  { app: "Teams", sender: "專案經理", message: "請回覆客戶的最新需求。" },
+  { app: "Email", sender: "Alice", message: "Are you coming to the weekend gathering?" },
+  { app: "Line", sender: "Mom", message: "Remember to come home for dinner tomorrow." },
+  { app: "Slack", sender: "HR", message: "Please remember to fill in this month's attendance record." },
+  { app: "Teams", sender: "Manager", message: "There's a meeting at 3 PM today, please be on time." },
+  { app: "Email", sender: "Bob", message: "Are you free to play ball this Friday?" },
+  { app: "Line", sender: "Class Group", message: "Want to go see a movie together next week?" },
+  { app: "Slack", sender: "Designer", message: "The new version of the design draft has been uploaded." },
+  { app: "Teams", sender: "Project Manager", message: "Please respond to the client's latest requirements." },
+
+  // --- Additional entries ---
+  { app: "Email", sender: "Marketing Team", message: "New marketing campaign strategy review meeting scheduled for Monday." },
+  { app: "Line", sender: "Dad", message: "Your package arrived safely." },
+  { app: "Slack", sender: "Engineering", message: "Bug report #123 has been resolved." },
+  { app: "Teams", sender: "Sales", message: "Q3 sales target updated. Please review." },
+  { app: "Email", sender: "Newsletter", message: "Your weekly tech news digest is here!" },
+  { app: "Line", sender: "Best Friend", message: "How was your day? Call me later!" },
+  { app: "Slack", sender: "IT Support", message: "System maintenance scheduled for tonight at 10 PM." },
+  { app: "Teams", sender: "Team Lead", message: "Remember to submit your weekly report by end of day." },
+  { app: "Email", sender: "Bank", message: "Your monthly statement is now available." },
+  { app: "Line", sender: "Sister", message: "Happy Birthday! Sending you a little something." },
+  { app: "Slack", sender: "Product Team", message: "Feedback on the new feature requested by Friday." },
+  { app: "Teams", sender: "Company Announce", message: "Important: New WFH policy update." },
+  { app: "Email", sender: "Online Store", message: "Your order #45678 has shipped!" },
+  { app: "Line", sender: "Neighbor", message: "Could you water my plants while I'm away?" },
+  { app: "Slack", sender: "DevOps", message: "Server performance alert: High CPU usage detected." },
+  { app: "Teams", sender: "HR Dept", message: "Reminder: Annual performance review forms are due next week." },
 ];
 
 const initialChatData = [
