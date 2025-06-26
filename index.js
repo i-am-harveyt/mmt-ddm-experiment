@@ -13,75 +13,151 @@ const timeline = [];
  * Experiment Settings
  */
 const params = {
-  trialsPerBlock: 30,
+  trialsPerBlock: 10,
   popupFreq: { low: 2, med: 5, high: 8 },
   trialDuration: 20_000,
-  popupDuration: 3000,
+  popupDuration: 4_000,
 };
 
 // --- 1. Questionnaires ---
+
+const welcome = {
+  type: jsPsychInstructions,
+  pages: [
+    `
+    <h1>歡迎參與本實驗</h1>
+    <p>
+    感謝您參與本次實驗。<br/>
+    接下來將請你填寫問卷，並進行實驗。<br/>
+    整體流程將包含三個段落，並於每個段落間與最後提供一次問卷調查。
+    </p>
+    `
+  ],
+  show_clickable_nav: true,
+  button_label_next: "Next",
+  button_label_previous: "Previous",
+};
+timeline.push(welcome);
+
+
 // Short Media Multitasking Measure (MMM-S)
-const mmm_sScale = ["從不", "有時", "經常", "總是"];
-const mmm_sQuestions = [
+const mmm_sScale = ["Never", "Sometimes", "Often", "Very often"];
+const mmm_sQuestions_TV = [
   {
-    prompt: "當您看電視時，您多常同時...聽音樂？",
+    prompt: "While watching TV, how often do you also also listen to music at the same time?",
     name: "MMM_TV_Music",
     labels: mmm_sScale,
     required: true,
   },
   {
-    prompt: "當您看電視時，您多常同時...傳訊息（如 文字, WhatsApp, Line）？",
+    prompt: "While watching TV, how often do you also send messages via phone or computer (e.g., text messages, WhatsApp, instant messaging)?",
     name: "MMM_TV_Msg",
     labels: mmm_sScale,
     required: true,
   },
   {
-    prompt:
-      "當您看電視時，您多常同時...使用社群網站（如 Facebook, Instagram）？",
+    prompt: "While watching TV, how often do you also use social networking sites (e.g., Facebook, Instagram)?",
     name: "MMM_TV_SNS",
     labels: mmm_sScale,
     required: true,
   },
-  // ... Add all 9 questions from Appendix 1 here
 ];
-const mmm_sSurvey = {
+const mmm_sQuestions_SNS = [
+  {
+    prompt: "While using social networking sites, how often do you also listen to music?",
+    name: "MMM_SNS_Music",
+    labels: mmm_sScale,
+    required: true,
+  },
+  {
+    prompt: "While using social networking sites, how often do you also send messages via phone or computer?",
+    name: "MMM_SNS_Msg",
+    labels: mmm_sScale,
+    required: true,
+  },
+  {
+    prompt: "While using social networking sites, how often do you also watch TV?",
+    name: "MMM_SNS_TV",
+    labels: mmm_sScale,
+    required: true,
+  },
+];
+const mmm_sQuestions_Msg = [
+  {
+    prompt: "While sending messages via phone or computer, how often do you also listen to music?",
+    name: "MMM_Msg_Music",
+    labels: mmm_sScale,
+    required: true,
+  },
+  {
+    prompt: "While sending messages via phone or computer, how often do you also use social networking sites?",
+    name: "MMM_Msg_SNS",
+    labels: mmm_sScale,
+    required: true,
+  },
+  {
+    prompt: "While sending messages via phone or computer, how often do you also watch TV?",
+    name: "MMM_Msg_TV",
+    labels: mmm_sScale,
+    required: true,
+  },
+];
+const mmm_sSurvey_TV = {
   type: jsPsychSurveyLikert,
-  questions: mmm_sQuestions,
+  questions: mmm_sQuestions_TV,
   preamble:
-    "<h3>媒體使用習慣問卷</h3><p>以下問題旨在了解您同時使用不同媒體的頻率。</p>",
-  data: { task: "mmm_s_survey" },
+    "<h3>Media Usage Habits Questionnaire</h3><p>The following questions aim to understand how frequently you use television simultaneously with other types of media.</p>",
+  data: { task: "mmm_s_survey_tv" },
 };
-// timeline.push(mmm_sSurvey);
+timeline.push(mmm_sSurvey_TV);
+
+const mmm_sSurvey_SNS = {
+  type: jsPsychSurveyLikert,
+  questions: mmm_sQuestions_SNS,
+  preamble:
+    "<h3>Media Usage Habits Questionnaire</h3><p>The following questions aim to understand how frequently you use social networking sites simultaneously with other types of media.</p>",
+  data: { task: "mmm_s_survey_sns" },
+};
+timeline.push(mmm_sSurvey_SNS);
+
+const mmm_sSurvey_Msg = {
+  type: jsPsychSurveyLikert,
+  questions: mmm_sQuestions_Msg,
+  preamble:
+    "<h3>Media Usage Habits Questionnaire</h3><p>The following questions aim to understand how frequently you use messaging applications on your phone or computer simultaneously with other types of media.</p>",
+  data: { task: "mmm_s_survey_msg" },
+};
+timeline.push(mmm_sSurvey_Msg);
 
 // Polychronic–Monochronic Tendency Scale (PMTS)
-const pmtsScale = ["非常不同意", "不同意", "普通", "同意", "非常同意"];
+const pmtsScale = ["Strongly disagree", "Disagree", "Slightly disagree", "Neutral", "Slightly agree", "Agree", "Strongly agree"];
 const pmtsQuestions = [
   {
-    prompt: "我偏好同時進行兩件或更多活動。",
+    prompt: "I prefer to do two or more activities at the same time.",
     name: "PMTS_1",
     labels: pmtsScale,
     required: true,
   },
   {
-    prompt: "我通常會同時進行兩件或更多活動。",
+    prompt: "I typically do two or more activities at the same time.",
     name: "PMTS_2",
     labels: pmtsScale,
     required: true,
   },
   {
-    prompt: "同時做兩件以上的事是我運用時間最有效率的方式。",
+    prompt: "Doing two or more activities at the same time is the most efficient way to use my time.",
     name: "PMTS_3",
     labels: pmtsScale,
     required: true,
   },
   {
-    prompt: "對於同時做一件以上的事情，我感到很自在。",
+    prompt: "I am comfortable doing more than one activity at the same time.",
     name: "PMTS_4",
     labels: pmtsScale,
     required: true,
   },
   {
-    prompt: "我喜歡同時處理兩件或更多活動。",
+    prompt: "I like to juggle two or more activities at the same time.",
     name: "PMTS_5",
     labels: pmtsScale,
     required: true,
@@ -93,7 +169,7 @@ const pmtsSurvey = {
   preamble: "<h3>個人處事風格問卷</h3>",
   data: { task: "pmts_survey" },
 };
-// timeline.push(pmtsSurvey);
+timeline.push(pmtsSurvey);
 
 // --- 2. Instructions ---
 const instructions = {
@@ -192,7 +268,7 @@ const comprehensionCheck = {
   })),
   preamble: "<h3>理解檢核題</h3><p>請回答下列問題，確保你已經了解實驗規則。</p>",
   button_label: "提交",
-  on_finish: function(data) {
+  on_finish: function (data) {
     let responses = data.response;
     const correctAnswers = comprehensionQuestions.map(q => q.correct);
     const userAnswers = Object.values(responses).map((ans, i) =>
@@ -211,7 +287,7 @@ const comprehensionWithInstructions = {
 
 const comprehensionLoop = {
   timeline: [comprehensionWithInstructions],
-  loop_function: function(data) {
+  loop_function: function (data) {
     const last = data.values().slice(-1)[0];
     if (!last.comprehension_passed) {
       alert("有些題目答錯了，請再閱讀說明並重新作答。");
@@ -221,14 +297,85 @@ const comprehensionLoop = {
   }
 };
 
-// timeline.push(instructions);
-// timeline.push(comprehensionLoop);
+timeline.push(comprehensionLoop);
 
 // --- 3. Inter-block Questionnaire
 const interBlockQuestions = [
   {
-    prompt: "我偏好同時進行兩件或更多活動。",
-    name: "INTER_1",
+    prompt: "I think completing this task makes me feel more competent.",
+    name: "INTER_AV_1",
+    labels: pmtsScale,
+    required: true,
+  },
+  {
+    prompt: "I think this task gives me a sense of achievement.",
+    name: "INTER_AV_2",
+    labels: pmtsScale,
+    required: true,
+  },
+  {
+    prompt: "I feel that succeeding in this task confirms my ability.",
+    name: "INTER_AV_3",
+    labels: pmtsScale,
+    required: true,
+  },
+  {
+    prompt: "This task gives me confidence in my skills.",
+    name: "INTER_AV_4",
+    labels: pmtsScale,
+    required: true,
+  },
+  {
+    prompt: "I think this task is interesting.",
+    name: "INTER_IV_1",
+    labels: pmtsScale,
+    required: true,
+  },
+  {
+    prompt: "I enjoy working on this task.",
+    name: "INTER_IV_2",
+    labels: pmtsScale,
+    required: true,
+  },
+  {
+    prompt: "I find this task fun.",
+    name: "INTER_IV_3",
+    labels: pmtsScale,
+    required: true,
+  },
+  {
+    prompt: "I think completing this task is helpful for my future work performance.",
+    name: "INTER_UV_1",
+    labels: pmtsScale,
+    required: true,
+  },
+  {
+    prompt: "I believe this task is useful for improving my professional skills.",
+    name: "INTER_UV_2",
+    labels: pmtsScale,
+    required: true,
+  },
+  {
+    prompt: "This task is valuable for achieving my long-term career goals.",
+    name: "INTER_UV_3",
+    labels: pmtsScale,
+    required: true,
+  },
+  {
+    prompt: "I feel uneasy when performing this task.",
+    name: "INTER_AN_1",
+    labels: pmtsScale,
+    required: true,
+  },
+  {
+    prompt: "I feel anxious about completing this task.",
+    name: "INTER_AN_2",
+    labels: pmtsScale,
+    required: true,
+  },
+  {
+    prompt: "I feel uncomfortable working on this task.",
+    name: "INTER_AN_3",
     labels: pmtsScale,
     required: true,
   },
@@ -236,8 +383,8 @@ const interBlockQuestions = [
 const interBlockSurvey = {
   type: jsPsychSurveyLikert,
   questions: interBlockQuestions,
-  preamble: "<h3>個人處事風格問卷</h3>",
-  data: { task: "pmts_survey" },
+  preamble: "<h3>Subjective Value Questionnaire</h3><p>Please answer according to your perception of the primary task.</p>",
+  data: { task: "inter_survey", timestamp: Date.now() },
 };
 
 // --- 4. Task-related Functions & Data ---
@@ -341,147 +488,145 @@ const POPUP_MESSAGES = [
 ];
 
 const initialChatData = [
-  // --- 正確回應: "請提供你的訂單編號" ---
-  { sender: "Alice", text: "我想查詢我的訂單處理進度。", answerIndex: 0 },
-  { sender: "Bob", text: "我收到的商品數量不對，怎麼辦？", answerIndex: 0 },
-  { sender: "Charles", text: "請問我可以修改我的訂單內容嗎？", answerIndex: 0 },
-  { sender: "David", text: "我還沒收到我的退款。", answerIndex: 0 },
-  { sender: "Eve", text: "我需要申請售後服務。", answerIndex: 0 },
-  { sender: "Frank", text: "我想查詢一筆帳單的詳細內容。", answerIndex: 0 },
-  { sender: "Grace", text: "我上週下的單，現在寄出了嗎？", answerIndex: 0 },
-  { sender: "Henry", text: "我對收到的發票金額有疑問。", answerIndex: 0 },
-  { sender: "Ivy", text: "我需要取消我的訂單。", answerIndex: 0 },
-  { sender: "Jack", text: "我付了款，但系統顯示訂單未付款。", answerIndex: 0 },
-  { sender: "Alice", text: "我的包裹好像寄丟了，可以幫我查一下嗎？", answerIndex: 0 },
-  { sender: "Bob", text: "我要如何退貨？", answerIndex: 0 },
-  { sender: "Charles", text: "我需要我的發票副本。", answerIndex: 0 },
-  { sender: "David", text: "我收到的產品有瑕疵。", answerIndex: 0 },
-  { sender: "Eve", text: "請問我的維修進度如何？", answerIndex: 0 },
-  { sender: "Frank", text: "我想確認我的合約細節。", answerIndex: 0 },
-  { sender: "Grace", text: "我購買的服務尚未啟用。", answerIndex: 0 },
-  { sender: "Henry", text: "我想更改我的送貨地址。", answerIndex: 0 },
-  { sender: "Ivy", text: "上次的諮詢費用帳單有問題。", answerIndex: 0 },
-  { sender: "Jack", text: "我對月費帳單有疑問。", answerIndex: 0 },
-  { sender: "Kelly", text: "我想查詢我的會員點數餘額。", answerIndex: 0 },
-  { sender: "Leo", text: "請問我的發票什麼時候會寄出？", answerIndex: 0 },
-  { sender: "Mandy", text: "我需要申請換貨，該怎麼做？", answerIndex: 0 },
-  { sender: "Nina", text: "我想知道我的訂單目前處於什麼狀態。", answerIndex: 0 },
-  { sender: "Oscar", text: "我收到的商品有缺件，怎麼處理？", answerIndex: 0 },
-  { sender: "Paul", text: "請問如何查詢過去的消費紀錄？", answerIndex: 0 },
-  { sender: "Queenie", text: "我想更改發票抬頭。", answerIndex: 0 },
-  { sender: "Ryan", text: "我的退款什麼時候會入帳？", answerIndex: 0 },
-  { sender: "Sandy", text: "我需要申請紙本發票。", answerIndex: 0 },
-  { sender: "Tom", text: "我想查詢我的會員等級。", answerIndex: 0 },
-  { sender: "Una", text: "我想知道我的訂單預計什麼時候出貨。", answerIndex: 0 },
-  { sender: "Vicky", text: "我需要補發收據。", answerIndex: 0 },
-  { sender: "Will", text: "我想查詢我的積分兌換紀錄。", answerIndex: 0 },
-  { sender: "Xavier", text: "我想取消自動續約功能。", answerIndex: 0 },
-  { sender: "Yvonne", text: "我需要查詢我的保固期限。", answerIndex: 0 },
-  { sender: "Zack", text: "我想更改聯絡電話。", answerIndex: 0 },
-  { sender: "Amy", text: "我想查詢我的訂單配送進度。", answerIndex: 0 },
-  { sender: "Ben", text: "我需要申請發票補印。", answerIndex: 0 },
-  { sender: "Cathy", text: "我想查詢我的會員專屬優惠。", answerIndex: 0 },
-  { sender: "Derek", text: "我想知道如何申請退貨。", answerIndex: 0 },
-  { sender: "Ella", text: "我需要查詢我的訂單明細。", answerIndex: 0 },
-  { sender: "Fiona", text: "我想更改收件地址。", answerIndex: 0 },
-  { sender: "George", text: "我想查詢我的消費發票。", answerIndex: 0 },
-  { sender: "Helen", text: "我需要查詢我的訂單付款狀態。", answerIndex: 0 },
-  { sender: "Ian", text: "我想查詢我的會員卡號。", answerIndex: 0 },
-  { sender: "Judy", text: "我需要申請售後維修。", answerIndex: 0 },
-  { sender: "Kevin", text: "我想查詢我的訂單折扣金額。", answerIndex: 0 },
-  { sender: "Linda", text: "我需要查詢我的訂單發票號碼。", answerIndex: 0 },
-  { sender: "Maggie", text: "我想查詢我的訂單配送方式。", answerIndex: 0 },
-  { sender: "Nick", text: "我需要查詢我的訂單取消狀態。", answerIndex: 0 },
-  { sender: "Olivia", text: "我想查詢我的訂單付款方式。", answerIndex: 0 },
-  { sender: "Peter", text: "我需要查詢我的訂單出貨日期。", answerIndex: 0 },
-  { sender: "Queena", text: "我想查詢我的訂單物流編號。", answerIndex: 0 },
-  { sender: "Rita", text: "我需要查詢我的訂單備註內容。", answerIndex: 0 },
-  { sender: "Sam", text: "我想查詢我的訂單優惠券使用情況。", answerIndex: 0 },
-  { sender: "Tina", text: "我需要查詢我的訂單發票抬頭。", answerIndex: 0 },
-  { sender: "Ursula", text: "我想查詢我的訂單配送時間。", answerIndex: 0 },
-  { sender: "Victor", text: "我需要查詢我的訂單付款紀錄。", answerIndex: 0 },
-  { sender: "Wendy", text: "我想查詢我的訂單配送狀態。", answerIndex: 0 },
-  { sender: "Xena", text: "我需要查詢我的訂單發票內容。", answerIndex: 0 },
-  { sender: "Yale", text: "我想查詢我的訂單付款方式。", answerIndex: 0 },
-  { sender: "Zoe", text: "我需要查詢我的訂單配送方式。", answerIndex: 0 },
-  { sender: "Allen", text: "我想查詢我的訂單付款狀態。", answerIndex: 0 },
-  { sender: "Betty", text: "我需要查詢我的訂單發票號碼。", answerIndex: 0 },
-  { sender: "Carl", text: "我想查詢我的訂單配送方式。", answerIndex: 0 },
-  { sender: "Doris", text: "我需要查詢我的訂單取消狀態。", answerIndex: 0 },
-  { sender: "Ethan", text: "我想查詢我的訂單付款方式。", answerIndex: 0 },
+  // --- Correct Response: "Please provide your order number." ---
+  { sender: "Alice", text: "I'd like to check my order's processing status.", answerIndex: 0 },
+  { sender: "Bob", text: "The quantity of items I received is incorrect, what should I do?", answerIndex: 0 },
+  { sender: "Charles", text: "Can I modify the contents of my order?", answerIndex: 0 },
+  { sender: "David", text: "I haven't received my refund yet.", answerIndex: 0 },
+  { sender: "Eve", text: "I need to apply for after-sales service.", answerIndex: 0 },
+  { sender: "Frank", text: "I'd like to inquire about the details of a bill.", answerIndex: 0 },
+  { sender: "Grace", text: "Has my order from last week been shipped yet?", answerIndex: 0 },
+  { sender: "Henry", text: "I have a question about the invoice amount I received.", answerIndex: 0 },
+  { sender: "Ivy", text: "I need to cancel my order.", answerIndex: 0 },
+  { sender: "Jack", text: "I've paid, but the system shows the order as unpaid.", answerIndex: 0 },
+  { sender: "Alice", text: "My package seems to be lost, can you help me check?", answerIndex: 0 },
+  { sender: "Bob", text: "How do I return an item?", answerIndex: 0 },
+  { sender: "Charles", text: "I need a copy of my invoice.", answerIndex: 0 },
+  { sender: "David", text: "The product I received is defective.", answerIndex: 0 },
+  { sender: "Eve", text: "What's the progress of my repair?", answerIndex: 0 },
+  { sender: "Frank", text: "I want to confirm my contract details.", answerIndex: 0 },
+  { sender: "Grace", text: "The service I purchased hasn't been activated yet.", answerIndex: 0 },
+  { sender: "Henry", text: "I want to change my shipping address.", answerIndex: 0 },
+  { sender: "Ivy", text: "There's a problem with the bill for my last consultation.", answerIndex: 0 },
+  { sender: "Jack", text: "I have a question about my monthly bill.", answerIndex: 0 },
+  { sender: "Kelly", text: "I'd like to check my member points balance.", answerIndex: 0 },
+  { sender: "Leo", text: "When will my invoice be sent out?", answerIndex: 0 },
+  { sender: "Mandy", text: "I need to apply for an exchange, how do I do that?", answerIndex: 0 },
+  { sender: "Nina", text: "I want to know the current status of my order.", answerIndex: 0 },
+  { sender: "Oscar", text: "My received item is missing parts, how should I deal with it?", answerIndex: 0 },
+  { sender: "Paul", text: "How can I check my past transaction records?", answerIndex: 0 },
+  { sender: "Queenie", text: "I want to change the invoice title.", answerIndex: 0 },
+  { sender: "Ryan", text: "When will my refund be credited?", answerIndex: 0 },
+  { sender: "Sandy", text: "I need to apply for a paper invoice.", answerIndex: 0 },
+  { sender: "Tom", text: "I'd like to check my membership level.", answerIndex: 0 },
+  { sender: "Una", text: "I want to know when my order is expected to ship.", answerIndex: 0 },
+  { sender: "Vicky", text: "I need a replacement receipt.", answerIndex: 0 },
+  { sender: "Will", text: "I'd like to check my points redemption history.", answerIndex: 0 },
+  { sender: "Xavier", text: "I want to cancel the auto-renewal feature.", answerIndex: 0 },
+  { sender: "Yvonne", text: "I need to check my warranty period.", answerIndex: 0 },
+  { sender: "Zack", text: "I want to change my contact number.", answerIndex: 0 },
+  { sender: "Amy", text: "I'd like to check my order delivery progress.", answerIndex: 0 },
+  { sender: "Ben", text: "I need to apply for an invoice reprint.", answerIndex: 0 },
+  { sender: "Cathy", text: "I'd like to check my member exclusive offers.", answerIndex: 0 },
+  { sender: "Derek", text: "I want to know how to apply for a return.", answerIndex: 0 },
+  { sender: "Ella", text: "I need to check my order details.", answerIndex: 0 },
+  { sender: "Fiona", text: "I want to change the recipient address.", answerIndex: 0 },
+  { sender: "George", text: "I'd like to check my consumption invoice.", answerIndex: 0 },
+  { sender: "Helen", text: "I need to check my order payment status.", answerIndex: 0 },
+  { sender: "Ian", text: "I'd like to check my membership card number.", answerIndex: 0 },
+  { sender: "Judy", text: "I need to apply for after-sales repair.", answerIndex: 0 },
+  { sender: "Kevin", text: "I'd like to check my order discount amount.", answerIndex: 0 },
+  { sender: "Linda", text: "I need to check my order invoice number.", answerIndex: 0 },
+  { sender: "Maggie", text: "I'd like to check my order delivery method.", answerIndex: 0 },
+  { sender: "Nick", text: "I need to check my order cancellation status.", answerIndex: 0 },
+  { sender: "Olivia", text: "I'd like to check my order payment method.", answerIndex: 0 },
+  { sender: "Peter", text: "I need to check my order shipment date.", answerIndex: 0 },
+  { sender: "Queena", text: "I'd like to check my order tracking number.", answerIndex: 0 },
+  { sender: "Rita", text: "I need to check my order notes.", answerIndex: 0 },
+  { sender: "Sam", text: "I'd like to check my order coupon usage.", answerIndex: 0 },
+  { sender: "Tina", text: "I need to check my order invoice title.", answerIndex: 0 },
+  { sender: "Ursula", text: "I'd like to check my order delivery time.", answerIndex: 0 },
+  { sender: "Victor", text: "I need to check my order payment history.", answerIndex: 0 },
+  { sender: "Wendy", text: "I'd like to check my order delivery status.", answerIndex: 0 },
+  { sender: "Xena", text: "I need to check my order invoice content.", answerIndex: 0 },
+  { sender: "Yale", text: "I'd like to check my order payment method.", answerIndex: 0 },
+  { sender: "Zoe", text: "I need to check my order delivery method.", answerIndex: 0 },
+  { sender: "Allen", text: "I'd like to check my order payment status.", answerIndex: 0 },
+  { sender: "Betty", text: "I need to check my order invoice number.", answerIndex: 0 },
+  { sender: "Carl", text: "I'd like to check my order delivery method.", answerIndex: 0 },
+  { sender: "Doris", text: "I need to check my order cancellation status.", answerIndex: 0 },
+  { sender: "Ethan", text: "I'd like to check my order payment method.", answerIndex: 0 },
 
 
-  // --- 正確回應: "該問題已經轉交技術部門..." ---
-  { sender: "Alice", text: "網站的密碼重設功能沒有用。", answerIndex: 1 },
-  { sender: "Bob", text: "我無法登入我的帳戶。", answerIndex: 1 },
-  { sender: "Charles", text: "你們的系統一直顯示錯誤訊息 'Error 503'。", answerIndex: 1 },
-  { sender: "David", text: "App在結帳頁面閃退。", answerIndex: 1 },
-  { sender: "Eve", text: "我無法上傳文件到你們的平台。", answerIndex: 1 },
-  { sender: "Frank", text: "你們的API回傳的資料格式不正確。", answerIndex: 1 },
-  { sender: "Grace", text: "系統的資料匯出功能失敗了。", answerIndex: 1 },
-  { sender: "Henry", text: "我懷疑我的帳戶有安全漏洞。", answerIndex: 1 },
-  { sender: "Ivy", text: "系統更新後，某些舊功能不見了。", answerIndex: 1 },
-  { sender: "Jack", text: "我無法將商品加入購物車。", answerIndex: 1 },
-  { sender: "Alice", text: "網站的搜尋功能找不到任何結果。", answerIndex: 1 },
-  { sender: "Bob", text: "你們的付款頁面無法載入。", answerIndex: 1 },
-  { sender: "Charles", text: "系統在處理我的請求時沒有回應。", answerIndex: 1 },
-  { sender: "David", text: "我收到了帳戶異常活動的通知。", answerIndex: 1 },
-  { sender: "Eve", text: "你們的系統與我的瀏覽器不相容。", answerIndex: 1 },
-  { sender: "Frank", text: "我無法儲存我的個人資料變更。", answerIndex: 1 },
-  { sender: "Grace", text: "系統顯示我的儲存空間已滿，但我沒放什麼東西。", answerIndex: 1 },
-  { sender: "Henry", text: "你們的資料庫連線似乎很不穩定。", answerIndex: 1 },
-  { sender: "Ivy", text: "我需要緊急技術支援，我的服務中斷了。", answerIndex: 1 },
-  { sender: "Jack", text: "用戶介面的按鈕點了沒有反應。", answerIndex: 1 },
-  { sender: "Kelly", text: "我的帳號被鎖住，無法登入。", answerIndex: 1 },
-  { sender: "Leo", text: "系統顯示資料庫錯誤，請協助處理。", answerIndex: 1 },
-  { sender: "Mandy", text: "我上傳檔案時一直出現錯誤訊息。", answerIndex: 1 },
-  { sender: "Nina", text: "網站載入速度很慢，請問怎麼辦？", answerIndex: 1 },
-  { sender: "Oscar", text: "App閃退無法正常使用。", answerIndex: 1 },
-  { sender: "Paul", text: "我收到的驗證信無法點擊連結。", answerIndex: 1 },
-  { sender: "Queenie", text: "系統更新後資料遺失。", answerIndex: 1 },
-  { sender: "Ryan", text: "登入時顯示密碼錯誤，但我確定正確。", answerIndex: 1 },
-  { sender: "Sandy", text: "無法重設密碼，請協助。", answerIndex: 1 },
-  { sender: "Tom", text: "系統顯示服務暫時無法使用。", answerIndex: 1 },
-  { sender: "Una", text: "我收到的推播通知內容有誤。", answerIndex: 1 },
-  { sender: "Vicky", text: "網站圖片無法顯示。", answerIndex: 1 },
-  { sender: "Will", text: "我無法下載附件檔案。", answerIndex: 1 },
-  { sender: "Xavier", text: "系統自動登出，請問原因？", answerIndex: 1 },
-  { sender: "Yvonne", text: "我收到的簡訊驗證碼無法使用。", answerIndex: 1 },
-  { sender: "Zack", text: "App更新後無法啟動。", answerIndex: 1 },
-  { sender: "Amy", text: "網站表單送出後沒有反應。", answerIndex: 1 },
-  { sender: "Ben", text: "我無法修改個人資料。", answerIndex: 1 },
-  { sender: "Cathy", text: "系統顯示伺服器錯誤。", answerIndex: 1 },
-  { sender: "Derek", text: "我無法收到重設密碼的信件。", answerIndex: 1 },
-  { sender: "Ella", text: "網站顯示 404 找不到頁面。", answerIndex: 1 },
-  { sender: "Fiona", text: "我無法新增收件地址。", answerIndex: 1 },
-  { sender: "George", text: "系統顯示 API 錯誤。", answerIndex: 1 },
-  { sender: "Helen", text: "我無法啟用雙重驗證。", answerIndex: 1 },
-  { sender: "Ian", text: "網站顯示「請稍後再試」。", answerIndex: 1 },
-  { sender: "Judy", text: "我無法收到通知信。", answerIndex: 1 },
-  { sender: "Kevin", text: "系統顯示「連線逾時」。", answerIndex: 1 },
-  { sender: "Linda", text: "我無法儲存設定變更。", answerIndex: 1 },
-  { sender: "Maggie", text: "網站顯示「權限不足」。", answerIndex: 1 },
-  { sender: "Nick", text: "我無法上傳大檔案。", answerIndex: 1 },
-  { sender: "Olivia", text: "App閃退後資料遺失。", answerIndex: 1 },
-  { sender: "Peter", text: "網站顯示「系統維護中」。", answerIndex: 1 },
-  { sender: "Queena", text: "我無法啟用新功能。", answerIndex: 1 },
-  { sender: "Rita", text: "系統顯示「未知錯誤」。", answerIndex: 1 },
-  { sender: "Sam", text: "我無法收到驗證簡訊。", answerIndex: 1 },
-  { sender: "Tina", text: "網站顯示「請重新登入」。", answerIndex: 1 },
-  { sender: "Ursula", text: "我無法啟用推播通知。", answerIndex: 1 },
-  { sender: "Victor", text: "系統顯示「資料格式錯誤」。", answerIndex: 1 },
-  { sender: "Wendy", text: "我無法下載發票。", answerIndex: 1 },
-  { sender: "Xena", text: "網站顯示「服務異常」。", answerIndex: 1 },
-  { sender: "Yale", text: "我無法啟用會員功能。", answerIndex: 1 },
-  { sender: "Zoe", text: "App閃退後無法重新登入。", answerIndex: 1 },
-  { sender: "Allen", text: "系統顯示「資料同步失敗」。", answerIndex: 1 },
-  { sender: "Betty", text: "我無法啟用優惠券。", answerIndex: 1 },
-  { sender: "Carl", text: "網站顯示「請求失敗」。", answerIndex: 1 },
-  { sender: "Doris", text: "我無法收到推播通知。", answerIndex: 1 },
-  { sender: "Ethan", text: "系統顯示「請稍後再試」。", answerIndex: 1 },
+  // --- Correct Response: "The issue has been forwarded to the technical department..." ---
+  { sender: "Alice", text: "The website's password reset function isn't working.", answerIndex: 1 },
+  { sender: "Bob", text: "I can't log into my account.", answerIndex: 1 },
+  { sender: "Charles", text: "Your system keeps showing an error message 'Error 503'.", answerIndex: 1 },
+  { sender: "David", text: "The app crashes on the checkout page.", answerIndex: 1 },
+  { sender: "Eve", text: "I can't upload documents to your platform.", answerIndex: 1 },
+  { sender: "Frank", text: "Your API is returning incorrect data format.", answerIndex: 1 },
+  { sender: "Grace", text: "The system's data export function failed.", answerIndex: 1 },
+  { sender: "Henry", text: "I suspect there's a security vulnerability in my account.", answerIndex: 1 },
+  { sender: "Ivy", text: "After the system update, some old features are gone.", answerIndex: 1 },
+  { sender: "Jack", text: "I can't add items to my shopping cart.", answerIndex: 1 },
+  { sender: "Alice", text: "The website's search function isn't finding any results.", answerIndex: 1 },
+  { sender: "Bob", text: "Your payment page isn't loading.", answerIndex: 1 },
+  { sender: "Charles", text: "The system is unresponsive when processing my request.", answerIndex: 1 },
+  { sender: "David", text: "I received a notification of unusual account activity.", answerIndex: 1 },
+  { sender: "Eve", text: "Your system is incompatible with my browser.", answerIndex: 1 },
+  { sender: "Frank", text: "I can't save my personal information changes.", answerIndex: 1 },
+  { sender: "Grace", text: "The system shows my storage space is full, but I haven't put much in it.", answerIndex: 1 },
+  { sender: "Henry", text: "Your database connection seems very unstable.", answerIndex: 1 },
+  { sender: "Ivy", text: "I need urgent technical support, my service is interrupted.", answerIndex: 1 },
+  { sender: "Jack", text: "The buttons on the user interface are not responding when clicked.", answerIndex: 1 },
+  { sender: "Kelly", text: "My account is locked and I can't log in.", answerIndex: 1 },
+  { sender: "Leo", text: "The system shows a database error, please help resolve it.", answerIndex: 1 },
+  { sender: "Mandy", text: "I keep getting error messages when uploading files.", answerIndex: 1 },
+  { sender: "Nina", text: "The website loads very slowly, what should I do?", answerIndex: 1 },
+  { sender: "Oscar", text: "The app crashes and cannot be used normally.", answerIndex: 1 },
+  { sender: "Paul", text: "The link in the verification email I received is not clickable.", answerIndex: 1 },
+  { sender: "Queenie", text: "Data was lost after the system update.", answerIndex: 1 },
+  { sender: "Ryan", text: "It shows password incorrect when logging in, but I'm sure it's right.", answerIndex: 1 },
+  { sender: "Sandy", text: "Cannot reset password, please assist.", answerIndex: 1 },
+  { sender: "Tom", text: "The system shows service temporarily unavailable.", answerIndex: 1 },
+  { sender: "Una", text: "The content of the push notification I received is incorrect.", answerIndex: 1 },
+  { sender: "Vicky", text: "Website images are not displaying.", answerIndex: 1 },
+  { sender: "Will", text: "I cannot download attachment files.", answerIndex: 1 },
+  { sender: "Xavier", text: "The system automatically logs out, what's the reason?", answerIndex: 1 },
+  { sender: "Yvonne", text: "The SMS verification code I received is not working.", answerIndex: 1 },
+  { sender: "Zack", text: "The app won't launch after the update.", answerIndex: 1 },
+  { sender: "Amy", text: "The website form doesn't respond after submission.", answerIndex: 1 },
+  { sender: "Ben", text: "I can't modify my personal information.", answerIndex: 1 },
+  { sender: "Cathy", text: "The system shows a server error.", answerIndex: 1 },
+  { sender: "Derek", text: "I'm not receiving password reset emails.", answerIndex: 1 },
+  { sender: "Ella", text: "The website shows 404 page not found.", answerIndex: 1 },
+  { sender: "Fiona", text: "I can't add a new shipping address.", answerIndex: 1 },
+  { sender: "George", text: "The system shows an API error.", answerIndex: 1 },
+  { sender: "Helen", text: "I can't enable two-factor authentication.", answerIndex: 1 },
+  { sender: "Ian", text: "The website says 'Please try again later'.", answerIndex: 1 },
+  { sender: "Judy", text: "I'm not receiving notification emails.", answerIndex: 1 },
+  { sender: "Kevin", text: "The system shows 'Connection timed out'.", answerIndex: 1 },
+  { sender: "Linda", text: "I can't save my settings changes.", answerIndex: 1 },
+  { sender: "Maggie", text: "The website shows 'Insufficient permissions'.", answerIndex: 1 },
+  { sender: "Nick", text: "I can't upload large files.", answerIndex: 1 },
+  { sender: "Olivia", text: "Data was lost after the app crashed.", answerIndex: 1 },
+  { sender: "Peter", text: "The website shows 'System under maintenance'.", answerIndex: 1 },
+  { sender: "Queena", text: "I can't enable new features.", answerIndex: 1 },
+  { sender: "Rita", text: "The system shows 'Unknown error'.", answerIndex: 1 },
+  { sender: "Sam", text: "I'm not receiving verification SMS messages.", answerIndex: 1 },
+  { sender: "Tina", text: "The website says 'Please log in again'.", answerIndex: 1 },
+  { sender: "Ursula", text: "I can't enable push notifications.", answerIndex: 1 },
+  { sender: "Victor", text: "The system shows 'Data format error'.", answerIndex: 1 },
+  { sender: "Wendy", text: "I can't download invoices.", answerIndex: 1 },
+  { sender: "Xena", text: "The website shows 'Service abnormal'.", answerIndex: 1 },
+  { sender: "Yale", text: "I can't enable member features.", answerIndex: 1 },
+  { sender: "Zoe", text: "After the app crashes, I can't log in again.", answerIndex: 1 },
+  { sender: "Allen", text: "The system shows 'Data synchronization failed'.", answerIndex: 1 },
+  { sender: "Betty", text: "I can't enable coupons.", answerIndex: 1 },
+  { sender: "Carl", text: "The website shows 'Request failed'.", answerIndex: 1 },
+  { sender: "Doris", text: "I'm not receiving push notifications.", answerIndex: 1 },
+  { sender: "Ethan", text: "The system shows 'Please try again later'.", answerIndex: 1 },
 ];
-
-console.log(`Total messages: ${initialChatData.length}`);
 
 const customerServiceEvents = [];
 let eventIdCounter = 0;
@@ -493,6 +638,7 @@ for (const message of initialChatData) {
     status: 'pending', // 'pending', 'handled'
     timestamp: Date.now() - Math.random() * 100000, // Add some jitter for ordering
     chosenResponse: null,
+    correctAnswerIndex: message.answerIndex,
   });
 }
 customerServiceEvents.sort((a, b) => a.timestamp - b.timestamp); // Ensure chronological order
@@ -507,7 +653,8 @@ customerServiceEvents.forEach((event, index) => {
   customerServiceEventMap[event.id] = {
     contactName: event.contactName,
     text: event.text,
-    timestamp: event.timestamp
+    timestamp: event.timestamp,
+    correctAnswerIndex: event.correctAnswerIndex,
   };
 });
 
@@ -992,11 +1139,8 @@ function createPrimaryTaskSet(sourceEvents, numTrials, numInterruptions, blockLa
     // Potentially add logic to repeat events if numTrials > blockEvents.length
   }
 
-  const indices = Array.from(Array(blockEvents.length).keys());
-  shuffle(indices);
-  for (let i = 0; i < numInterruptions && i < indices.length; i++) {
-    blockEvents[indices[i]].Interruption = Math.random() < 0.5;
-  }
+  // Initialize all events to not be interruptions
+  blockEvents.forEach(event => event.Interruption = false);
 
   // Insert interruptions at regular intervals
   if (numInterruptions > 0) {
@@ -1055,6 +1199,7 @@ for (const [blockIndex, config] of primaryTaskBlockConfigs.entries()) {
     const popupData = POPUP_MESSAGES[Math.floor(Math.random() * POPUP_MESSAGES.length)];
     const popupHtml = cs_event.Interruption
       ? `<div class="jspsych-popup-message" style="text-align:left;">
+          <button class="jspsych-popup-close" style="position:absolute; top:6px; right:8px; background:transparent; border:none; font-size:18px; color:#888; cursor:pointer;">&times;</button>
           <div style="font-weight:bold; font-size:1.05em;">${popupData.app}</div>
           <div style="color:#1a73e8; font-weight:500;">${popupData.sender}</div>
           <div style="margin-top:2px;">${popupData.message}</div>
@@ -1260,10 +1405,12 @@ for (const [blockIndex, config] of primaryTaskBlockConfigs.entries()) {
         task_type: 'customer_service_primary',
         block_condition_label: config.label,
         trial_in_block: trialInBlockIndex,
+        block_index: blockIndex,
         customer_event_id: cs_event.id,
         customer_event_text: cs_event.text,
         customer_event_contact: cs_event.contactName,
         is_interruption: cs_event.Interruption,
+        correct_answer_index: cs_event.correctAnswerIndex,
         // Remove secondary_task_stimulus binding - emails are independent now
         timestamp: Date.now(),
       },
@@ -1286,6 +1433,14 @@ for (const [blockIndex, config] of primaryTaskBlockConfigs.entries()) {
             if (popupElement) popupElement.classList.remove('show');
           }, params.popupDuration);
           this.primaryTaskTimers.push(hideTimer);
+
+          // 新增：打叉按鈕事件
+          const closeBtn = popupElement.querySelector('.jspsych-popup-close');
+          if (closeBtn) {
+            closeBtn.addEventListener('click', () => {
+              popupElement.style.display = 'none';
+            });
+          }
         }
 
         // --- Secondary Task (Email Classification) Listeners ---
@@ -1446,7 +1601,6 @@ for (const [blockIndex, config] of primaryTaskBlockConfigs.entries()) {
               correct: classificationChoice === (emailStimulus?.CorrectAnswer || 'w') ? 1 : 0, // Boolean as number
               rt: Math.round(rt), // Round RT to nearest millisecond
               email_classification_count: globalEmailClassificationCount, // Track which email this is in the trial
-              primary_task_cs_event_id: trialData?.customer_event_id || 'unknown_event',
               timestamp: Date.now(),
             });
 
@@ -1570,6 +1724,13 @@ for (const [blockIndex, config] of primaryTaskBlockConfigs.entries()) {
         } else {
           console.warn("Could not find customer event to update in on_finish:", customerEventId);
         }
+
+        if (data.response !== null) {
+          data.correct = data.response === data.correct_answer_index;
+        } else {
+          data.correct = false; // No response is incorrect
+        }
+
         data.primary_task_response_text = chosenResponseText;
         data.primary_task_rt = data.rt;
       }
@@ -1794,6 +1955,7 @@ timeline.push(
     return acc;
   }, []))
 );
+timeline.push(interBlockSurvey);
 
 addCustomStyles(); // Add the CSS for animations
 
@@ -1811,19 +1973,18 @@ const jsPsych = initJsPsych({
     });
 
     const dataToSave = {
-      experimentData: JSON.stringify(
+      experimentData:
         data.map((e) => {
           delete e.stimulus;
           delete e.plugin_version;
           return e;
         }),
-      ),
-      handledCustomerServiceEvents: JSON.stringify(handledEventLog),
-      emailClassificationResponses: JSON.stringify(emailClassificationResponses),
-      stimulusReferences: JSON.stringify({
+      handledCustomerServiceEvents: handledEventLog,
+      emailClassificationResponses: emailClassificationResponses,
+      stimulusReferences: {
         emailStimuli: emailStimulusReference,
         customerServiceEvents: customerServiceEventReference
-      }),
+      },
     };
     document.body.innerHTML = JSON.stringify(dataToSave);
     const prolificId = jsPsych.data.getURLVariable("PROLIFIC_PID") || "unknown";
