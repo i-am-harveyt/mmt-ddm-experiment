@@ -1973,8 +1973,25 @@ function addCustomStyles() {
   document.head.appendChild(style);
 }
 
+const blockStartScreen = {
+  type: jsPsychInstructions,
+  pages: [
+    `
+    <div style="font-size: 22px; line-height: 1.6;">
+      <p>The next section is about to begin.</p>
+      <p>Please place your hands on the keyboard or mouse and prepare to start.</p>
+      <p>Click "Next" when you are ready.</p>
+    </div>
+    `
+  ],
+  show_clickable_nav: true,
+  button_label_next: "Next",
+  data: { task: "block_start_screen" }
+};
+
 timeline.push(
   ...(trialBlocks.reduce((acc, block, index) => {
+    acc.push(blockStartScreen); // Add start screen before the block
     acc.push(...block); // Spread the trials of the block
     if (index < trialBlocks.length - 1) { // Add interBlockSurvey between blocks
       acc.push(interBlockSurvey);
