@@ -191,7 +191,7 @@ const instructions = {
     </p>`,
 
     `
-    <h2>Instruction 1 / 4: Task One</h2>
+    <h2>Instruction 1 / 4: Primary Task</h2>
     <p>
     You will see a customer message panel on the right side of the screen.<br/>
     We will set a response time limit of ${params.trialDuration / 1_000} seconds for each message, which will be displayed on the screen.
@@ -204,7 +204,7 @@ const instructions = {
     </p>`,
 
     `
-    <h2>Instruction 2 / 4: Task Two</h2>
+    <h2>Instruction 2 / 4: Secondary Task</h2>
     <p>
     At the same time, several emails will continuously appear on the left side of the screen.<br/>
     Please determine whether their content is work-related.
