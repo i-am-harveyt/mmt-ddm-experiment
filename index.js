@@ -113,7 +113,7 @@ const mmm_sSurvey_TV = {
     "<h3>Media Usage Habits Questionnaire</h3><p>The following questions aim to understand how frequently you use television simultaneously with other types of media.</p>",
   data: { task: "mmm_s_survey_tv" },
 };
-timeline.push(mmm_sSurvey_TV);
+// timeline.push(mmm_sSurvey_TV);
 
 const mmm_sSurvey_SNS = {
   type: jsPsychSurveyLikert,
@@ -122,7 +122,7 @@ const mmm_sSurvey_SNS = {
     "<h3>Media Usage Habits Questionnaire</h3><p>The following questions aim to understand how frequently you use social networking sites simultaneously with other types of media.</p>",
   data: { task: "mmm_s_survey_sns" },
 };
-timeline.push(mmm_sSurvey_SNS);
+// timeline.push(mmm_sSurvey_SNS);
 
 const mmm_sSurvey_Msg = {
   type: jsPsychSurveyLikert,
@@ -131,7 +131,7 @@ const mmm_sSurvey_Msg = {
     "<h3>Media Usage Habits Questionnaire</h3><p>The following questions aim to understand how frequently you use messaging applications on your phone or computer simultaneously with other types of media.</p>",
   data: { task: "mmm_s_survey_msg" },
 };
-timeline.push(mmm_sSurvey_Msg);
+// timeline.push(mmm_sSurvey_Msg);
 
 // Polychronic–Monochronic Tendency Scale (PMTS)
 const pmtsScale = ["Strongly disagree", "Disagree", "Slightly disagree", "Neutral", "Slightly agree", "Agree", "Strongly agree"];
@@ -173,7 +173,7 @@ const pmtsSurvey = {
   preamble: "<h3>Personal Work Style Questionnaire</h3>",
   data: { task: "pmts_survey" },
 };
-timeline.push(pmtsSurvey);
+// timeline.push(pmtsSurvey);
 
 // --- 2. Instructions ---
 const instructions = {
@@ -311,7 +311,7 @@ const comprehensionLoop = {
   }
 };
 
-timeline.push(comprehensionLoop);
+// timeline.push(comprehensionLoop);
 
 // --- 3. Inter-block Questionnaire
 const interBlockQuestions = [
@@ -1918,7 +1918,7 @@ function addCustomStyles() {
       justify-content: center;
       gap: 18px;
       margin: 28px 0 0 0;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
     }
     #primary-task-panel .jspsych-btn.response-btn-primary {
       flex: 1 1 120px;
@@ -1943,12 +1943,7 @@ function addCustomStyles() {
     #primary-task-panel .jspsych-btn.response-btn-primary:active {
       background: #0d3c6e;
     }
-    @media (max-width: 900px) {
-      #primary-task-panel #jspsych-html-button-response-btngroup {
-        flex-direction: column;
-        gap: 12px;
-      }
-    }
+
     .jspsych-display-element {
       max-width: 100vw;
       max-height: 100vh;
