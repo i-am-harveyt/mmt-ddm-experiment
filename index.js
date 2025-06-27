@@ -4,6 +4,12 @@
 const APP_URL = "https://script.google.com/macros/s/AKfycbwBdzSzb9o6OBd2MLcWr2URp_3D2EKcsI7o6WwLpn4I-gVNQyhYxNbhZGVDShPY29L-6Q/exec";
 
 /**
+ * `completionCode` stores the completion code for the experiment
+ */
+const completionCode = "YOUR_COMPLETION_CODE_HERE";
+
+
+/**
  * `timeline` stores the steps of the experiment
  */
 const timeline = [];
@@ -1985,6 +1991,48 @@ timeline.push(interBlockSurvey);
 
 addCustomStyles(); // Add the CSS for animations
 
+// --- Demographic Survey (Control Variables) ---
+const demographicSurvey = {
+  type: jsPsychSurveyMultiChoice,
+  preamble: "<h3>Demographic Information</h3><p>Please answer the following questions:</p>",
+  questions: [
+    {
+      prompt: "What is your biological gender?",
+      name: "gender",
+      options: ["Male", "Female", "Other", "Prefer not to say"],
+      required: true
+    },
+    {
+      prompt: "What is your age group?",
+      name: "age_group",
+      options: [
+        "15-19", "20-24", "25-29", "30-34", "35-39",
+        "40-44", "45-49", "50-54", "55-59", "60-64", "65 or above"
+      ],
+      required: true
+    },
+    {
+      prompt: "Which region are you currently living in?",
+      name: "region",
+      options: [
+        "North America", "South America", "Europe", "Asia", "Africa", "Oceania", "Other"
+      ],
+      required: true
+    },
+    {
+      prompt: "What is your current occupation?",
+      name: "occupation",
+      options: [
+        "Student", "Academic/Researcher", "Office Worker", "Self-employed", "Unemployed", "Retired", "Other"
+      ],
+      required: true
+    }
+  ],
+  data: { task: "demographic_survey" }
+};
+
+timeline.push(demographicSurvey);
+
 const jsPsych = initJsPsych({
   show_progress_bar: true,
   on_finish: () => {
@@ -2022,9 +2070,17 @@ const jsPsych = initJsPsych({
         prolific_id: prolificId,
         data: dataToSave,
       }),
-    }).then((response) => {
-      // window.location.href = "about:blank";
-      // "https://app.prolific.com/submissions/complete?cc=你的完成碼";
+    }).finally(() => {
+      // Show Prolific completion code and link
+      const prolificUrl = `https://app.prolific.com/submissions/complete?cc=${completionCode}`;
+      document.body.innerHTML = `
+        <div style="max-width: 500px; margin: 80px auto; padding: 32px; background: #fff; border-radius: 10px; box-shadow: 0 2px 16px rgba(0,0,0,0.08); text-align: center; font-family: sans-serif;">
+          <h2>Thank you for participating!</h2>
+          <p style="font-size: 1.1em; margin: 24px 0 12px 0;">Your Prolific completion code is:</p>
+          <div style="font-size: 1.5em; font-weight: bold; color: #1976d2; margin-bottom: 24px;">${completionCode}</div>
+          <a href="${prolificUrl}" style="display: inline-block; padding: 12px 28px; background: #1976d2; color: #fff; border-radius: 6px; font-size: 1.1em; text-decoration: none; font-weight: 500;">Click here to return to Prolific</a>
+        </div>
+      `;
     });
   },
 });
