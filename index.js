@@ -14,687 +14,6 @@ const completionCode = "YOUR_COMPLETION_CODE_HERE";
  */
 const timeline = [];
 
-/**
- * Experiment Settings
- */
-const params = {
-  trialsPerBlock: 30,
-  popupFreq: { low: 2, med: 5, high: 8 },
-  trialDuration: 20_000,
-  popupDuration: 4_000,
-};
-
-// --- 1. Questionnaires ---
-const welcome = {
-  type: jsPsychInstructions,
-  pages: [
-    `
-    <h1>Welcome to the Experiment</h1>
-    <p>
-    Thank you for participating in this experiment.<br/>
-    Next, you'll be asked to complete a questionnaire and then proceed with the experiment itself.<br/>
-    The entire process is divided into three sections, with a questionnaire at the end of each section and a final one at the very end.
-    </p>
-    `
-  ],
-  show_clickable_nav: true,
-  button_label_next: "Next",
-  button_label_previous: "Previous",
-};
-timeline.push(welcome);
-
-
-// Short Media Multitasking Measure (MMM-S)
-const mmm_sScale = ["Never", "Sometimes", "Often", "Very often"];
-const mmm_sQuestions_TV = [
-  {
-    prompt: "While watching TV, how often do you also also listen to music at the same time?",
-    name: "MMM_TV_Music",
-    labels: mmm_sScale,
-    required: true,
-  },
-  {
-    prompt: "While watching TV, how often do you also send messages via phone or computer (e.g., text messages, WhatsApp, instant messaging)?",
-    name: "MMM_TV_Msg",
-    labels: mmm_sScale,
-    required: true,
-  },
-  {
-    prompt: "While watching TV, how often do you also use social networking sites (e.g., Facebook, Instagram)?",
-    name: "MMM_TV_SNS",
-    labels: mmm_sScale,
-    required: true,
-  },
-];
-const mmm_sQuestions_SNS = [
-  {
-    prompt: "While using social networking sites, how often do you also listen to music?",
-    name: "MMM_SNS_Music",
-    labels: mmm_sScale,
-    required: true,
-  },
-  {
-    prompt: "While using social networking sites, how often do you also send messages via phone or computer?",
-    name: "MMM_SNS_Msg",
-    labels: mmm_sScale,
-    required: true,
-  },
-  {
-    prompt: "While using social networking sites, how often do you also watch TV?",
-    name: "MMM_SNS_TV",
-    labels: mmm_sScale,
-    required: true,
-  },
-];
-const mmm_sQuestions_Msg = [
-  {
-    prompt: "While sending messages via phone or computer, how often do you also listen to music?",
-    name: "MMM_Msg_Music",
-    labels: mmm_sScale,
-    required: true,
-  },
-  {
-    prompt: "While sending messages via phone or computer, how often do you also use social networking sites?",
-    name: "MMM_Msg_SNS",
-    labels: mmm_sScale,
-    required: true,
-  },
-  {
-    prompt: "While sending messages via phone or computer, how often do you also watch TV?",
-    name: "MMM_Msg_TV",
-    labels: mmm_sScale,
-    required: true,
-  },
-];
-const mmm_sSurvey_TV = {
-  type: jsPsychSurveyLikert,
-  questions: mmm_sQuestions_TV,
-  preamble:
-    "<h3>Media Usage Habits Questionnaire</h3><p>The following questions aim to understand how frequently you use television simultaneously with other types of media.</p>",
-  data: { task: "mmm_s_survey_tv" },
-};
-timeline.push(mmm_sSurvey_TV);
-
-const mmm_sSurvey_SNS = {
-  type: jsPsychSurveyLikert,
-  questions: mmm_sQuestions_SNS,
-  preamble:
-    "<h3>Media Usage Habits Questionnaire</h3><p>The following questions aim to understand how frequently you use social networking sites simultaneously with other types of media.</p>",
-  data: { task: "mmm_s_survey_sns" },
-};
-timeline.push(mmm_sSurvey_SNS);
-
-const mmm_sSurvey_Msg = {
-  type: jsPsychSurveyLikert,
-  questions: mmm_sQuestions_Msg,
-  preamble:
-    "<h3>Media Usage Habits Questionnaire</h3><p>The following questions aim to understand how frequently you use messaging applications on your phone or computer simultaneously with other types of media.</p>",
-  data: { task: "mmm_s_survey_msg" },
-};
-timeline.push(mmm_sSurvey_Msg);
-
-// Polychronic–Monochronic Tendency Scale (PMTS)
-const pmtsScale = ["Strongly disagree", "Disagree", "Slightly disagree", "Neutral", "Slightly agree", "Agree", "Strongly agree"];
-const pmtsQuestions = [
-  {
-    prompt: "I prefer to do two or more activities at the same time.",
-    name: "PMTS_1",
-    labels: pmtsScale,
-    required: true,
-  },
-  {
-    prompt: "I typically do two or more activities at the same time.",
-    name: "PMTS_2",
-    labels: pmtsScale,
-    required: true,
-  },
-  {
-    prompt: "Doing two or more activities at the same time is the most efficient way to use my time.",
-    name: "PMTS_3",
-    labels: pmtsScale,
-    required: true,
-  },
-  {
-    prompt: "I am comfortable doing more than one activity at the same time.",
-    name: "PMTS_4",
-    labels: pmtsScale,
-    required: true,
-  },
-  {
-    prompt: "I like to juggle two or more activities at the same time.",
-    name: "PMTS_5",
-    labels: pmtsScale,
-    required: true,
-  },
-];
-const pmtsSurvey = {
-  type: jsPsychSurveyLikert,
-  questions: pmtsQuestions,
-  preamble: "<h3>Personal Work Style Questionnaire</h3>",
-  data: { task: "pmts_survey" },
-};
-timeline.push(pmtsSurvey);
-
-// --- 2. Instructions ---
-const instructions = {
-  type: jsPsychInstructions,
-  pages: [
-    `
-    <h1>Welcome to the Experiment</h1>
-    <p>
-    Thank you for participating in this experiment.<br/>
-    The entire process will consist of three sections, with a questionnaire provided at the beginning, middle, and end.
-    </p>
-    <p>
-    Next, you will act as a customer service representative and perform two tasks simultaneously.<br/>
-    These two tasks will be presented in side-by-side areas on the left and right sides of the screen.
-    </p>`,
-
-    `
-    <h2>Instruction 1 / 4: Primary Task</h2>
-    <p>
-    You will see a customer message panel on the right side of the screen.<br/>
-    We will set a response time limit of ${params.trialDuration / 1_000} seconds for each message, which will be displayed on the screen.
-    </p>
-    <img src="static/Exp_Instruction_rhs.png" alt="Task One" style="width: 55dvw; height: auto;">
-    <p>
-    Please quickly and accurately select the correct response option below based on the message content:<br/>
-    ─ If it's an order or process-related question, please click "Please provide your order number."<br/>
-    ─ If it's a technical issue, please click "The issue has been forwarded to the technical department, and we will get back to you as soon as possible."
-    </p>`,
-
-    `
-    <h2>Instruction 2 / 4: Secondary Task</h2>
-    <p>
-    At the same time, several emails will continuously appear on the left side of the screen.<br/>
-    Please determine whether their content is work-related.
-    </p>
-    <img src="static/Exp_Instruction_lhs.png" alt="Task Two" style="width: 55dvw; height: auto;">
-    <p>
-    Below each email, there are two buttons: <b>"Work-Related"</b> and <b>"Not Work-Related"</b>. Please click honestly to complete the classification.
-    </p>`,
-
-    `
-    <h2>Instruction 3 / 4: Other Tips</h2>
-    <p>
-    During the experiment, message prompts from email, Slack, or Teams may randomly pop up on the screen as a modal window.
-    </p>
-    <img src="static/Exp_Instruction_popup.png" alt="Task Two" style="width: 55dvw; height: auto;">
-    <p>
-    There is a dismiss button in the upper right corner of the prompt; clicking it will make it disappear. <br/>
-    If not dismissed beforehand, each prompt will automatically close after ${params.popupDuration / 1_000} seconds.<br/>
-    </p>`,
-
-    `
-    <h2>Instruction 4 / 4: Task Completion and Reminder</h2>
-    <p>
-    The experiment will automatically end once you complete all of Task One.<br/>
-    If you plan to perform the secondary task, please be mindful of your time and pace.
-    </p>
-    <p>
-    Please do your best to complete both tasks.<br/>
-    Once you are ready, please click "Next" to start the comprehension check.<br/>
-    <b>If you do not pass the comprehension check, please re-read the instructions and answer again.</b>
-    </p>`,
-  ],
-  show_clickable_nav: true,
-  button_label_next: "Next",
-  button_label_previous: "Previous",
-};
-
-// --- Comprehension Check ---
-const comprehensionQuestions = [
-  {
-    prompt: "When you see 'I can't log in to my account' in the customer message panel, which response should you choose?",
-    options: [
-      "Please provide your order number.",
-      "The issue has been forwarded to the technical department, and we will get back to you as soon as possible.",
-      "No response needed."
-    ],
-    required: true,
-    correct: 1
-  },
-  {
-    prompt: "In the Email task, how should you categorize 'Company Policy Update Notification'?",
-    options: [
-      "Work-Related",
-      "Not Work-Related"
-    ],
-    required: true,
-    correct: 0
-  },
-  {
-    prompt: "When a pop-up message appears, do you need to click or respond to it?",
-    options: [
-      "Yes, otherwise you can't continue.",
-      "No, it will disappear automatically."
-    ],
-    required: true,
-    correct: 1
-  }
-];
-const comprehensionCheck = {
-  type: jsPsychSurveyMultiChoice,
-  questions: comprehensionQuestions.map(q => ({
-    prompt: q.prompt,
-    options: q.options,
-    required: q.required
-  })),
-  preamble: "<h3>Comprehension Check</h3><p>Please answer the following questions to ensure you understand the experiment rules.</p>",
-  button_label: "Submit",
-  on_finish: function (data) {
-    let responses = data.response;
-    const correctAnswers = comprehensionQuestions.map(q => q.correct);
-    const userAnswers = Object.values(responses).map((ans, i) =>
-      comprehensionQuestions[i].options.indexOf(ans)
-    );
-    console.log(correctAnswers, userAnswers);
-    const allCorrect = userAnswers.every((ans, i) => ans === correctAnswers[i]);
-    data.comprehension_passed = allCorrect;
-  }
-};
-
-// 包裝 instructions + comprehensionCheck
-const comprehensionWithInstructions = {
-  timeline: [instructions, comprehensionCheck]
-};
-
-const comprehensionLoop = {
-  timeline: [comprehensionWithInstructions],
-  loop_function: function (data) {
-    const last = data.values().slice(-1)[0];
-    if (!last.comprehension_passed) {
-      alert("Some questions were answered incorrectly. Please read the instructions again and answer again.");
-      return true; // 重新顯示說明+檢核
-    }
-    return false; // 通過，進入正式實驗
-  }
-};
-
-timeline.push(comprehensionLoop);
-
-// --- 3. Inter-block Questionnaire
-const interBlockQuestions = [
-  {
-    prompt: "I think completing this task makes me feel more competent.",
-    name: "INTER_AV_1",
-    labels: pmtsScale,
-    required: true,
-  },
-  {
-    prompt: "I think this task gives me a sense of achievement.",
-    name: "INTER_AV_2",
-    labels: pmtsScale,
-    required: true,
-  },
-  {
-    prompt: "I feel that succeeding in this task confirms my ability.",
-    name: "INTER_AV_3",
-    labels: pmtsScale,
-    required: true,
-  },
-  {
-    prompt: "This task gives me confidence in my skills.",
-    name: "INTER_AV_4",
-    labels: pmtsScale,
-    required: true,
-  },
-  {
-    prompt: "I think this task is interesting.",
-    name: "INTER_IV_1",
-    labels: pmtsScale,
-    required: true,
-  },
-  {
-    prompt: "I enjoy working on this task.",
-    name: "INTER_IV_2",
-    labels: pmtsScale,
-    required: true,
-  },
-  {
-    prompt: "I find this task fun.",
-    name: "INTER_IV_3",
-    labels: pmtsScale,
-    required: true,
-  },
-  {
-    prompt: "I think completing this task is helpful for my future work performance.",
-    name: "INTER_UV_1",
-    labels: pmtsScale,
-    required: true,
-  },
-  {
-    prompt: "I believe this task is useful for improving my professional skills.",
-    name: "INTER_UV_2",
-    labels: pmtsScale,
-    required: true,
-  },
-  {
-    prompt: "This task is valuable for achieving my long-term career goals.",
-    name: "INTER_UV_3",
-    labels: pmtsScale,
-    required: true,
-  },
-  {
-    prompt: "I feel uneasy when performing this task.",
-    name: "INTER_AN_1",
-    labels: pmtsScale,
-    required: true,
-  },
-  {
-    prompt: "I feel anxious about completing this task.",
-    name: "INTER_AN_2",
-    labels: pmtsScale,
-    required: true,
-  },
-  {
-    prompt: "I feel uncomfortable working on this task.",
-    name: "INTER_AN_3",
-    labels: pmtsScale,
-    required: true,
-  },
-];
-const interBlockSurvey = {
-  type: jsPsychSurveyLikert,
-  questions: interBlockQuestions,
-  preamble: "<h3>Subjective Value Questionnaire</h3><p>Please answer according to your perception of the primary task.</p>",
-  data: { task: "inter_survey", timestamp: Date.now() },
-};
-
-// --- 4. Task-related Functions & Data ---
-
-// Primary Task (Customer Service) - Now tracked by jsPsych
-const RESPONSE_BEHAVIOR = [
-  "Please provide your order number.",
-  "The issue has been forwarded to the technical department, and we will get back to you as soon as possible.",
-];
-
-function renderCurrentEventDisplay(event) {
-  if (!event) {
-    return "<p style='padding: 10px; text-align: center;'>No pending customer messages.</p>";
-  }
-  return `
-    <div class="event-content-wrapper" data-event-id="${event.id}" style="padding: 16px; background-color: #ffffff; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.08);">
-      <h4 style="margin-top: 0; margin-bottom: 8px; color: #343a40; font-size: 0.95em; font-weight: 600;">From: ${event.contactName}</h4>
-      <p style="margin-bottom: 18px; color: #495057; font-size: 0.9em; line-height: 1.5;">${event.text}</p>
-    </div>
-  `;
-}
-
-// Secondary Task (Email Classification) - Now only logging
-function renderEmailTask(emailTrial) {
-  return `
-		<div style='
-			flex: 1; /* Takes up half of the screen */
-			padding: 25px;
-			display: flex;
-			flex-direction: column;
-			background-color: #f9f9f9; /* Light grey background for the panel */
-			position: relative; /* To position the countdown timer */
-            font-family: Arial, Helvetica, sans-serif; /* Common email font */
-            color: #333; /* Default text color */
-        '
-		>
-			<div id="countdown-timer" style="
-                position: absolute; top: 15px; right: 20px;
-                font-size: 14px; /* Increased font size */
-                color: #5f6368;
-                background-color: #f1f3f4;
-                padding: 6px 10px; /* Adjusted padding */
-                border-radius: 4px;
-            ">
-                Emails: 0
-            </div>
-            
-            <div class="email-header" style="margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #e0e0e0;">
-                <div style="margin-bottom: 8px;">
-                    <span style="font-weight: bold; color: #666; min-width: 70px; display: inline-block;">From:</span>
-                    <span style="color: #2a2a2a;">${emailTrial.Sender}</span>
-                </div>
-                <div style="margin-bottom: 8px;">
-                    <span style="font-weight: bold; color: #666; min-width: 70px; display: inline-block;">Subject:</span>
-                    <span style="color: #2a2a2a; font-weight: bold; font-size: 1.1em;">${emailTrial.Subject}</span>
-                </div>
-                <div>
-                    <span style="font-weight: bold; color: #666; min-width: 70px; display: inline-block;">Date:</span>
-                    <span style="color: #444; font-size: 0.9em;">${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-                </div>
-            </div>
-
-            <div class="email-body-container" style="flex-grow: 1; background-color: #ffffff; border: 1px solid #dcdcdc; border-radius: 4px; padding: 20px; overflow-y: auto; margin-bottom: 20px; min-height: 200px;">
-    			<p style='font-size: 1em; line-height: 1.6; margin: 0;'>${emailTrial.Body.replace(/\n/g, "<br>")}</p>
-            </div>
-
-			<div class="email-classification-buttons" style="display: flex; gap: 10px; margin-top: 10px;">
-				<button type="button" class="jspsych-btn email-classify-btn" data-classification="w" style="flex: 1;">Work-related</button>
-				<button type="button" class="jspsych-btn email-classify-btn" data-classification="n" style="flex: 1;">Non-work-related</button>
-			</div>
-		</div>
-	`;
-}
-
-function shuffle(array) {
-  let currentIndex = array.length;
-
-  // While there remain elements to shuffle...
-  while (currentIndex != 0) {
-    // Pick a remaining element...
-    let randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex--;
-
-    // And swap it with the current element.
-    [array[currentIndex], array[randomIndex]] = [
-      array[randomIndex],
-      array[currentIndex],
-    ];
-  }
-}
-
-const POPUP_MESSAGES = [
-  { app: "Email", sender: "Alice", message: "Are you coming to the weekend gathering?" },
-  { app: "Line", sender: "Mom", message: "Remember to come home for dinner tomorrow." },
-  { app: "Slack", sender: "HR", message: "Please remember to fill in this month's attendance record." },
-  { app: "Teams", sender: "Manager", message: "There's a meeting at 3 PM today, please be on time." },
-  { app: "Email", sender: "Bob", message: "Are you free to play ball this Friday?" },
-  { app: "Line", sender: "Class Group", message: "Want to go see a movie together next week?" },
-  { app: "Slack", sender: "Designer", message: "The new version of the design draft has been uploaded." },
-  { app: "Teams", sender: "Project Manager", message: "Please respond to the client's latest requirements." },
-
-  // --- Additional entries ---
-  { app: "Email", sender: "Marketing Team", message: "New marketing campaign strategy review meeting scheduled for Monday." },
-  { app: "Line", sender: "Dad", message: "Your package arrived safely." },
-  { app: "Slack", sender: "Engineering", message: "Bug report #123 has been resolved." },
-  { app: "Teams", sender: "Sales", message: "Q3 sales target updated. Please review." },
-  { app: "Email", sender: "Newsletter", message: "Your weekly tech news digest is here!" },
-  { app: "Line", sender: "Best Friend", message: "How was your day? Call me later!" },
-  { app: "Slack", sender: "IT Support", message: "System maintenance scheduled for tonight at 10 PM." },
-  { app: "Teams", sender: "Team Lead", message: "Remember to submit your weekly report by end of day." },
-  { app: "Email", sender: "Bank", message: "Your monthly statement is now available." },
-  { app: "Line", sender: "Sister", message: "Happy Birthday! Sending you a little something." },
-  { app: "Slack", sender: "Product Team", message: "Feedback on the new feature requested by Friday." },
-  { app: "Teams", sender: "Company Announce", message: "Important: New WFH policy update." },
-  { app: "Email", sender: "Online Store", message: "Your order #45678 has shipped!" },
-  { app: "Line", sender: "Neighbor", message: "Could you water my plants while I'm away?" },
-  { app: "Slack", sender: "DevOps", message: "Server performance alert: High CPU usage detected." },
-  { app: "Teams", sender: "HR Dept", message: "Reminder: Annual performance review forms are due next week." },
-];
-
-const initialChatData = [
-  // --- Correct Response: "Please provide your order number." ---
-  { sender: "Alice", text: "I'd like to check my order's processing status.", answerIndex: 0 },
-  { sender: "Bob", text: "The quantity of items I received is incorrect, what should I do?", answerIndex: 0 },
-  { sender: "Charles", text: "Can I modify the contents of my order?", answerIndex: 0 },
-  { sender: "David", text: "I haven't received my refund yet.", answerIndex: 0 },
-  { sender: "Eve", text: "I need to apply for after-sales service.", answerIndex: 0 },
-  { sender: "Frank", text: "I'd like to inquire about the details of a bill.", answerIndex: 0 },
-  { sender: "Grace", text: "Has my order from last week been shipped yet?", answerIndex: 0 },
-  { sender: "Henry", text: "I have a question about the invoice amount I received.", answerIndex: 0 },
-  { sender: "Ivy", text: "I need to cancel my order.", answerIndex: 0 },
-  { sender: "Jack", text: "I've paid, but the system shows the order as unpaid.", answerIndex: 0 },
-  { sender: "Alice", text: "My package seems to be lost, can you help me check?", answerIndex: 0 },
-  { sender: "Bob", text: "How do I return an item?", answerIndex: 0 },
-  { sender: "Charles", text: "I need a copy of my invoice.", answerIndex: 0 },
-  { sender: "David", text: "The product I received is defective.", answerIndex: 0 },
-  { sender: "Eve", text: "What's the progress of my repair?", answerIndex: 0 },
-  { sender: "Frank", text: "I want to confirm my contract details.", answerIndex: 0 },
-  { sender: "Grace", text: "The service I purchased hasn't been activated yet.", answerIndex: 0 },
-  { sender: "Henry", text: "I want to change my shipping address.", answerIndex: 0 },
-  { sender: "Ivy", text: "There's a problem with the bill for my last consultation.", answerIndex: 0 },
-  { sender: "Jack", text: "I have a question about my monthly bill.", answerIndex: 0 },
-  { sender: "Kelly", text: "I'd like to check my member points balance.", answerIndex: 0 },
-  { sender: "Leo", text: "When will my invoice be sent out?", answerIndex: 0 },
-  { sender: "Mandy", text: "I need to apply for an exchange, how do I do that?", answerIndex: 0 },
-  { sender: "Nina", text: "I want to know the current status of my order.", answerIndex: 0 },
-  { sender: "Oscar", text: "My received item is missing parts, how should I deal with it?", answerIndex: 0 },
-  { sender: "Paul", text: "How can I check my past transaction records?", answerIndex: 0 },
-  { sender: "Queenie", text: "I want to change the invoice title.", answerIndex: 0 },
-  { sender: "Ryan", text: "When will my refund be credited?", answerIndex: 0 },
-  { sender: "Sandy", text: "I need to apply for a paper invoice.", answerIndex: 0 },
-  { sender: "Tom", text: "I'd like to check my membership level.", answerIndex: 0 },
-  { sender: "Una", text: "I want to know when my order is expected to ship.", answerIndex: 0 },
-  { sender: "Vicky", text: "I need a replacement receipt.", answerIndex: 0 },
-  { sender: "Will", text: "I'd like to check my points redemption history.", answerIndex: 0 },
-  { sender: "Xavier", text: "I want to cancel the auto-renewal feature.", answerIndex: 0 },
-  { sender: "Yvonne", text: "I need to check my warranty period.", answerIndex: 0 },
-  { sender: "Zack", text: "I want to change my contact number.", answerIndex: 0 },
-  { sender: "Amy", text: "I'd like to check my order delivery progress.", answerIndex: 0 },
-  { sender: "Ben", text: "I need to apply for an invoice reprint.", answerIndex: 0 },
-  { sender: "Cathy", text: "I'd like to check my member exclusive offers.", answerIndex: 0 },
-  { sender: "Derek", text: "I want to know how to apply for a return.", answerIndex: 0 },
-  { sender: "Ella", text: "I need to check my order details.", answerIndex: 0 },
-  { sender: "Fiona", text: "I want to change the recipient address.", answerIndex: 0 },
-  { sender: "George", text: "I'd like to check my consumption invoice.", answerIndex: 0 },
-  { sender: "Helen", text: "I need to check my order payment status.", answerIndex: 0 },
-  { sender: "Ian", text: "I'd like to check my membership card number.", answerIndex: 0 },
-  { sender: "Judy", text: "I need to apply for after-sales repair.", answerIndex: 0 },
-  { sender: "Kevin", text: "I'd like to check my order discount amount.", answerIndex: 0 },
-  { sender: "Linda", text: "I need to check my order invoice number.", answerIndex: 0 },
-  { sender: "Maggie", text: "I'd like to check my order delivery method.", answerIndex: 0 },
-  { sender: "Nick", text: "I need to check my order cancellation status.", answerIndex: 0 },
-  { sender: "Olivia", text: "I'd like to check my order payment method.", answerIndex: 0 },
-  { sender: "Peter", text: "I need to check my order shipment date.", answerIndex: 0 },
-  { sender: "Queena", text: "I'd like to check my order tracking number.", answerIndex: 0 },
-  { sender: "Rita", text: "I need to check my order notes.", answerIndex: 0 },
-  { sender: "Sam", text: "I'd like to check my order coupon usage.", answerIndex: 0 },
-  { sender: "Tina", text: "I need to check my order invoice title.", answerIndex: 0 },
-  { sender: "Ursula", text: "I'd like to check my order delivery time.", answerIndex: 0 },
-  { sender: "Victor", text: "I need to check my order payment history.", answerIndex: 0 },
-  { sender: "Wendy", text: "I'd like to check my order delivery status.", answerIndex: 0 },
-  { sender: "Xena", text: "I need to check my order invoice content.", answerIndex: 0 },
-  { sender: "Yale", text: "I'd like to check my order payment method.", answerIndex: 0 },
-  { sender: "Zoe", text: "I need to check my order delivery method.", answerIndex: 0 },
-  { sender: "Allen", text: "I'd like to check my order payment status.", answerIndex: 0 },
-  { sender: "Betty", text: "I need to check my order invoice number.", answerIndex: 0 },
-  { sender: "Carl", text: "I'd like to check my order delivery method.", answerIndex: 0 },
-  { sender: "Doris", text: "I need to check my order cancellation status.", answerIndex: 0 },
-  { sender: "Ethan", text: "I'd like to check my order payment method.", answerIndex: 0 },
-
-
-  // --- Correct Response: "The issue has been forwarded to the technical department..." ---
-  { sender: "Alice", text: "The website's password reset function isn't working.", answerIndex: 1 },
-  { sender: "Bob", text: "I can't log into my account.", answerIndex: 1 },
-  { sender: "Charles", text: "Your system keeps showing an error message 'Error 503'.", answerIndex: 1 },
-  { sender: "David", text: "The app crashes on the checkout page.", answerIndex: 1 },
-  { sender: "Eve", text: "I can't upload documents to your platform.", answerIndex: 1 },
-  { sender: "Frank", text: "Your API is returning incorrect data format.", answerIndex: 1 },
-  { sender: "Grace", text: "The system's data export function failed.", answerIndex: 1 },
-  { sender: "Henry", text: "I suspect there's a security vulnerability in my account.", answerIndex: 1 },
-  { sender: "Ivy", text: "After the system update, some old features are gone.", answerIndex: 1 },
-  { sender: "Jack", text: "I can't add items to my shopping cart.", answerIndex: 1 },
-  { sender: "Alice", text: "The website's search function isn't finding any results.", answerIndex: 1 },
-  { sender: "Bob", text: "Your payment page isn't loading.", answerIndex: 1 },
-  { sender: "Charles", text: "The system is unresponsive when processing my request.", answerIndex: 1 },
-  { sender: "David", text: "I received a notification of unusual account activity.", answerIndex: 1 },
-  { sender: "Eve", text: "Your system is incompatible with my browser.", answerIndex: 1 },
-  { sender: "Frank", text: "I can't save my personal information changes.", answerIndex: 1 },
-  { sender: "Grace", text: "The system shows my storage space is full, but I haven't put much in it.", answerIndex: 1 },
-  { sender: "Henry", text: "Your database connection seems very unstable.", answerIndex: 1 },
-  { sender: "Ivy", text: "I need urgent technical support, my service is interrupted.", answerIndex: 1 },
-  { sender: "Jack", text: "The buttons on the user interface are not responding when clicked.", answerIndex: 1 },
-  { sender: "Kelly", text: "My account is locked and I can't log in.", answerIndex: 1 },
-  { sender: "Leo", text: "The system shows a database error, please help resolve it.", answerIndex: 1 },
-  { sender: "Mandy", text: "I keep getting error messages when uploading files.", answerIndex: 1 },
-  { sender: "Nina", text: "The website loads very slowly, what should I do?", answerIndex: 1 },
-  { sender: "Oscar", text: "The app crashes and cannot be used normally.", answerIndex: 1 },
-  { sender: "Paul", text: "The link in the verification email I received is not clickable.", answerIndex: 1 },
-  { sender: "Queenie", text: "Data was lost after the system update.", answerIndex: 1 },
-  { sender: "Ryan", text: "It shows password incorrect when logging in, but I'm sure it's right.", answerIndex: 1 },
-  { sender: "Sandy", text: "Cannot reset password, please assist.", answerIndex: 1 },
-  { sender: "Tom", text: "The system shows service temporarily unavailable.", answerIndex: 1 },
-  { sender: "Una", text: "The content of the push notification I received is incorrect.", answerIndex: 1 },
-  { sender: "Vicky", text: "Website images are not displaying.", answerIndex: 1 },
-  { sender: "Will", text: "I cannot download attachment files.", answerIndex: 1 },
-  { sender: "Xavier", text: "The system automatically logs out, what's the reason?", answerIndex: 1 },
-  { sender: "Yvonne", text: "The SMS verification code I received is not working.", answerIndex: 1 },
-  { sender: "Zack", text: "The app won't launch after the update.", answerIndex: 1 },
-  { sender: "Amy", text: "The website form doesn't respond after submission.", answerIndex: 1 },
-  { sender: "Ben", text: "I can't modify my personal information.", answerIndex: 1 },
-  { sender: "Cathy", text: "The system shows a server error.", answerIndex: 1 },
-  { sender: "Derek", text: "I'm not receiving password reset emails.", answerIndex: 1 },
-  { sender: "Ella", text: "The website shows 404 page not found.", answerIndex: 1 },
-  { sender: "Fiona", text: "I can't add a new shipping address.", answerIndex: 1 },
-  { sender: "George", text: "The system shows an API error.", answerIndex: 1 },
-  { sender: "Helen", text: "I can't enable two-factor authentication.", answerIndex: 1 },
-  { sender: "Ian", text: "The website says 'Please try again later'.", answerIndex: 1 },
-  { sender: "Judy", text: "I'm not receiving notification emails.", answerIndex: 1 },
-  { sender: "Kevin", text: "The system shows 'Connection timed out'.", answerIndex: 1 },
-  { sender: "Linda", text: "I can't save my settings changes.", answerIndex: 1 },
-  { sender: "Maggie", text: "The website shows 'Insufficient permissions'.", answerIndex: 1 },
-  { sender: "Nick", text: "I can't upload large files.", answerIndex: 1 },
-  { sender: "Olivia", text: "Data was lost after the app crashed.", answerIndex: 1 },
-  { sender: "Peter", text: "The website shows 'System under maintenance'.", answerIndex: 1 },
-  { sender: "Queena", text: "I can't enable new features.", answerIndex: 1 },
-  { sender: "Rita", text: "The system shows 'Unknown error'.", answerIndex: 1 },
-  { sender: "Sam", text: "I'm not receiving verification SMS messages.", answerIndex: 1 },
-  { sender: "Tina", text: "The website says 'Please log in again'.", answerIndex: 1 },
-  { sender: "Ursula", text: "I can't enable push notifications.", answerIndex: 1 },
-  { sender: "Victor", text: "The system shows 'Data format error'.", answerIndex: 1 },
-  { sender: "Wendy", text: "I can't download invoices.", answerIndex: 1 },
-  { sender: "Xena", text: "The website shows 'Service abnormal'.", answerIndex: 1 },
-  { sender: "Yale", text: "I can't enable member features.", answerIndex: 1 },
-  { sender: "Zoe", text: "After the app crashes, I can't log in again.", answerIndex: 1 },
-  { sender: "Allen", text: "The system shows 'Data synchronization failed'.", answerIndex: 1 },
-  { sender: "Betty", text: "I can't enable coupons.", answerIndex: 1 },
-  { sender: "Carl", text: "The website shows 'Request failed'.", answerIndex: 1 },
-  { sender: "Doris", text: "I'm not receiving push notifications.", answerIndex: 1 },
-  { sender: "Ethan", text: "The system shows 'Please try again later'.", answerIndex: 1 },
-];
-
-const customerServiceEvents = [];
-let eventIdCounter = 0;
-for (const message of initialChatData) {
-  customerServiceEvents.push({
-    id: `evt${++eventIdCounter}`,
-    contactName: message.sender,
-    text: message.text,
-    status: 'pending', // 'pending', 'handled'
-    timestamp: Date.now() - Math.random() * 100000, // Add some jitter for ordering
-    chosenResponse: null,
-    correctAnswerIndex: message.answerIndex,
-  });
-}
-customerServiceEvents.sort((a, b) => a.timestamp - b.timestamp); // Ensure chronological order
-
-const handledEventLog = []; // Log for primary task (customer service)
-const emailClassificationResponses = []; // Log for secondary task (email classification)
-let globalEmailClassificationCount = 0; // Global counter for email classifications across all trials
-
-// Create customer service event lookup map for efficient storage
-const customerServiceEventMap = {};
-customerServiceEvents.forEach((event, index) => {
-  customerServiceEventMap[event.id] = {
-    contactName: event.contactName,
-    text: event.text,
-    timestamp: event.timestamp,
-    correctAnswerIndex: event.correctAnswerIndex,
-  };
-});
-
-// Add customer service event map to data export
-const customerServiceEventReference = {
-  event_map: customerServiceEventMap,
-  total_events: customerServiceEvents.length
-};
 
 // --- Secondary Task (Email) Data Setup ---
 const allEmailStimuli = [
@@ -1120,6 +439,689 @@ const allEmailStimuli = [
   },
 ];
 
+/**
+ * Experiment Settings
+ */
+const params = {
+  trialsPerBlock: 30,
+  popupFreq: { low: 2, med: 5, high: 8 },
+  trialDuration: 20_000,
+  popupDuration: 4_000,
+  EMAIL_TARGET_COUNT: allEmailStimuli.length,
+};
+
+// --- 1. Questionnaires ---
+const welcome = {
+  type: jsPsychInstructions,
+  pages: [
+    `
+    <h1>Welcome to the Experiment</h1>
+    <p>
+    Thank you for participating in this experiment.<br/>
+    Next, you'll be asked to complete a questionnaire and then proceed with the experiment itself.<br/>
+    The entire process is divided into three sections, with a questionnaire at the end of each section and a final one at the very end.
+    </p>
+    `
+  ],
+  show_clickable_nav: true,
+  button_label_next: "Next",
+  button_label_previous: "Previous",
+};
+timeline.push(welcome);
+
+
+// Short Media Multitasking Measure (MMM-S)
+const mmm_sScale = ["Never", "Sometimes", "Often", "Very often"];
+const mmm_sQuestions_TV = [
+  {
+    prompt: "While watching TV or YouTube, how often do you also also listen to music at the same time?",
+    name: "MMM_TV_Music",
+    labels: mmm_sScale,
+    required: true,
+  },
+  {
+    prompt: "While watching TV or YouTube, how often do you also send messages via phone or computer (e.g., text messages, WhatsApp, instant messaging)?",
+    name: "MMM_TV_Msg",
+    labels: mmm_sScale,
+    required: true,
+  },
+  {
+    prompt: "While watching TV or YouTube, how often do you also use social networking sites (e.g., Facebook, Instagram)?",
+    name: "MMM_TV_SNS",
+    labels: mmm_sScale,
+    required: true,
+  },
+];
+const mmm_sQuestions_SNS = [
+  {
+    prompt: "While using social networking sites, how often do you also listen to music?",
+    name: "MMM_SNS_Music",
+    labels: mmm_sScale,
+    required: true,
+  },
+  {
+    prompt: "While using social networking sites, how often do you also send messages via phone or computer?",
+    name: "MMM_SNS_Msg",
+    labels: mmm_sScale,
+    required: true,
+  },
+  {
+    prompt: "While using social networking sites, how often do you also watch TV or YouTube?",
+    name: "MMM_SNS_TV",
+    labels: mmm_sScale,
+    required: true,
+  },
+];
+const mmm_sQuestions_Msg = [
+  {
+    prompt: "While sending messages via phone or computer, how often do you also listen to music?",
+    name: "MMM_Msg_Music",
+    labels: mmm_sScale,
+    required: true,
+  },
+  {
+    prompt: "While sending messages via phone or computer, how often do you also use social networking sites?",
+    name: "MMM_Msg_SNS",
+    labels: mmm_sScale,
+    required: true,
+  },
+  {
+    prompt: "While sending messages via phone or computer, how often do you also watch TV or YouTube?",
+    name: "MMM_Msg_TV",
+    labels: mmm_sScale,
+    required: true,
+  },
+];
+const mmm_sSurvey_TV = {
+  type: jsPsychSurveyLikert,
+  questions: mmm_sQuestions_TV,
+  preamble:
+    "<h3>Media Usage Habits Questionnaire</h3><p>The following questions aim to understand how frequently you use television or YouTube simultaneously with other types of media.</p>",
+  data: { task: "mmm_s_survey_tv" },
+};
+// timeline.push(mmm_sSurvey_TV);
+
+const mmm_sSurvey_SNS = {
+  type: jsPsychSurveyLikert,
+  questions: mmm_sQuestions_SNS,
+  preamble:
+    "<h3>Media Usage Habits Questionnaire</h3><p>The following questions aim to understand how frequently you use social networking sites simultaneously with other types of media.</p>",
+  data: { task: "mmm_s_survey_sns" },
+};
+// timeline.push(mmm_sSurvey_SNS);
+
+const mmm_sSurvey_Msg = {
+  type: jsPsychSurveyLikert,
+  questions: mmm_sQuestions_Msg,
+  preamble:
+    "<h3>Media Usage Habits Questionnaire</h3><p>The following questions aim to understand how frequently you use messaging applications on your phone or computer simultaneously with other types of media.</p>",
+  data: { task: "mmm_s_survey_msg" },
+};
+// timeline.push(mmm_sSurvey_Msg);
+
+// Polychronic–Monochronic Tendency Scale (PMTS)
+const pmtsScale = ["Strongly disagree", "Disagree", "Slightly disagree", "Neutral", "Slightly agree", "Agree", "Strongly agree"];
+const pmtsQuestions = [
+  {
+    prompt: "I prefer to do two or more activities at the same time.",
+    name: "PMTS_1",
+    labels: pmtsScale,
+    required: true,
+  },
+  {
+    prompt: "I typically do two or more activities at the same time.",
+    name: "PMTS_2",
+    labels: pmtsScale,
+    required: true,
+  },
+  {
+    prompt: "Doing two or more activities at the same time is the most efficient way to use my time.",
+    name: "PMTS_3",
+    labels: pmtsScale,
+    required: true,
+  },
+  {
+    prompt: "I am comfortable doing more than one activity at the same time.",
+    name: "PMTS_4",
+    labels: pmtsScale,
+    required: true,
+  },
+  {
+    prompt: "I like to juggle two or more activities at the same time.",
+    name: "PMTS_5",
+    labels: pmtsScale,
+    required: true,
+  },
+];
+const pmtsSurvey = {
+  type: jsPsychSurveyLikert,
+  questions: pmtsQuestions,
+  preamble: "<h3>Personal Work Style Questionnaire</h3>",
+  data: { task: "pmts_survey" },
+};
+// timeline.push(pmtsSurvey);
+
+// --- 2. Instructions ---
+const instructions = {
+  type: jsPsychInstructions,
+  pages: [
+    `
+    <h1>Welcome to the Experiment</h1>
+    <p>
+    Thank you for participating in this experiment.<br/>
+    The entire process will consist of three sections, with a questionnaire provided at the beginning, middle, and end.
+    </p>
+    <p>
+    Next, you will act as a customer service representative and perform two tasks simultaneously.<br/>
+    These two tasks will be presented in side-by-side areas on the left and right sides of the screen.
+    </p>`,
+
+    `
+    <h2>Instruction 1 / 4: Primary Task (Customer Service)</h2>
+    <p>
+    You will see a customer message panel on the right side of the screen.<br/>
+    We will set a response time limit of ${params.trialDuration / 1_000} seconds for each message, which will be displayed on the screen.
+    </p>
+    <img src="static/Exp_Instruction_rhs.png" alt="Task One" style="width: 55dvw; height: auto;">
+    <p>
+    Please quickly and accurately select the correct response option below based on the message content:<br/>
+    ─ If it's an order or process-related question, please click "Please provide your order number."<br/>
+    ─ If it's a technical issue, please click "The issue has been forwarded to the technical department, and we will get back to you as soon as possible."
+    </p>`,
+
+    `
+    <h2>Instruction 2 / 4: Secondary Task (Email Classification)</h2>
+    <p>
+    At the same time, several emails will continuously appear on the left side of the screen.<br/>
+    Please determine whether their content is work-related.
+    </p>
+    <img src="static/Exp_Instruction_lhs.png" alt="Task Two" style="width: 55dvw; height: auto;">
+    <p>
+    Below each email, there are two buttons: <b>"Work-Related"</b> and <b>"Not Work-Related"</b>. Please click honestly to complete the classification.
+    </p>`,
+
+    `
+    <h2>Instruction 3 / 4: Other Tips</h2>
+    <p>
+    During the experiment, message prompts from email, Slack, or Teams may randomly pop up on the screen as a modal window.
+    </p>
+    <img src="static/Exp_Instruction_popup.png" alt="Task Two" style="width: 55dvw; height: auto;">
+    <p>
+    There is a dismiss button in the upper right corner of the prompt; clicking it will make it disappear. <br/>
+    If not dismissed beforehand, each prompt will automatically close after ${params.popupDuration / 1_000} seconds.<br/>
+    </p>`,
+
+    `
+    <h2>Instruction 4 / 4: Task Completion and Reminder</h2>
+    <p>
+    Please do your best to complete both tasks.<br/>
+    <span style="color: red; font-weight: bold;">Once you are ready, please click "Next" to start the comprehension check.</span><br/>
+    <span style="color: #d32f2f; font-weight: bold; font-size: 1.1em;">⚠️ WARNING: Low accuracy rates will result in your experiment being marked as invalid and rejected. Please answer carefully.</span><br/>
+    <b>If you do not pass the comprehension check, please re-read the instructions and answer again.</b>
+    </p>`,
+  ],
+  show_clickable_nav: true,
+  button_label_next: "Next",
+  button_label_previous: "Previous",
+};
+
+// --- Comprehension Check ---
+const comprehensionQuestions = [
+  {
+    prompt: "When you see 'I can't log in to my account' in the customer message panel, which response should you choose?",
+    options: [
+      "Please provide your order number.",
+      "The issue has been forwarded to the technical department, and we will get back to you as soon as possible.",
+      "No response needed."
+    ],
+    required: true,
+    correct: 1
+  },
+  {
+    prompt: "In the Email task, how should you categorize 'Company Policy Update Notification'?",
+    options: [
+      "Work-Related",
+      "Not Work-Related"
+    ],
+    required: true,
+    correct: 0
+  },
+  {
+    prompt: "When a pop-up message appears, do you need to click or respond to it?",
+    options: [
+      "Yes, otherwise you can't continue.",
+      "No, it will disappear automatically."
+    ],
+    required: true,
+    correct: 1
+  }
+];
+const comprehensionCheck = {
+  type: jsPsychSurveyMultiChoice,
+  questions: comprehensionQuestions.map(q => ({
+    prompt: q.prompt,
+    options: q.options,
+    required: q.required
+  })),
+  preamble: "<h3>Comprehension Check</h3><p>Please answer the following questions to ensure you understand the experiment rules.</p>",
+  button_label: "Submit",
+  on_finish: function (data) {
+    let responses = data.response;
+    const correctAnswers = comprehensionQuestions.map(q => q.correct);
+    const userAnswers = Object.values(responses).map((ans, i) =>
+      comprehensionQuestions[i].options.indexOf(ans)
+    );
+    console.log(correctAnswers, userAnswers);
+    const allCorrect = userAnswers.every((ans, i) => ans === correctAnswers[i]);
+    data.comprehension_passed = allCorrect;
+  }
+};
+
+// 包裝 instructions + comprehensionCheck
+const comprehensionWithInstructions = {
+  timeline: [instructions, comprehensionCheck]
+};
+
+const comprehensionLoop = {
+  timeline: [comprehensionWithInstructions],
+  loop_function: function (data) {
+    const last = data.values().slice(-1)[0];
+    if (!last.comprehension_passed) {
+      alert("Some questions were answered incorrectly. Please read the instructions again and answer again.");
+      return true; // 重新顯示說明+檢核
+    }
+    return false; // 通過，進入正式實驗
+  }
+};
+
+// timeline.push(comprehensionLoop);
+
+// --- 3. Inter-block Questionnaire
+const interBlockQuestions = [
+  {
+    prompt: "I think completing this task makes me feel more competent.",
+    name: "INTER_AV_1",
+    labels: pmtsScale,
+    required: true,
+  },
+  {
+    prompt: "I think this task gives me a sense of achievement.",
+    name: "INTER_AV_2",
+    labels: pmtsScale,
+    required: true,
+  },
+  {
+    prompt: "I feel that succeeding in this task confirms my ability.",
+    name: "INTER_AV_3",
+    labels: pmtsScale,
+    required: true,
+  },
+  {
+    prompt: "This task gives me confidence in my skills.",
+    name: "INTER_AV_4",
+    labels: pmtsScale,
+    required: true,
+  },
+  {
+    prompt: "I think this task is interesting.",
+    name: "INTER_IV_1",
+    labels: pmtsScale,
+    required: true,
+  },
+  {
+    prompt: "I enjoy working on this task.",
+    name: "INTER_IV_2",
+    labels: pmtsScale,
+    required: true,
+  },
+  {
+    prompt: "I find this task fun.",
+    name: "INTER_IV_3",
+    labels: pmtsScale,
+    required: true,
+  },
+  {
+    prompt: "I think completing this task is helpful for my future work performance.",
+    name: "INTER_UV_1",
+    labels: pmtsScale,
+    required: true,
+  },
+  {
+    prompt: "I believe this task is useful for improving my professional skills.",
+    name: "INTER_UV_2",
+    labels: pmtsScale,
+    required: true,
+  },
+  {
+    prompt: "This task is valuable for achieving my long-term career goals.",
+    name: "INTER_UV_3",
+    labels: pmtsScale,
+    required: true,
+  },
+  {
+    prompt: "I feel uneasy when performing this task.",
+    name: "INTER_AN_1",
+    labels: pmtsScale,
+    required: true,
+  },
+  {
+    prompt: "I feel anxious about completing this task.",
+    name: "INTER_AN_2",
+    labels: pmtsScale,
+    required: true,
+  },
+  {
+    prompt: "I feel uncomfortable working on this task.",
+    name: "INTER_AN_3",
+    labels: pmtsScale,
+    required: true,
+  },
+];
+const interBlockSurvey = {
+  type: jsPsychSurveyLikert,
+  questions: interBlockQuestions,
+  preamble: "<h3>Subjective Value Questionnaire</h3><p>Please answer according to your perception of the primary task.</p>",
+  data: { task: "inter_survey", timestamp: Date.now() },
+};
+
+// --- 4. Task-related Functions & Data ---
+
+// Primary Task (Customer Service) - Now tracked by jsPsych
+const RESPONSE_BEHAVIOR = [
+  "Please provide your order number.",
+  "The issue has been forwarded to the technical department, and we will get back to you as soon as possible.",
+];
+
+function renderCurrentEventDisplay(event) {
+  if (!event) {
+    return "<p style='padding: 10px; text-align: center;'>No pending customer messages.</p>";
+  }
+  return `
+    <div class="event-content-wrapper" data-event-id="${event.id}" style="padding: 16px; background-color: #ffffff; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.08);">
+      <h4 style="margin-top: 0; margin-bottom: 8px; color: #343a40; font-size: 0.95em; font-weight: 600;">From: ${event.contactName}</h4>
+      <p style="margin-bottom: 18px; color: #495057; font-size: 0.9em; line-height: 1.5;">${event.text}</p>
+    </div>
+  `;
+}
+
+// Secondary Task (Email Classification) - Now only logging
+function renderEmailTask(emailTrial) {
+  return `
+		<div style='
+			flex: 1; /* Takes up half of the screen */
+			padding: 25px;
+			display: flex;
+			flex-direction: column;
+			background-color: #f9f9f9; /* Light grey background for the panel */
+			position: relative; /* To position the countdown timer */
+            font-family: Arial, Helvetica, sans-serif; /* Common email font */
+            color: #333; /* Default text color */
+        '
+		>
+			<div id="countdown-timer" style="
+                position: absolute; top: 15px; right: 20px;
+                font-size: 14px; /* Increased font size */
+                color: #5f6368;
+                background-color: #f1f3f4;
+                padding: 6px 10px; /* Adjusted padding */
+                border-radius: 4px;
+            ">
+                Emails: 0
+            </div>
+            
+            <div class="email-header" style="margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #e0e0e0;">
+                <div style="margin-bottom: 8px;">
+                    <span style="font-weight: bold; color: #666; min-width: 70px; display: inline-block;">From:</span>
+                    <span style="color: #2a2a2a;">${emailTrial.Sender}</span>
+                </div>
+                <div style="margin-bottom: 8px;">
+                    <span style="font-weight: bold; color: #666; min-width: 70px; display: inline-block;">Subject:</span>
+                    <span style="color: #2a2a2a; font-weight: bold; font-size: 1.1em;">${emailTrial.Subject}</span>
+                </div>
+                <div>
+                    <span style="font-weight: bold; color: #666; min-width: 70px; display: inline-block;">Date:</span>
+                    <span style="color: #444; font-size: 0.9em;">${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                </div>
+            </div>
+
+            <div class="email-body-container" style="flex-grow: 1; background-color: #ffffff; border: 1px solid #dcdcdc; border-radius: 4px; padding: 20px; overflow-y: auto; margin-bottom: 20px; min-height: 200px;">
+    			<p style='font-size: 1em; line-height: 1.6; margin: 0;'>${emailTrial.Body.replace(/\n/g, "<br>")}</p>
+            </div>
+
+			<div class="email-classification-buttons" style="display: flex; gap: 10px; margin-top: 10px;">
+				<button type="button" class="jspsych-btn email-classify-btn" data-classification="w" style="flex: 1;">Work-related</button>
+				<button type="button" class="jspsych-btn email-classify-btn" data-classification="n" style="flex: 1;">Non-work-related</button>
+			</div>
+		</div>
+	`;
+}
+
+function shuffle(array) {
+  let currentIndex = array.length;
+
+  // While there remain elements to shuffle...
+  while (currentIndex != 0) {
+    // Pick a remaining element...
+    let randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+
+    // And swap it with the current element.
+    [array[currentIndex], array[randomIndex]] = [
+      array[randomIndex],
+      array[currentIndex],
+    ];
+  }
+}
+
+const POPUP_MESSAGES = [
+  { app: "Email", sender: "Alice", message: "Are you coming to the weekend gathering?" },
+  { app: "Line", sender: "Mom", message: "Remember to come home for dinner tomorrow." },
+  { app: "Slack", sender: "HR", message: "Please remember to fill in this month's attendance record." },
+  { app: "Teams", sender: "Manager", message: "There's a meeting at 3 PM today, please be on time." },
+  { app: "Email", sender: "Bob", message: "Are you free to play ball this Friday?" },
+  { app: "Line", sender: "Class Group", message: "Want to go see a movie together next week?" },
+  { app: "Slack", sender: "Designer", message: "The new version of the design draft has been uploaded." },
+  { app: "Teams", sender: "Project Manager", message: "Please respond to the client's latest requirements." },
+
+  // --- Additional entries ---
+  { app: "Email", sender: "Marketing Team", message: "New marketing campaign strategy review meeting scheduled for Monday." },
+  { app: "Line", sender: "Dad", message: "Your package arrived safely." },
+  { app: "Slack", sender: "Engineering", message: "Bug report #123 has been resolved." },
+  { app: "Teams", sender: "Sales", message: "Q3 sales target updated. Please review." },
+  { app: "Email", sender: "Newsletter", message: "Your weekly tech news digest is here!" },
+  { app: "Line", sender: "Best Friend", message: "How was your day? Call me later!" },
+  { app: "Slack", sender: "IT Support", message: "System maintenance scheduled for tonight at 10 PM." },
+  { app: "Teams", sender: "Team Lead", message: "Remember to submit your weekly report by end of day." },
+  { app: "Email", sender: "Bank", message: "Your monthly statement is now available." },
+  { app: "Line", sender: "Sister", message: "Happy Birthday! Sending you a little something." },
+  { app: "Slack", sender: "Product Team", message: "Feedback on the new feature requested by Friday." },
+  { app: "Teams", sender: "Company Announce", message: "Important: New WFH policy update." },
+  { app: "Email", sender: "Online Store", message: "Your order #45678 has shipped!" },
+  { app: "Line", sender: "Neighbor", message: "Could you water my plants while I'm away?" },
+  { app: "Slack", sender: "DevOps", message: "Server performance alert: High CPU usage detected." },
+  { app: "Teams", sender: "HR Dept", message: "Reminder: Annual performance review forms are due next week." },
+];
+
+const initialChatData = [
+  // --- Correct Response: "Please provide your order number." ---
+  { sender: "Alice", text: "I'd like to check my order's processing status.", answerIndex: 0 },
+  { sender: "Bob", text: "The quantity of items I received is incorrect, what should I do?", answerIndex: 0 },
+  { sender: "Charles", text: "Can I modify the contents of my order?", answerIndex: 0 },
+  { sender: "David", text: "I haven't received my refund yet.", answerIndex: 0 },
+  { sender: "Eve", text: "I need to apply for after-sales service.", answerIndex: 0 },
+  { sender: "Frank", text: "I'd like to inquire about the details of a bill.", answerIndex: 0 },
+  { sender: "Grace", text: "Has my order from last week been shipped yet?", answerIndex: 0 },
+  { sender: "Henry", text: "I have a question about the invoice amount I received.", answerIndex: 0 },
+  { sender: "Ivy", text: "I need to cancel my order.", answerIndex: 0 },
+  { sender: "Jack", text: "I've paid, but the system shows the order as unpaid.", answerIndex: 0 },
+  { sender: "Alice", text: "My package seems to be lost, can you help me check?", answerIndex: 0 },
+  { sender: "Bob", text: "How do I return an item?", answerIndex: 0 },
+  { sender: "Charles", text: "I need a copy of my invoice.", answerIndex: 0 },
+  { sender: "David", text: "The product I received is defective.", answerIndex: 0 },
+  { sender: "Eve", text: "What's the progress of my repair?", answerIndex: 0 },
+  { sender: "Frank", text: "I want to confirm my contract details.", answerIndex: 0 },
+  { sender: "Grace", text: "The service I purchased hasn't been activated yet.", answerIndex: 0 },
+  { sender: "Henry", text: "I want to change my shipping address.", answerIndex: 0 },
+  { sender: "Ivy", text: "There's a problem with the bill for my last consultation.", answerIndex: 0 },
+  { sender: "Jack", text: "I have a question about my monthly bill.", answerIndex: 0 },
+  { sender: "Kelly", text: "I'd like to check my member points balance.", answerIndex: 0 },
+  { sender: "Leo", text: "When will my invoice be sent out?", answerIndex: 0 },
+  { sender: "Mandy", text: "I need to apply for an exchange, how do I do that?", answerIndex: 0 },
+  { sender: "Nina", text: "I want to know the current status of my order.", answerIndex: 0 },
+  { sender: "Oscar", text: "My received item is missing parts, how should I deal with it?", answerIndex: 0 },
+  { sender: "Paul", text: "How can I check my past transaction records?", answerIndex: 0 },
+  { sender: "Queenie", text: "I want to change the invoice title.", answerIndex: 0 },
+  { sender: "Ryan", text: "When will my refund be credited?", answerIndex: 0 },
+  { sender: "Sandy", text: "I need to apply for a paper invoice.", answerIndex: 0 },
+  { sender: "Tom", text: "I'd like to check my membership level.", answerIndex: 0 },
+  { sender: "Una", text: "I want to know when my order is expected to ship.", answerIndex: 0 },
+  { sender: "Vicky", text: "I need a replacement receipt.", answerIndex: 0 },
+  { sender: "Will", text: "I'd like to check my points redemption history.", answerIndex: 0 },
+  { sender: "Xavier", text: "I want to cancel the auto-renewal feature.", answerIndex: 0 },
+  { sender: "Yvonne", text: "I need to check my warranty period.", answerIndex: 0 },
+  { sender: "Zack", text: "I want to change my contact number.", answerIndex: 0 },
+  { sender: "Amy", text: "I'd like to check my order delivery progress.", answerIndex: 0 },
+  { sender: "Ben", text: "I need to apply for an invoice reprint.", answerIndex: 0 },
+  { sender: "Cathy", text: "I'd like to check my member exclusive offers.", answerIndex: 0 },
+  { sender: "Derek", text: "I want to know how to apply for a return.", answerIndex: 0 },
+  { sender: "Ella", text: "I need to check my order details.", answerIndex: 0 },
+  { sender: "Fiona", text: "I want to change the recipient address.", answerIndex: 0 },
+  { sender: "George", text: "I'd like to check my consumption invoice.", answerIndex: 0 },
+  { sender: "Helen", text: "I need to check my order payment status.", answerIndex: 0 },
+  { sender: "Ian", text: "I'd like to check my membership card number.", answerIndex: 0 },
+  { sender: "Judy", text: "I need to apply for after-sales repair.", answerIndex: 0 },
+  { sender: "Kevin", text: "I'd like to check my order discount amount.", answerIndex: 0 },
+  { sender: "Linda", text: "I need to check my order invoice number.", answerIndex: 0 },
+  { sender: "Maggie", text: "I'd like to check my order delivery method.", answerIndex: 0 },
+  { sender: "Nick", text: "I need to check my order cancellation status.", answerIndex: 0 },
+  { sender: "Olivia", text: "I'd like to check my order payment method.", answerIndex: 0 },
+  { sender: "Peter", text: "I need to check my order shipment date.", answerIndex: 0 },
+  { sender: "Queena", text: "I'd like to check my order tracking number.", answerIndex: 0 },
+  { sender: "Rita", text: "I need to check my order notes.", answerIndex: 0 },
+  { sender: "Sam", text: "I'd like to check my order coupon usage.", answerIndex: 0 },
+  { sender: "Tina", text: "I need to check my order invoice title.", answerIndex: 0 },
+  { sender: "Ursula", text: "I'd like to check my order delivery time.", answerIndex: 0 },
+  { sender: "Victor", text: "I need to check my order payment history.", answerIndex: 0 },
+  { sender: "Wendy", text: "I'd like to check my order delivery status.", answerIndex: 0 },
+  { sender: "Xena", text: "I need to check my order invoice content.", answerIndex: 0 },
+  { sender: "Yale", text: "I'd like to check my order payment method.", answerIndex: 0 },
+  { sender: "Zoe", text: "I need to check my order delivery method.", answerIndex: 0 },
+  { sender: "Allen", text: "I'd like to check my order payment status.", answerIndex: 0 },
+  { sender: "Betty", text: "I need to check my order invoice number.", answerIndex: 0 },
+  { sender: "Carl", text: "I'd like to check my order delivery method.", answerIndex: 0 },
+  { sender: "Doris", text: "I need to check my order cancellation status.", answerIndex: 0 },
+  { sender: "Ethan", text: "I'd like to check my order payment method.", answerIndex: 0 },
+
+
+  // --- Correct Response: "The issue has been forwarded to the technical department..." ---
+  { sender: "Alice", text: "The website's password reset function isn't working.", answerIndex: 1 },
+  { sender: "Bob", text: "I can't log into my account.", answerIndex: 1 },
+  { sender: "Charles", text: "Your system keeps showing an error message 'Error 503'.", answerIndex: 1 },
+  { sender: "David", text: "The app crashes on the checkout page.", answerIndex: 1 },
+  { sender: "Eve", text: "I can't upload documents to your platform.", answerIndex: 1 },
+  { sender: "Frank", text: "Your API is returning incorrect data format.", answerIndex: 1 },
+  { sender: "Grace", text: "The system's data export function failed.", answerIndex: 1 },
+  { sender: "Henry", text: "I suspect there's a security vulnerability in my account.", answerIndex: 1 },
+  { sender: "Ivy", text: "After the system update, some old features are gone.", answerIndex: 1 },
+  { sender: "Jack", text: "I can't add items to my shopping cart.", answerIndex: 1 },
+  { sender: "Alice", text: "The website's search function isn't finding any results.", answerIndex: 1 },
+  { sender: "Bob", text: "Your payment page isn't loading.", answerIndex: 1 },
+  { sender: "Charles", text: "The system is unresponsive when processing my request.", answerIndex: 1 },
+  { sender: "David", text: "I received a notification of unusual account activity.", answerIndex: 1 },
+  { sender: "Eve", text: "Your system is incompatible with my browser.", answerIndex: 1 },
+  { sender: "Frank", text: "I can't save my personal information changes.", answerIndex: 1 },
+  { sender: "Grace", text: "The system shows my storage space is full, but I haven't put much in it.", answerIndex: 1 },
+  { sender: "Henry", text: "Your database connection seems very unstable.", answerIndex: 1 },
+  { sender: "Ivy", text: "I need urgent technical support, my service is interrupted.", answerIndex: 1 },
+  { sender: "Jack", text: "The buttons on the user interface are not responding when clicked.", answerIndex: 1 },
+  { sender: "Kelly", text: "My account is locked and I can't log in.", answerIndex: 1 },
+  { sender: "Leo", text: "The system shows a database error, please help resolve it.", answerIndex: 1 },
+  { sender: "Mandy", text: "I keep getting error messages when uploading files.", answerIndex: 1 },
+  { sender: "Nina", text: "The website loads very slowly, what should I do?", answerIndex: 1 },
+  { sender: "Oscar", text: "The app crashes and cannot be used normally.", answerIndex: 1 },
+  { sender: "Paul", text: "The link in the verification email I received is not clickable.", answerIndex: 1 },
+  { sender: "Queenie", text: "Data was lost after the system update.", answerIndex: 1 },
+  { sender: "Ryan", text: "It shows password incorrect when logging in, but I'm sure it's right.", answerIndex: 1 },
+  { sender: "Sandy", text: "Cannot reset password, please assist.", answerIndex: 1 },
+  { sender: "Tom", text: "The system shows service temporarily unavailable.", answerIndex: 1 },
+  { sender: "Una", text: "The content of the push notification I received is incorrect.", answerIndex: 1 },
+  { sender: "Vicky", text: "Website images are not displaying.", answerIndex: 1 },
+  { sender: "Will", text: "I cannot download attachment files.", answerIndex: 1 },
+  { sender: "Xavier", text: "The system automatically logs out, what's the reason?", answerIndex: 1 },
+  { sender: "Yvonne", text: "The SMS verification code I received is not working.", answerIndex: 1 },
+  { sender: "Zack", text: "The app won't launch after the update.", answerIndex: 1 },
+  { sender: "Amy", text: "The website form doesn't respond after submission.", answerIndex: 1 },
+  { sender: "Ben", text: "I can't modify my personal information.", answerIndex: 1 },
+  { sender: "Cathy", text: "The system shows a server error.", answerIndex: 1 },
+  { sender: "Derek", text: "I'm not receiving password reset emails.", answerIndex: 1 },
+  { sender: "Ella", text: "The website shows 404 page not found.", answerIndex: 1 },
+  { sender: "Fiona", text: "I can't add a new shipping address.", answerIndex: 1 },
+  { sender: "George", text: "The system shows an API error.", answerIndex: 1 },
+  { sender: "Helen", text: "I can't enable two-factor authentication.", answerIndex: 1 },
+  { sender: "Ian", text: "The website says 'Please try again later'.", answerIndex: 1 },
+  { sender: "Judy", text: "I'm not receiving notification emails.", answerIndex: 1 },
+  { sender: "Kevin", text: "The system shows 'Connection timed out'.", answerIndex: 1 },
+  { sender: "Linda", text: "I can't save my settings changes.", answerIndex: 1 },
+  { sender: "Maggie", text: "The website shows 'Insufficient permissions'.", answerIndex: 1 },
+  { sender: "Nick", text: "I can't upload large files.", answerIndex: 1 },
+  { sender: "Olivia", text: "Data was lost after the app crashed.", answerIndex: 1 },
+  { sender: "Peter", text: "The website shows 'System under maintenance'.", answerIndex: 1 },
+  { sender: "Queena", text: "I can't enable new features.", answerIndex: 1 },
+  { sender: "Rita", text: "The system shows 'Unknown error'.", answerIndex: 1 },
+  { sender: "Sam", text: "I'm not receiving verification SMS messages.", answerIndex: 1 },
+  { sender: "Tina", text: "The website says 'Please log in again'.", answerIndex: 1 },
+  { sender: "Ursula", text: "I can't enable push notifications.", answerIndex: 1 },
+  { sender: "Victor", text: "The system shows 'Data format error'.", answerIndex: 1 },
+  { sender: "Wendy", text: "I can't download invoices.", answerIndex: 1 },
+  { sender: "Xena", text: "The website shows 'Service abnormal'.", answerIndex: 1 },
+  { sender: "Yale", text: "I can't enable member features.", answerIndex: 1 },
+  { sender: "Zoe", text: "After the app crashes, I can't log in again.", answerIndex: 1 },
+  { sender: "Allen", text: "The system shows 'Data synchronization failed'.", answerIndex: 1 },
+  { sender: "Betty", text: "I can't enable coupons.", answerIndex: 1 },
+  { sender: "Carl", text: "The website shows 'Request failed'.", answerIndex: 1 },
+  { sender: "Doris", text: "I'm not receiving push notifications.", answerIndex: 1 },
+  { sender: "Ethan", text: "The system shows 'Please try again later'.", answerIndex: 1 },
+];
+
+const customerServiceEvents = [];
+let eventIdCounter = 0;
+for (const message of initialChatData) {
+  customerServiceEvents.push({
+    id: `evt${++eventIdCounter}`,
+    contactName: message.sender,
+    text: message.text,
+    status: 'pending', // 'pending', 'handled'
+    timestamp: Date.now() - Math.random() * 100000, // Add some jitter for ordering
+    chosenResponse: null,
+    correctAnswerIndex: message.answerIndex,
+  });
+}
+customerServiceEvents.sort((a, b) => a.timestamp - b.timestamp); // Ensure chronological order
+
+const handledEventLog = []; // Log for primary task (customer service)
+const emailClassificationResponses = []; // Log for secondary task (email classification)
+let globalEmailClassificationCount = 0; // Global counter for email classifications across all trials
+
+// Email countdown settings
+let emailCountdown = params.EMAIL_TARGET_COUNT; // Countdown from target to 0
+
+// Create customer service event lookup map for efficient storage
+const customerServiceEventMap = {};
+customerServiceEvents.forEach((event, index) => {
+  customerServiceEventMap[event.id] = {
+    contactName: event.contactName,
+    text: event.text,
+    timestamp: event.timestamp,
+    correctAnswerIndex: event.correctAnswerIndex,
+  };
+});
+
+// Add customer service event map to data export
+const customerServiceEventReference = {
+  event_map: customerServiceEventMap,
+  total_events: customerServiceEvents.length
+};
+
 // Create email stimulus lookup map for efficient storage
 const emailStimulusMap = {};
 allEmailStimuli.forEach((email, index) => {
@@ -1296,7 +1298,7 @@ for (const [blockIndex, config] of primaryTaskBlockConfigs.entries()) {
                   padding: 6px 10px; /* Adjusted padding */
                   border-radius: 4px;
                 ">
-                  Emails: ${globalEmailClassificationCount}
+                  Emails Remaining: ${emailCountdown}
                 </div>
               </div>
               
@@ -1515,7 +1517,7 @@ for (const [blockIndex, config] of primaryTaskBlockConfigs.entries()) {
         const updateEmailCounter = () => {
           const countdownTimer = document.getElementById('countdown-timer');
           if (countdownTimer) {
-            countdownTimer.innerHTML = `Emails: ${globalEmailClassificationCount}`;
+            countdownTimer.innerHTML = `Emails Remaining: ${emailCountdown}`;
           }
         };
 
@@ -1615,8 +1617,9 @@ for (const [blockIndex, config] of primaryTaskBlockConfigs.entries()) {
 
             console.log(`Email classification clicked: ${classificationChoice} for email: ${emailStimulus?.Subject || 'Unknown'}`);
 
-            // Increment classification count
-            globalEmailClassificationCount++;
+            // Decrement countdown (instead of incrementing)
+            emailCountdown = Math.max(0, emailCountdown - 1);
+            globalEmailClassificationCount++; // Keep this for data logging
 
             // Update counter display
             updateEmailCounter();
@@ -1747,6 +1750,7 @@ for (const [blockIndex, config] of primaryTaskBlockConfigs.entries()) {
                 timestamp: customerServiceEvents[eventIndex].handledTimestamp,
                 block_condition_label: data.block_condition_label,
                 trial_in_block: data.trial_in_block,
+                block_index: data.block_index,
                 globalTrialIndex: jsPsych.getProgress().current_trial_global,
               });
             } else { // Timeout - user missed the event
@@ -1980,6 +1984,7 @@ const blockStartScreen = {
     <div style="font-size: 22px; line-height: 1.6;">
       <p>The next section is about to begin.</p>
       <p>Please place your hands on the keyboard or mouse and prepare to start.</p>
+      <img src="static/example.png" alt="Experiment Interface Example" style="width: 50dvw; height: auto; margin: 20px 0; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
       <p>Click "Next" when you are ready.</p>
     </div>
     `
@@ -1989,10 +1994,137 @@ const blockStartScreen = {
   data: { task: "block_start_screen" }
 };
 
+// Block progress display page
+const blockProgressScreen = {
+  type: jsPsychHtmlButtonResponse,
+  stimulus: function() {
+    // Get current block data
+    const currentTrialIndex = jsPsych.getProgress().current_trial_global;
+    const currentBlockIndex = Math.floor(currentTrialIndex / (params.trialsPerBlock + 3)); // +3 for start screen, trials, and progress screen
+    
+    // Calculate customer service progress for this block
+    // Use block_index to accurately count events for this specific block
+    const blockCustomerServiceEvents = handledEventLog.filter(event => 
+      event.block_index === currentBlockIndex
+    );
+    
+    const completedCustomerService = blockCustomerServiceEvents.length;
+    const totalCustomerServiceTime = blockCustomerServiceEvents.reduce((total, event) => total + (event.rt || 0), 0);
+    const avgCustomerServiceTime = completedCustomerService > 0 ? Math.round(totalCustomerServiceTime / completedCustomerService) : 0;
+    
+    // Calculate email classification progress for this block
+    // Use a time window approach to estimate emails for this block
+    const blockStartTime = Date.now() - (params.trialDuration * params.trialsPerBlock * 1.5); // Estimate block duration
+    const blockEmailClassifications = emailClassificationResponses.filter(response => 
+      response.timestamp >= blockStartTime
+    );
+    
+    const completedEmails = blockEmailClassifications.length;
+    const correctEmails = blockEmailClassifications.filter(response => response.correct === 1).length;
+    const emailAccuracy = completedEmails > 0 ? Math.round((correctEmails / completedEmails) * 100) : 0;
+    
+    return `
+      <div style="
+        max-width: 800px;
+        margin: 50px auto;
+        padding: 40px;
+        background: #f5f6fa;
+        border-radius: 20px;
+        color: #333;
+        font-family: sans-serif;
+        text-align: center;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        border: 1px solid #e8eaed;
+      ">
+        <h1 style="margin: 0 0 30px 0; font-size: 32px; font-weight: 500; color: #202124;">Block ${currentBlockIndex + 1} Complete!</h1>
+        
+        <div style="
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 30px;
+          margin: 40px 0;
+        ">
+          <!-- Customer Service Progress -->
+          <div style="
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid #e8eaed;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+          ">
+            <h2 style="margin: 0 0 20px 0; font-size: 24px; color: #1976d2;">Customer Service Task</h2>
+            <div style="font-size: 48px; font-weight: bold; margin: 20px 0; color: #4ade80;">
+              ${completedCustomerService}/${params.trialsPerBlock}
+            </div>
+            <p style="margin: 10px 0; font-size: 18px; color: #5f6368;">Messages Handled</p>
+            <div style="
+              background: #f1f3f4;
+              height: 8px;
+              border-radius: 4px;
+              margin: 20px 0;
+              overflow: hidden;
+            ">
+              <div style="
+                background: #4ade80;
+                height: 100%;
+                width: ${(completedCustomerService / params.trialsPerBlock) * 100}%;
+                transition: width 0.5s ease;
+              "></div>
+            </div>
+            <p style="margin: 10px 0; font-size: 16px; color: #5f6368;">
+              Average Response Time: <strong style="color: #202124;">${avgCustomerServiceTime}ms</strong>
+            </p>
+          </div>
+          
+          <!-- Email Classification Progress -->
+          <div style="
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid #e8eaed;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+          ">
+            <h2 style="margin: 0 0 20px 0; font-size: 24px; color: #1976d2;">Email Classification Task</h2>
+            <div style="font-size: 48px; font-weight: bold; margin: 20px 0; color: #60a5fa;">
+              ${completedEmails}
+            </div>
+            <p style="margin: 10px 0; font-size: 18px; color: #5f6368;">Emails Classified</p>
+            <div style="font-size: 36px; font-weight: bold; margin: 20px 0; color: #fbbf24;">
+              ${emailAccuracy}%
+            </div>
+            <p style="margin: 10px 0; font-size: 16px; color: #5f6368;">Accuracy Rate</p>
+            <p style="margin: 10px 0; font-size: 14px; color: #80868b;">
+              ${correctEmails} correct out of ${completedEmails} total
+            </p>
+          </div>
+        </div>
+        
+        <div style="
+          background: #ffffff;
+          padding: 20px;
+          border-radius: 10px;
+          margin-top: 30px;
+          border: 1px solid #e8eaed;
+        ">
+          <p style="margin: 0; font-size: 18px; color: #5f6368;">
+            Great job! You've completed Block ${currentBlockIndex + 1} of ${trialBlocks.length}.
+          </p>
+        </div>
+      </div>
+    `;
+  },
+  choices: ["Continue"],
+  button_html: [
+    '<button class="jspsych-btn response-btn-primary" style="font-size: 0.9em; padding: 10px 12px; margin: 2px !important;">%choice%</button>',
+  ],
+  data: { task: "block_progress_screen" }
+};
+
 timeline.push(
   ...(trialBlocks.reduce((acc, block, index) => {
     acc.push(blockStartScreen); // Add start screen before the block
     acc.push(...block); // Spread the trials of the block
+    acc.push(blockProgressScreen); // Add progress screen after the block
     if (index < trialBlocks.length - 1) { // Add interBlockSurvey between blocks
       acc.push(interBlockSurvey);
     }
@@ -2048,6 +2180,53 @@ timeline.push(demographicSurvey);
 const jsPsych = initJsPsych({
   show_progress_bar: true,
   on_finish: () => {
+    // Show loading page immediately
+    document.body.innerHTML = `
+      <div style="
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        font-family: sans-serif;
+        color: white;
+        z-index: 10000;
+      ">
+        <div style="
+          text-align: center;
+          max-width: 400px;
+          padding: 40px;
+          background: rgba(255, 255, 255, 0.1);
+          border-radius: 20px;
+          backdrop-filter: blur(10px);
+          border: 1px solid rgba(255, 255, 255, 0.2);
+        ">
+          <div style="
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+          "></div>
+          <h2 style="margin: 0 0 10px 0; font-size: 24px;">Processing Your Data</h2>
+          <p style="margin: 0; font-size: 16px; opacity: 0.9;">Please wait while we save your responses...</p>
+        </div>
+      </div>
+      <style>
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+      </style>
+    `;
+
     const experimentResult = jsPsych.data.get().json();
     const data = JSON.parse(experimentResult);
 
