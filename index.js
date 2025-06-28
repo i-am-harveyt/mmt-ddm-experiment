@@ -2072,7 +2072,6 @@ const jsPsych = initJsPsych({
         customerServiceEvents: customerServiceEventReference
       },
     };
-    document.body.innerHTML = JSON.stringify(dataToSave);
     const prolificId = jsPsych.data.getURLVariable("PROLIFIC_PID") || "unknown";
 
     fetch(APP_URL, {
