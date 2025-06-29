@@ -6,8 +6,7 @@ const APP_URL = "https://script.google.com/macros/s/AKfycbwBdzSzb9o6OBd2MLcWr2UR
 /**
  * `completionCode` stores the completion code for the experiment
  */
-const completionCode = "YOUR_COMPLETION_CODE_HERE";
-
+const completionCode = "C1AYQ2X4";
 
 /**
  * `timeline` stores the steps of the experiment
@@ -539,7 +538,7 @@ const mmm_sSurvey_TV = {
     "<h3>Media Usage Habits Questionnaire</h3><p>The following questions aim to understand how frequently you use television or YouTube simultaneously with other types of media.</p>",
   data: { task: "mmm_s_survey_tv" },
 };
-// timeline.push(mmm_sSurvey_TV);
+timeline.push(mmm_sSurvey_TV);
 
 const mmm_sSurvey_SNS = {
   type: jsPsychSurveyLikert,
@@ -548,7 +547,7 @@ const mmm_sSurvey_SNS = {
     "<h3>Media Usage Habits Questionnaire</h3><p>The following questions aim to understand how frequently you use social networking sites simultaneously with other types of media.</p>",
   data: { task: "mmm_s_survey_sns" },
 };
-// timeline.push(mmm_sSurvey_SNS);
+timeline.push(mmm_sSurvey_SNS);
 
 const mmm_sSurvey_Msg = {
   type: jsPsychSurveyLikert,
@@ -557,7 +556,7 @@ const mmm_sSurvey_Msg = {
     "<h3>Media Usage Habits Questionnaire</h3><p>The following questions aim to understand how frequently you use messaging applications on your phone or computer simultaneously with other types of media.</p>",
   data: { task: "mmm_s_survey_msg" },
 };
-// timeline.push(mmm_sSurvey_Msg);
+timeline.push(mmm_sSurvey_Msg);
 
 // Polychronic–Monochronic Tendency Scale (PMTS)
 const pmtsScale = ["Strongly disagree", "Disagree", "Slightly disagree", "Neutral", "Slightly agree", "Agree", "Strongly agree"];
@@ -599,7 +598,7 @@ const pmtsSurvey = {
   preamble: "<h3>Personal Work Style Questionnaire</h3>",
   data: { task: "pmts_survey" },
 };
-// timeline.push(pmtsSurvey);
+timeline.push(pmtsSurvey);
 
 // --- 2. Instructions ---
 const instructions = {
@@ -734,7 +733,7 @@ const comprehensionLoop = {
   }
 };
 
-// timeline.push(comprehensionLoop);
+timeline.push(comprehensionLoop);
 
 // --- 3. Inter-block Questionnaire
 const interBlockQuestions = [
@@ -2251,13 +2250,14 @@ const jsPsych = initJsPsych({
         customerServiceEvents: customerServiceEventReference
       },
     };
-    const prolificId = jsPsych.data.getURLVariable("PROLIFIC_PID") || "unknown";
 
     fetch(APP_URL, {
       method: "POST",
       mode: "no-cors",
       body: JSON.stringify({
-        prolific_id: prolificId,
+        prolific_id: prolific_id,
+        study_id: study_id,
+        session_id: session_id,
         data: dataToSave,
       }),
     }).finally(() => {
@@ -2274,4 +2274,21 @@ const jsPsych = initJsPsych({
     });
   },
 });
+/**
+ * `prolificId` stores the prolific id for the experiment
+ */
+const prolific_id = jsPsych.data.getURLVariable("PROLIFIC_PID") || "unknown";
+
+/**
+ * `study_id` stores the study id for the experiment
+ */
+const study_id = jsPsych.data.getURLVariable('STUDY_ID');
+
+/**
+ * `session_id` stores the session id for the experiment
+ */
+const session_id = jsPsych.data.getURLVariable('SESSION_ID');
+
+console.log(prolific_id, study_id, session_id);
+
 jsPsych.run(timeline);
