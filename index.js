@@ -710,7 +710,6 @@ const comprehensionCheck = {
     const userAnswers = Object.values(responses).map((ans, i) =>
       comprehensionQuestions[i].options.indexOf(ans)
     );
-    console.log(correctAnswers, userAnswers);
     const allCorrect = userAnswers.every((ans, i) => ans === correctAnswers[i]);
     data.comprehension_passed = allCorrect;
   }
@@ -1149,7 +1148,6 @@ function getNextEmailForSecondaryTask() {
     throw new Error(errorMessage);
   }
   if (globalEmailIndex >= allEmailStimuli.length) {
-    console.log("Resetting globalEmailIndex, looping through secondary task stimuli.");
     globalEmailIndex = 0; // Loop back
   }
   return allEmailStimuli[globalEmailIndex];
@@ -1159,7 +1157,6 @@ function getNextEmailForSecondaryTask() {
 function advanceToNextEmail() {
   globalEmailIndex++;
   if (globalEmailIndex >= allEmailStimuli.length) {
-    console.log("Resetting globalEmailIndex, looping through secondary task stimuli.");
     globalEmailIndex = 0; // Loop back
   }
 }
@@ -1478,7 +1475,6 @@ for (const [blockIndex, config] of primaryTaskBlockConfigs.entries()) {
 
         // --- Secondary Task (Email Classification) Listeners ---
         const emailButtons = document.querySelectorAll('.email-classify-btn');
-        console.log(`Found ${emailButtons.length} email classification buttons`);
         let emailClassificationStartTime = Date.now(); // Make it mutable
 
         // Function to get current email from DOM
@@ -1496,10 +1492,8 @@ for (const [blockIndex, config] of primaryTaskBlockConfigs.entries()) {
             );
 
             if (originalEmail) {
-              console.log(`Found email in original data: ${originalEmail.Subject}`);
               return originalEmail;
             } else {
-              console.warn(`Email not found in original data: ${currentSubject}`);
               // Fallback if not found in original data
               return {
                 Subject: currentSubject,
@@ -1526,7 +1520,6 @@ for (const [blockIndex, config] of primaryTaskBlockConfigs.entries()) {
         // Function to load next email - completely independent of primary task
         const loadNextEmail = (withDelay = true) => {
           const nextEmail = getNextEmailForSecondaryTask();
-          console.log(`Loading next email: ${nextEmail.Subject}`);
 
           // Show loading indicator only if there's a delay
           const emailBody = document.getElementById('email-body');
@@ -1552,7 +1545,6 @@ for (const [blockIndex, config] of primaryTaskBlockConfigs.entries()) {
             const subjectElement = document.getElementById('email-subject');
             if (subjectElement) {
               subjectElement.textContent = `Subject: ${nextEmail.Subject}`;
-              console.log(`Updated subject to: ${nextEmail.Subject}`);
             } else {
               console.warn('Could not find subject element');
             }
@@ -1560,7 +1552,6 @@ for (const [blockIndex, config] of primaryTaskBlockConfigs.entries()) {
             // Update email body
             if (emailBody) {
               emailBody.innerHTML = nextEmail.Body.replace(/\n/g, "<br>");
-              console.log(`Updated email body to: ${nextEmail.Body.substring(0, 50)}...`);
             } else {
               console.warn('Could not find email body element');
             }
@@ -1580,7 +1571,6 @@ for (const [blockIndex, config] of primaryTaskBlockConfigs.entries()) {
             // Reset classification start time
             emailClassificationStartTime = Date.now();
 
-            console.log(`Next email loaded: ${nextEmail.Subject}`);
           };
 
           if (withDelay) {
@@ -1601,7 +1591,6 @@ for (const [blockIndex, config] of primaryTaskBlockConfigs.entries()) {
         this.secondaryTaskTimers.push(initTimer);
 
         emailButtons.forEach((button, index) => {
-          console.log(`Setting up listener for button ${index}:`, button.textContent, button.dataset.classification);
           button.addEventListener('click', function handler(e) {
             e.preventDefault(); // Prevent default button behavior
             e.stopPropagation(); // Stop event bubbling to prevent jsPsych interference
@@ -1613,8 +1602,6 @@ for (const [blockIndex, config] of primaryTaskBlockConfigs.entries()) {
             if (!emailStimulus) {
               emailStimulus = getCurrentEmailFromDOM();
             }
-
-            console.log(`Email classification clicked: ${classificationChoice} for email: ${emailStimulus?.Subject || 'Unknown'}`);
 
             // Decrement countdown (instead of incrementing)
             emailCountdown = Math.max(0, emailCountdown - 1);
@@ -1630,6 +1617,7 @@ for (const [blockIndex, config] of primaryTaskBlockConfigs.entries()) {
 
             emailClassificationResponses.push({
               email_stimulus_index: globalEmailIndex - 1, // Index of the email stimulus (before advancing)
+              block_index: blockIndex,
               correct_answer_char: emailStimulus?.CorrectAnswer || 'w',
               user_choice_char: classificationChoice,
               correct: classificationChoice === (emailStimulus?.CorrectAnswer || 'w') ? 1 : 0, // Boolean as number
@@ -1643,8 +1631,6 @@ for (const [blockIndex, config] of primaryTaskBlockConfigs.entries()) {
               btn.disabled = true;
               btn.style.opacity = '0.6';
             });
-
-            console.log("Email classified:", classificationChoice, "for", emailStimulus?.Subject || 'Unknown');
 
             // Advance to next email index AFTER user has made a classification
             advanceToNextEmail();
@@ -1773,11 +1759,6 @@ for (const [blockIndex, config] of primaryTaskBlockConfigs.entries()) {
   });
   trialBlocks.push(blockTrials);
 }
-
-console.log(`Created ${trialBlocks.length} trial blocks`);
-trialBlocks.forEach((block, index) => {
-  console.log(`Block ${index + 1}: ${block.length} trials`);
-});
 
 function addCustomStyles() {
   const style = document.createElement('style');
@@ -1997,9 +1978,9 @@ const blockStartScreen = {
 const blockProgressScreen = {
   type: jsPsychHtmlButtonResponse,
   stimulus: function() {
-    // Get current block data
-    const currentTrialIndex = jsPsych.getProgress().current_trial_global;
-    const currentBlockIndex = Math.floor(currentTrialIndex / (params.trialsPerBlock + 3)); // +3 for start screen, trials, and progress screen
+    // Get current block data from the last trial
+    const lastTrial = jsPsych.data.get().last(1).values()[0];
+    const currentBlockIndex = lastTrial.block_index;
     
     // Calculate customer service progress for this block
     // Use block_index to accurately count events for this specific block
@@ -2012,10 +1993,9 @@ const blockProgressScreen = {
     const avgCustomerServiceTime = completedCustomerService > 0 ? Math.round(totalCustomerServiceTime / completedCustomerService) : 0;
     
     // Calculate email classification progress for this block
-    // Use a time window approach to estimate emails for this block
-    const blockStartTime = Date.now() - (params.trialDuration * params.trialsPerBlock * 1.5); // Estimate block duration
+    // Filter by the accurate block_index
     const blockEmailClassifications = emailClassificationResponses.filter(response => 
-      response.timestamp >= blockStartTime
+      response.block_index === currentBlockIndex
     );
     
     const completedEmails = blockEmailClassifications.length;
@@ -2043,6 +2023,28 @@ const blockProgressScreen = {
           gap: 30px;
           margin: 40px 0;
         ">
+          <!-- Email Classification Progress -->
+          <div style="
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid #e8eaed;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+          ">
+            <h2 style="margin: 0 0 20px 0; font-size: 24px; color: #1976d2;">Email Classification Task</h2>
+            <div style="font-size: 48px; font-weight: bold; margin: 20px 0; color: #60a5fa;">
+              ${completedEmails}
+            </div>
+            <p style="margin: 10px 0; font-size: 18px; color: #5f6368;">Emails Classified</p>
+            <div style="font-size: 36px; font-weight: bold; margin: 20px 0; color: #fbbf24;">
+              ${emailAccuracy}%
+            </div>
+            <p style="margin: 10px 0; font-size: 16px; color: #5f6368;">Accuracy Rate</p>
+            <p style="margin: 10px 0; font-size: 14px; color: #80868b;">
+              ${correctEmails} correct out of ${completedEmails} total
+            </p>
+          </div>
+
           <!-- Customer Service Progress -->
           <div style="
             background: #ffffff;
@@ -2072,28 +2074,6 @@ const blockProgressScreen = {
             </div>
             <p style="margin: 10px 0; font-size: 16px; color: #5f6368;">
               Average Response Time: <strong style="color: #202124;">${avgCustomerServiceTime}ms</strong>
-            </p>
-          </div>
-          
-          <!-- Email Classification Progress -->
-          <div style="
-            background: #ffffff;
-            padding: 30px;
-            border-radius: 15px;
-            border: 1px solid #e8eaed;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-          ">
-            <h2 style="margin: 0 0 20px 0; font-size: 24px; color: #1976d2;">Email Classification Task</h2>
-            <div style="font-size: 48px; font-weight: bold; margin: 20px 0; color: #60a5fa;">
-              ${completedEmails}
-            </div>
-            <p style="margin: 10px 0; font-size: 18px; color: #5f6368;">Emails Classified</p>
-            <div style="font-size: 36px; font-weight: bold; margin: 20px 0; color: #fbbf24;">
-              ${emailAccuracy}%
-            </div>
-            <p style="margin: 10px 0; font-size: 16px; color: #5f6368;">Accuracy Rate</p>
-            <p style="margin: 10px 0; font-size: 14px; color: #80868b;">
-              ${correctEmails} correct out of ${completedEmails} total
             </p>
           </div>
         </div>
