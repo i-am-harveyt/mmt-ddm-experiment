@@ -1202,7 +1202,7 @@ for (const [blockIndex, config] of primaryTaskBlockConfigs.entries()) {
           <button class="jspsych-popup-close" style="position:absolute; top:6px; right:8px; background:transparent; border:none; font-size:18px; color:#888; cursor:pointer;">&times;</button>
           <div style="font-weight:bold; font-size:1.05em;">${popupData.app}</div>
           <div style="color:#1a73e8; font-weight:500;">${popupData.sender}</div>
-          <div style="margin-top:2px;">${popupData.message}</div>
+          <div style="margin-top:2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${popupData.message}</div>
         </div>`
       : "";
 
@@ -1818,6 +1818,11 @@ function addCustomStyles() {
       font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
       font-size: 0.9em;
       text-align: left;
+      max-width: 250px;
+      word-wrap: break-word;
+      max-height: 150px; /* Enough for app, sender, and one line of message */
+      overflow: hidden;
+      box-sizing: border-box;
     }
 
     .jspsych-popup-message {
@@ -1919,6 +1924,7 @@ function addCustomStyles() {
     }
     #primary-task-buttons {
       margin-top: auto !important;
+      margin-bottom: 20px;
     }
   `;
   document.head.appendChild(style);
