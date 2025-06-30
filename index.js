@@ -2129,6 +2129,23 @@ const demographicSurvey = {
 
 timeline.push(demographicSurvey);
 
+const qualitativeSurvey = {
+  type: jsPsychSurveyText,
+  preamble: "<h3>Qualitative Survey</h3><p>Please answer the following questions:</p>",
+  questions: [
+    { prompt: "What is your strategy of media multitasking?", name: "media_multitasking_strategy", rows: 3, required: true },
+    { prompt: `Did you notice yourself starting to ignore the email classification task at any point?`, name: "email_classification_ignore", rows: 3, required: true },
+    { prompt: `Can you describe what was going through your mind when you decided it wasn't worth the effort?`, name: "email_classification_ignore_reason", rows: 3, required: true },
+    { prompt: `How did the pop-up messages influence your willingness to do the email task?`, name: "email_classification_pop_up_influence", rows: 3, required: true },
+    { prompt: `How did the pop-up messages influence your willingness to do the customer service task?`, name: "customer_service_pop_up_influence", rows: 3, required: true },
+    { prompt: `Was there a point where you felt the pop-ups were too disruptive to justify switching your attention?`, name: "pop_up_disruptive", rows: 3, required: true },
+    { prompt: `What do you think about the experiment?`, name: "experiment_feedback", rows: 3, required: true },
+  ],
+  data: { task: "qualitative_survey" }
+};
+
+timeline.push(qualitativeSurvey);
+
 const jsPsych = initJsPsych({
   show_progress_bar: true,
   on_finish: () => {
