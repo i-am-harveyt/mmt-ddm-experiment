@@ -438,11 +438,15 @@ const allEmailStimuli = [
   },
 ];
 
+allEmailStimuli.forEach((email, index) => {
+  email.originalIndex = index;
+});
+
 /**
  * Experiment Settings
  */
 const params = {
-  trialsPerBlock: 30,
+  trialsPerBlock: 10,
   popupFreq: { low: 2, med: 5, high: 8 },
   trialDuration: 20_000,
   popupDuration: 4_000,
@@ -1103,40 +1107,6 @@ let globalEmailClassificationCount = 0; // Global counter for email classificati
 // Email countdown settings
 let emailCountdown = params.EMAIL_TARGET_COUNT; // Countdown from target to 0
 
-// Create customer service event lookup map for efficient storage
-const customerServiceEventMap = {};
-customerServiceEvents.forEach((event, index) => {
-  customerServiceEventMap[event.id] = {
-    contactName: event.contactName,
-    text: event.text,
-    timestamp: event.timestamp,
-    correctAnswerIndex: event.correctAnswerIndex,
-  };
-});
-
-// Add customer service event map to data export
-const customerServiceEventReference = {
-  event_map: customerServiceEventMap,
-  total_events: customerServiceEvents.length
-};
-
-// Create email stimulus lookup map for efficient storage
-const emailStimulusMap = {};
-allEmailStimuli.forEach((email, index) => {
-  emailStimulusMap[index] = {
-    Subject: email.Subject,
-    Body: email.Body,
-    Type: email.Type,
-    CorrectAnswer: email.CorrectAnswer
-  };
-});
-
-// Add email stimulus map to data export
-const emailStimulusReference = {
-  stimulus_map: emailStimulusMap,
-  total_stimuli: allEmailStimuli.length
-};
-
 shuffle(allEmailStimuli);
 let globalEmailIndex = 0;
 
@@ -1437,8 +1407,6 @@ for (const [blockIndex, config] of primaryTaskBlockConfigs.entries()) {
         trial_in_block: trialInBlockIndex,
         block_index: blockIndex,
         customer_event_id: cs_event.id,
-        customer_event_text: cs_event.text,
-        customer_event_contact: cs_event.contactName,
         is_interruption: cs_event.Interruption,
         correct_answer_index: cs_event.correctAnswerIndex,
         // Remove secondary_task_stimulus binding - emails are independent now
@@ -1616,7 +1584,7 @@ for (const [blockIndex, config] of primaryTaskBlockConfigs.entries()) {
             e.target.textContent = classificationChoice === 'w' ? '✓ Work-related' : '✓ Non-work-related';
 
             emailClassificationResponses.push({
-              email_stimulus_index: globalEmailIndex - 1, // Index of the email stimulus (before advancing)
+              email_stimulus_index: emailStimulus?.originalIndex ?? -1, // Use the stable, original index
               block_index: blockIndex,
               correct_answer_char: emailStimulus?.CorrectAnswer || 'w',
               user_choice_char: classificationChoice,
@@ -2225,10 +2193,6 @@ const jsPsych = initJsPsych({
         }),
       handledCustomerServiceEvents: handledEventLog,
       emailClassificationResponses: emailClassificationResponses,
-      stimulusReferences: {
-        emailStimuli: emailStimulusReference,
-        customerServiceEvents: customerServiceEventReference
-      },
     };
 
     fetch(APP_URL, {
