@@ -449,7 +449,7 @@ const params = {
   trialsPerBlock: 30,
   popupFreq: { low: 2, med: 5, high: 8 },
   trialDuration: 20_000,
-  popupDuration: 4_000,
+  popupDuration: 20_000,
   EMAIL_TARGET_COUNT: allEmailStimuli.length,
 };
 
@@ -629,7 +629,7 @@ const instructions = {
     <p>
     Please quickly and accurately select the correct response option below based on the message content:<br/>
     ─ If it's an order or process-related question, please click "Please provide your order number."<br/>
-    ─ If it's a technical issue, please click "The issue has been forwarded to the technical department, and we will get back to you as soon as possible."
+    ─ If it's a technical issue, please click "The issue has been forwarded to the technical department."
     </p>`,
 
     `
@@ -646,12 +646,12 @@ const instructions = {
     `
     <h2>Instruction 3 / 4: Other Tips</h2>
     <p>
-    During the experiment, message prompts from email, Slack, or Teams may randomly pop up on the screen as a modal window.
+    During the experiment, message prompts from Slack may pop up on the screen as a modal window.
     </p>
     <img src="static/Exp_Instruction_popup.png" alt="Task Two" style="width: 55dvw; height: auto;">
     <p>
     There is a dismiss button in the upper right corner of the prompt; clicking it will make it disappear. <br/>
-    If not dismissed beforehand, each prompt will automatically close after ${params.popupDuration / 1_000} seconds.<br/>
+    It does not disappear automatically throughout a single trial.<br/>
     </p>`,
 
     `
@@ -674,7 +674,7 @@ const comprehensionQuestions = [
     prompt: "When you see 'I can't log in to my account' in the customer message panel, which response should you choose?",
     options: [
       "Please provide your order number.",
-      "The issue has been forwarded to the technical department, and we will get back to you as soon as possible.",
+      "The issue has been forwarded to the technical department.",
       "No response needed."
     ],
     required: true,
@@ -696,7 +696,7 @@ const comprehensionQuestions = [
       "No, it will disappear automatically."
     ],
     required: true,
-    correct: 1
+    correct: 0
   }
 ];
 const comprehensionCheck = {
@@ -831,7 +831,7 @@ const interBlockSurvey = {
 // Primary Task (Customer Service) - Now tracked by jsPsych
 const RESPONSE_BEHAVIOR = [
   "Please provide your order number.",
-  "The issue has been forwarded to the technical department, and we will get back to you as soon as possible.",
+  "The issue has been forwarded to the technical department.",
 ];
 
 function renderCurrentEventDisplay(event) {
@@ -839,8 +839,8 @@ function renderCurrentEventDisplay(event) {
     return "<p style='padding: 10px; text-align: center;'>No pending customer messages.</p>";
   }
   return `
-    <div class="event-content-wrapper" data-event-id="${event.id}" style="padding: 16px; background-color: #ffffff; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.08);">
-      <h4 style="margin-top: 0; margin-bottom: 8px; color: #343a40; font-size: 0.95em; font-weight: 600;">From: ${event.contactName}</h4>
+    <div class="event-content-wrapper" data-event-id="${event.id}">
+      <h4 style="margin-top: 100px; margin-bottom: 8px; color: #343a40; font-size: 0.95em; font-weight: 600;">From: ${event.contactName}</h4>
       <p style="margin-bottom: 18px; color: #495057; font-size: 0.9em; line-height: 1.5;">${event.text}</p>
     </div>
   `;
@@ -916,32 +916,20 @@ function shuffle(array) {
 }
 
 const POPUP_MESSAGES = [
-  { app: "Email", sender: "Alice", message: "Are you coming to the weekend gathering?" },
-  { app: "Line", sender: "Mom", message: "Remember to come home for dinner tomorrow." },
+  // --- Reminders & Standard Tasks ---
   { app: "Slack", sender: "HR", message: "Please remember to fill in this month's attendance record." },
-  { app: "Teams", sender: "Manager", message: "There's a meeting at 3 PM today, please be on time." },
-  { app: "Email", sender: "Bob", message: "Are you free to play ball this Friday?" },
-  { app: "Line", sender: "Class Group", message: "Want to go see a movie together next week?" },
-  { app: "Slack", sender: "Designer", message: "The new version of the design draft has been uploaded." },
-  { app: "Teams", sender: "Project Manager", message: "Please respond to the client's latest requirements." },
-
-  // --- Additional entries ---
-  { app: "Email", sender: "Marketing Team", message: "New marketing campaign strategy review meeting scheduled for Monday." },
-  { app: "Line", sender: "Dad", message: "Your package arrived safely." },
-  { app: "Slack", sender: "Engineering", message: "Bug report #123 has been resolved." },
-  { app: "Teams", sender: "Sales", message: "Q3 sales target updated. Please review." },
-  { app: "Email", sender: "Newsletter", message: "Your weekly tech news digest is here!" },
-  { app: "Line", sender: "Best Friend", message: "How was your day? Call me later!" },
-  { app: "Slack", sender: "IT Support", message: "System maintenance scheduled for tonight at 10 PM." },
-  { app: "Teams", sender: "Team Lead", message: "Remember to submit your weekly report by end of day." },
-  { app: "Email", sender: "Bank", message: "Your monthly statement is now available." },
-  { app: "Line", sender: "Sister", message: "Happy Birthday! Sending you a little something." },
+  { app: "Slack", sender: "Manager", message: "There's a meeting at 3 PM today, please be on time." },
+  { app: "Slack", sender: "Team Lead", message: "Remember to submit your weekly report by end of day." },
+  { app: "Slack", sender: "HR Dept", message: "Reminder: Annual performance review forms are due next week." },
   { app: "Slack", sender: "Product Team", message: "Feedback on the new feature requested by Friday." },
-  { app: "Teams", sender: "Company Announce", message: "Important: New WFH policy update." },
-  { app: "Email", sender: "Online Store", message: "Your order #45678 has shipped!" },
-  { app: "Line", sender: "Neighbor", message: "Could you water my plants while I'm away?" },
-  { app: "Slack", sender: "DevOps", message: "Server performance alert: High CPU usage detected." },
-  { app: "Teams", sender: "HR Dept", message: "Reminder: Annual performance review forms are due next week." },
+
+  // --- Status Updates & Announcements ---
+  { app: "Slack", sender: "Designer", message: "The new version of the design draft has been uploaded." },
+  { app: "Slack", sender: "Marketing Team", message: "New marketing campaign strategy review meeting scheduled for Monday." },
+  { app: "Slack", sender: "Engineering", message: "Bug report #123 has been resolved." },
+  { app: "Slack", sender: "Sales", message: "Q3 sales target updated. Please review." },
+  { app: "Slack", sender: "IT Support", message: "System maintenance scheduled for tonight at 10 PM." },
+  { app: "Slack", sender: "Company Announce", message: "Important: New WFH policy update." }
 ];
 
 const initialChatData = [
@@ -1198,12 +1186,16 @@ for (const [blockIndex, config] of primaryTaskBlockConfigs.entries()) {
   const blockTrials = currentBlockPrimaryTasks.map((cs_event, trialInBlockIndex) => {
     const popupData = POPUP_MESSAGES[Math.floor(Math.random() * POPUP_MESSAGES.length)];
     const popupHtml = cs_event.Interruption
-      ? `<div class="jspsych-popup-message" style="text-align:left;">
-          <button class="jspsych-popup-close" style="position:absolute; top:6px; right:8px; background:transparent; border:none; font-size:18px; color:#888; cursor:pointer;">&times;</button>
-          <div style="font-weight:bold; font-size:1.05em;">${popupData.app}</div>
-          <div style="color:#1a73e8; font-weight:500;">${popupData.sender}</div>
-          <div style="margin-top:2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${popupData.message}</div>
-        </div>`
+      ? `<div class="jspsych-popup-message">
+           <div class="popup-header">
+             <span class="popup-app-name">${popupData.app}</span>
+             <button class="jspsych-popup-close">&times;</button>
+           </div>
+           <div class="popup-content">
+             <div class="popup-sender">${popupData.sender}</div>
+             <div class="popup-message">${popupData.message}</div>
+           </div>
+         </div>`
       : "";
 
     return {
@@ -1389,8 +1381,11 @@ for (const [blockIndex, config] of primaryTaskBlockConfigs.entries()) {
 
                 <div id="primary-task-countdown-timer"></div>
               </div>
+              <div style="padding: 16px; background-color: #ffffff; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.08);height:100%; display: flex; flex-direction: column; justify-content: space-between;">
               ${renderCurrentEventDisplay(cs_event)}
-              <div id="primary-task-buttons" style="margin-top: 18px; display: flex; gap: 10px;"></div>
+                <div id="primary-task-buttons" style="margin-top: 18px; display: flex; flex-direction: column; align-items: flex-end; gap: 10px;"></div>
+              </div>
+
             </div>
           </div>
         `;
@@ -1730,6 +1725,9 @@ for (const [blockIndex, config] of primaryTaskBlockConfigs.entries()) {
 function addCustomStyles() {
   const style = document.createElement('style');
   style.textContent = `
+    *{
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif !important;
+    }
     .event-content-wrapper {
       transition: opacity 0.5s ease-out, transform 0.5s ease-out, max-height 0.5s ease-out;
       overflow: hidden;
@@ -1804,37 +1802,86 @@ function addCustomStyles() {
       box-shadow: none;
     }
     
+    /* Windows-style Notification */
     .jspsych-popup-message {
       position: fixed;
+      height: 200px;
+      width: 400px;
       bottom: 25px;
       right: 25px;
-      background-color: #ffffff; /* Clean white background */
-      color: #333; /* Darker text for readability */
-      border: 1px solid #dee2e6; /* Softer border */
-      border-radius: 6px; /* Rounded corners */
-      padding: 12px 18px; /* Comfortable padding */
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-      z-index: 10000; /* Ensure it's on top */
+      background: #1e1e1e; /* A very dark grey, almost black */
+      color: #ffffff;
+      border-radius: 8px; /* Windows 11 uses rounded corners */
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+      z-index: 10000;
       font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      font-size: 0.9em;
-      text-align: left;
-      max-width: 250px;
-      word-wrap: break-word;
-      max-height: 150px; /* Enough for app, sender, and one line of message */
       overflow: hidden;
-      box-sizing: border-box;
-    }
-
-    .jspsych-popup-message {
-      /* Existing styles... */
-      transition: bottom 0.3s ease-out, opacity 0.3s ease-out; /* Add transition */
-      bottom: -100px; /* Start position below screen */
-      opacity: 0; /* Start invisible */
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      
+      /* Animation properties - keeping original logic as requested */
+      transition: bottom 0.3s ease-out, opacity 0.3s ease-out;
+      bottom: -120px; /* Start a bit lower to ensure it's off-screen */
+      opacity: 0;
     }
 
     .jspsych-popup-message.show {
-      bottom: 25px; /* Ending position */
-      opacity: 1; /* Ending opacity */
+      bottom: 25px;
+      opacity: 1;
+    }
+
+    .jspsych-popup-message .popup-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .jspsych-popup-message .popup-app-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #f0f0f0;
+    }
+
+    .jspsych-popup-message .jspsych-popup-close {
+      background: transparent;
+      border: none;
+      color: #a0a0a0;
+      font-size: 18px;
+      font-weight: normal;
+      cursor: pointer;
+      padding: 2px 6px;
+      line-height: 1;
+      border-radius: 4px;
+      transition: background-color 0.2s, color 0.2s;
+    }
+
+    .jspsych-popup-message .jspsych-popup-close:hover {
+      background-color: rgba(255, 255, 255, 0.15);
+      color: #ffffff;
+    }
+
+    .jspsych-popup-message .popup-content {
+      padding: 12px;
+      text-align: left;
+    }
+
+    .jspsych-popup-message .popup-sender {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .jspsych-popup-message .popup-message {
+      font-size: 14px;
+      line-height: 1.4;
+      color: #e0e0e0;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      word-wrap: break-word;
     }
 
     .panel-titlebar {
@@ -1870,8 +1917,9 @@ function addCustomStyles() {
     #primary-task-panel #jspsych-html-button-response-btngroup {
       width: 100%;
       display: flex;
-      flex-direction: row;
+      flex-direction: column;
       justify-content: center;
+      align-items: flex-end;
       gap: 18px;
       margin: 28px 0 0 0;
       flex-wrap: nowrap;
@@ -1881,30 +1929,32 @@ function addCustomStyles() {
       min-width: 120px;
       max-width: 340px;
       font-size: 1em;
-      padding: 14px 10px;
-      border-radius: 6px;
-      background: #1976d2;
-      color: #fff;
-      border: none;
+      padding: 10px 10px;
+      border-radius: 10px;
+      color: gray;
+      border: 1px solid #cfcccc;
       font-weight: 500;
       transition: background 0.18s, box-shadow 0.18s;
       box-shadow: 0 2px 8px rgba(25, 118, 210, 0.08);
       word-break: break-word;
       white-space: normal;
       text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     #primary-task-panel .jspsych-btn.response-btn-primary:hover {
-      background: #125ea2;
+      background: lightgray;
     }
     #primary-task-panel .jspsych-btn.response-btn-primary:active {
-      background: #0d3c6e;
+      background: gray;
     }
 
     .jspsych-display-element {
-      max-width: 100vw;
+      max-width: 1440px;
+      width: 96vw;
       max-height: 100vh;
       min-height: 92vh;
-      min-width: 96vw;
       padding: 0;
       margin: 0 auto;
       background: #f5f6fa;
@@ -1915,16 +1965,12 @@ function addCustomStyles() {
     }
     #primary-task-buttons {
       margin-top: 0px !important;
-      padding-bottom: 20px !important;
+      margin-bottom: 30px !important;
     }
     #primary-task-panel {
       display: flex;
       flex-direction: column;
       height: 100%;
-    }
-    #primary-task-buttons {
-      margin-top: auto !important;
-      margin-bottom: 20px;
     }
   `;
   document.head.appendChild(style);
@@ -1950,31 +1996,31 @@ const blockStartScreen = {
 // Block progress display page
 const blockProgressScreen = {
   type: jsPsychHtmlButtonResponse,
-  stimulus: function() {
+  stimulus: function () {
     // Get current block data from the last trial
     const lastTrial = jsPsych.data.get().last(1).values()[0];
     const currentBlockIndex = lastTrial.block_index;
-    
+
     // Calculate customer service progress for this block
     // Use block_index to accurately count events for this specific block
-    const blockCustomerServiceEvents = handledEventLog.filter(event => 
+    const blockCustomerServiceEvents = handledEventLog.filter(event =>
       event.block_index === currentBlockIndex
     );
-    
+
     const completedCustomerService = blockCustomerServiceEvents.length;
     const totalCustomerServiceTime = blockCustomerServiceEvents.reduce((total, event) => total + (event.rt || 0), 0);
     const avgCustomerServiceTime = completedCustomerService > 0 ? Math.round(totalCustomerServiceTime / completedCustomerService) : 0;
-    
+
     // Calculate email classification progress for this block
     // Filter by the accurate block_index
-    const blockEmailClassifications = emailClassificationResponses.filter(response => 
+    const blockEmailClassifications = emailClassificationResponses.filter(response =>
       response.block_index === currentBlockIndex
     );
-    
+
     const completedEmails = blockEmailClassifications.length;
     const correctEmails = blockEmailClassifications.filter(response => response.correct === 1).length;
     const emailAccuracy = completedEmails > 0 ? Math.round((correctEmails / completedEmails) * 100) : 0;
-    
+
     return `
       <div style="
         max-width: 800px;
