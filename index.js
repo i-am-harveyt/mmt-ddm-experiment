@@ -1721,7 +1721,6 @@ for (const [blockIndex, config] of primaryTaskBlockConfigs.entries()) {
         }
 
         data.primary_task_response_text = chosenResponseText;
-        data.primary_task_rt = data.rt;
       }
     };
   });
