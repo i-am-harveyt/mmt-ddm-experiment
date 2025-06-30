@@ -446,7 +446,7 @@ allEmailStimuli.forEach((email, index) => {
  * Experiment Settings
  */
 const params = {
-  trialsPerBlock: 10,
+  trialsPerBlock: 30,
   popupFreq: { low: 2, med: 5, high: 8 },
   trialDuration: 20_000,
   popupDuration: 4_000,
