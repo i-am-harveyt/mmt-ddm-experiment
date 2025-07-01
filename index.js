@@ -933,144 +933,551 @@ const POPUP_MESSAGES = [
 ];
 
 const initialChatData = [
-  // --- Correct Response: "Please provide your order number." ---
-  { sender: "Alice", text: "I'd like to check my order's processing status.", answerIndex: 0 },
-  { sender: "Bob", text: "The quantity of items I received is incorrect, what should I do?", answerIndex: 0 },
-  { sender: "Charles", text: "Can I modify the contents of my order?", answerIndex: 0 },
-  { sender: "David", text: "I haven't received my refund yet.", answerIndex: 0 },
-  { sender: "Eve", text: "I need to apply for after-sales service.", answerIndex: 0 },
-  { sender: "Frank", text: "I'd like to inquire about the details of a bill.", answerIndex: 0 },
-  { sender: "Grace", text: "Has my order from last week been shipped yet?", answerIndex: 0 },
-  { sender: "Henry", text: "I have a question about the invoice amount I received.", answerIndex: 0 },
-  { sender: "Ivy", text: "I need to cancel my order.", answerIndex: 0 },
-  { sender: "Jack", text: "I've paid, but the system shows the order as unpaid.", answerIndex: 0 },
-  { sender: "Alice", text: "My package seems to be lost, can you help me check?", answerIndex: 0 },
-  { sender: "Bob", text: "How do I return an item?", answerIndex: 0 },
-  { sender: "Charles", text: "I need a copy of my invoice.", answerIndex: 0 },
-  { sender: "David", text: "The product I received is defective.", answerIndex: 0 },
-  { sender: "Eve", text: "What's the progress of my repair?", answerIndex: 0 },
-  { sender: "Frank", text: "I want to confirm my contract details.", answerIndex: 0 },
-  { sender: "Grace", text: "The service I purchased hasn't been activated yet.", answerIndex: 0 },
-  { sender: "Henry", text: "I want to change my shipping address.", answerIndex: 0 },
-  { sender: "Ivy", text: "There's a problem with the bill for my last consultation.", answerIndex: 0 },
-  { sender: "Jack", text: "I have a question about my monthly bill.", answerIndex: 0 },
-  { sender: "Kelly", text: "I'd like to check my member points balance.", answerIndex: 0 },
-  { sender: "Leo", text: "When will my invoice be sent out?", answerIndex: 0 },
-  { sender: "Mandy", text: "I need to apply for an exchange, how do I do that?", answerIndex: 0 },
-  { sender: "Nina", text: "I want to know the current status of my order.", answerIndex: 0 },
-  { sender: "Oscar", text: "My received item is missing parts, how should I deal with it?", answerIndex: 0 },
-  { sender: "Paul", text: "How can I check my past transaction records?", answerIndex: 0 },
-  { sender: "Queenie", text: "I want to change the invoice title.", answerIndex: 0 },
-  { sender: "Ryan", text: "When will my refund be credited?", answerIndex: 0 },
-  { sender: "Sandy", text: "I need to apply for a paper invoice.", answerIndex: 0 },
-  { sender: "Tom", text: "I'd like to check my membership level.", answerIndex: 0 },
-  { sender: "Una", text: "I want to know when my order is expected to ship.", answerIndex: 0 },
-  { sender: "Vicky", text: "I need a replacement receipt.", answerIndex: 0 },
-  { sender: "Will", text: "I'd like to check my points redemption history.", answerIndex: 0 },
-  { sender: "Xavier", text: "I want to cancel the auto-renewal feature.", answerIndex: 0 },
-  { sender: "Yvonne", text: "I need to check my warranty period.", answerIndex: 0 },
-  { sender: "Zack", text: "I want to change my contact number.", answerIndex: 0 },
-  { sender: "Amy", text: "I'd like to check my order delivery progress.", answerIndex: 0 },
-  { sender: "Ben", text: "I need to apply for an invoice reprint.", answerIndex: 0 },
-  { sender: "Cathy", text: "I'd like to check my member exclusive offers.", answerIndex: 0 },
-  { sender: "Derek", text: "I want to know how to apply for a return.", answerIndex: 0 },
-  { sender: "Ella", text: "I need to check my order details.", answerIndex: 0 },
-  { sender: "Fiona", text: "I want to change the recipient address.", answerIndex: 0 },
-  { sender: "George", text: "I'd like to check my consumption invoice.", answerIndex: 0 },
-  { sender: "Helen", text: "I need to check my order payment status.", answerIndex: 0 },
-  { sender: "Ian", text: "I'd like to check my membership card number.", answerIndex: 0 },
-  { sender: "Judy", text: "I need to apply for after-sales repair.", answerIndex: 0 },
-  { sender: "Kevin", text: "I'd like to check my order discount amount.", answerIndex: 0 },
-  { sender: "Linda", text: "I need to check my order invoice number.", answerIndex: 0 },
-  { sender: "Maggie", text: "I'd like to check my order delivery method.", answerIndex: 0 },
-  { sender: "Nick", text: "I need to check my order cancellation status.", answerIndex: 0 },
-  { sender: "Olivia", text: "I'd like to check my order payment method.", answerIndex: 0 },
-  { sender: "Peter", text: "I need to check my order shipment date.", answerIndex: 0 },
-  { sender: "Queena", text: "I'd like to check my order tracking number.", answerIndex: 0 },
-  { sender: "Rita", text: "I need to check my order notes.", answerIndex: 0 },
-  { sender: "Sam", text: "I'd like to check my order coupon usage.", answerIndex: 0 },
-  { sender: "Tina", text: "I need to check my order invoice title.", answerIndex: 0 },
-  { sender: "Ursula", text: "I'd like to check my order delivery time.", answerIndex: 0 },
-  { sender: "Victor", text: "I need to check my order payment history.", answerIndex: 0 },
-  { sender: "Wendy", text: "I'd like to check my order delivery status.", answerIndex: 0 },
-  { sender: "Xena", text: "I need to check my order invoice content.", answerIndex: 0 },
-  { sender: "Yale", text: "I'd like to check my order payment method.", answerIndex: 0 },
-  { sender: "Zoe", text: "I need to check my order delivery method.", answerIndex: 0 },
-  { sender: "Allen", text: "I'd like to check my order payment status.", answerIndex: 0 },
-  { sender: "Betty", text: "I need to check my order invoice number.", answerIndex: 0 },
-  { sender: "Carl", text: "I'd like to check my order delivery method.", answerIndex: 0 },
-  { sender: "Doris", text: "I need to check my order cancellation status.", answerIndex: 0 },
-  { sender: "Ethan", text: "I'd like to check my order payment method.", answerIndex: 0 },
+  // --- Block 1 (Items 1-30) ---
+  {
+    sender: "Alice",
+    text: "I'd like to check on my order's processing status.",
+    answerIndex: 0,
+    difficulty: "simple",
+  },
+  {
+    sender: "Bob",
+    text: "The website's password reset function isn't working at all.",
+    answerIndex: 1,
+    difficulty: "simple",
+  },
+  {
+    sender: "Charles",
+    text: "The app crashed right after I paid, can you please confirm if my order went through?",
+    answerIndex: 0,
+    difficulty: "complex",
+  },
+  {
+    sender: "David",
+    text: "I need to know the shipping status for order #C-98765, but the tracking page won't load.",
+    answerIndex: 1,
+    difficulty: "complex",
+  },
+  {
+    sender: "Eve",
+    text: "I need to apply for after-sales service for a recent purchase.",
+    answerIndex: 0,
+    difficulty: "simple",
+  },
+  {
+    sender: "Frank",
+    text: "Your API is consistently returning a 500 server error.",
+    answerIndex: 1,
+    difficulty: "simple",
+  },
+  {
+    sender: "Grace",
+    text: "The tracking page is showing a 'network error'. Can you please tell me the current location of my package?",
+    answerIndex: 0,
+    difficulty: "complex",
+  },
+  {
+    sender: "Henry",
+    text: "I see my correct order history, but I also received a notification of unusual account activity. Should I be concerned?",
+    answerIndex: 1,
+    difficulty: "complex",
+  },
+  {
+    sender: "Ivy",
+    text: "How do I process a return for an item I bought?",
+    answerIndex: 0,
+    difficulty: "simple",
+  },
+  {
+    sender: "Jack",
+    text: "I can't add any more items to my shopping cart.",
+    answerIndex: 1,
+    difficulty: "simple",
+  },
+  {
+    sender: "Kelly",
+    text: "Your app's self-service diagnostics tool says my device is fine, but it's clearly broken. I need to start a repair request.",
+    answerIndex: 1,
+    difficulty: "complex",
+  },
+  {
+    sender: "Leo",
+    text: "I can't log in to my account to check my refund status. Can you fix the login issue?",
+    answerIndex: 1,
+    difficulty: "complex",
+  },
+  {
+    sender: "Mandy",
+    text: "I need to change my shipping address for an upcoming delivery.",
+    answerIndex: 0,
+    difficulty: "simple",
+  },
+  {
+    sender: "Nina",
+    text: "The system becomes unresponsive every time I try to process my return request. Is the return system down?",
+    answerIndex: 1,
+    difficulty: "complex",
+  },
+  {
+    sender: "Oscar",
+    text: "I was charged twice for my last order. Please help me process a refund for the extra charge.",
+    answerIndex: 0,
+    difficulty: "complex",
+  },
+  {
+    sender: "Paul",
+    text: "The link in the account verification email you sent is not clickable.",
+    answerIndex: 1,
+    difficulty: "simple",
+  },
+  {
+    sender: "Queenie",
+    text: "I need a copy of my invoice for tax purposes.",
+    answerIndex: 0,
+    difficulty: "simple",
+  },
+  {
+    sender: "Ryan",
+    text: "The website keeps saying 'password incorrect', but I'm certain I'm typing it correctly. Can you reset it for me?",
+    answerIndex: 1,
+    difficulty: "simple",
+  },
+  {
+    sender: "Sandy",
+    text: "Your website timed out while I was trying to change my delivery address. Can you confirm if the change was saved?",
+    answerIndex: 0,
+    difficulty: "complex",
+  },
+  {
+    sender: "Tom",
+    text: "I need to check my order history, but the page shows 'Service Temporarily Unavailable'. Is the server down?",
+    answerIndex: 1,
+    difficulty: "complex",
+  },
+  {
+    sender: "Una",
+    text: "When is my order expected to ship?",
+    answerIndex: 0,
+    difficulty: "simple",
+  },
+  {
+    sender: "Vicky",
+    text: "The images on your website are not displaying correctly.",
+    answerIndex: 1,
+    difficulty: "simple",
+  },
+  {
+    sender: "Will",
+    text: "I'm trying to redeem my member points, but the page keeps crashing. Can you just manually apply the points to my account?",
+    answerIndex: 0,
+    difficulty: "complex",
+  },
+  {
+    sender: "Xavier",
+    text: "I was about to confirm a very important order, but the system keeps logging me out every few minutes. Can you check if there's an issue with my account's session stability?",
+    answerIndex: 1,
+    difficulty: "complex",
+  },
+  {
+    sender: "Yvonne",
+    text: "I need to check the warranty period for a recent purchase.",
+    answerIndex: 0,
+    difficulty: "simple",
+  },
+  {
+    sender: "Zack",
+    text: "The app won't launch after I updated it this morning.",
+    answerIndex: 1,
+    difficulty: "simple",
+  },
+  {
+    sender: "Amy",
+    text: "I got a 'database error' when I tried to cancel my subscription. Can you ensure it's cancelled so I'm not charged again?",
+    answerIndex: 0,
+    difficulty: "complex",
+  },
+  {
+    sender: "Ben",
+    text: "The form doesn't respond after I submit it. I'm trying to report that my last order, #D-11223, was missing an item.",
+    answerIndex: 1,
+    difficulty: "complex",
+  },
+  {
+    sender: "Cathy",
+    text: "I'd like to check my member-exclusive offers.",
+    answerIndex: 0,
+    difficulty: "simple",
+  },
+  {
+    sender: "Derek",
+    text: "I'm not receiving the password reset email needed to access my account and view my past invoices.",
+    answerIndex: 1,
+    difficulty: "complex",
+  },
 
+  // --- Block 2 (Items 31-60) ---
+  {
+    sender: "Ella",
+    text: "Can I modify the contents of my existing order?",
+    answerIndex: 0,
+    difficulty: "simple",
+  },
+  {
+    sender: "Fiona",
+    text: "Your system is showing a persistent 'Error 503: Service Unavailable' message.",
+    answerIndex: 1,
+    difficulty: "simple",
+  },
+  {
+    sender: "George",
+    text: "After your system update, I can no longer find my transaction records. Can you help me retrieve my last one?",
+    answerIndex: 0,
+    difficulty: "complex",
+  },
+  {
+    sender: "Helen",
+    text: "I need to check my invoice for order #G-22334, but the app crashes every time I open that section. Can you report this bug?",
+    answerIndex: 1,
+    difficulty: "complex",
+  },
+  {
+    sender: "Ian",
+    text: "I have not received my refund yet for a returned item.",
+    answerIndex: 0,
+    difficulty: "simple",
+  },
+  {
+    sender: "Judy",
+    text: "I can't upload the photos required for my warranty claim. The upload button is not working.",
+    answerIndex: 1,
+    difficulty: "complex",
+  },
+  {
+    sender: "Kevin",
+    text: "The checkout page showed a 'payment failed' error, but my bank says the charge went through. Can you check my order status?",
+    answerIndex: 0,
+    difficulty: "complex",
+  },
+  {
+    sender: "Linda",
+    text: "I was trying to export my purchase history for my accountant, but the data export function failed.",
+    answerIndex: 1,
+    difficulty: "complex",
+  },
+  {
+    sender: "Maggie",
+    text: "I need to apply for an exchange. What's the procedure?",
+    answerIndex: 0,
+    difficulty: "simple",
+  },
+  {
+    sender: "Nick",
+    text: "I think there's a security issue; my order history looks wrong but I can't change my password either.",
+    answerIndex: 1,
+    difficulty: "simple",
+  },
+  {
+    sender: "Olivia",
+    text: "I'm trying to track my return, but the status page is showing a 404 error. Can you just tell me the status?",
+    answerIndex: 0,
+    difficulty: "complex",
+  },
+  {
+    sender: "Peter",
+    text: "Some of my saved addresses disappeared after your system maintenance. Is this a known issue?",
+    answerIndex: 1,
+    difficulty: "simple",
+  },
+  {
+    sender: "Queena",
+    text: "The product I received is defective, what should I do?",
+    answerIndex: 0,
+    difficulty: "simple",
+  },
+  {
+    sender: "Rita",
+    text: "Your payment gateway seems to be down, I can't finalize my purchase.",
+    answerIndex: 1,
+    difficulty: "simple",
+  },
+  {
+    sender: "Sam",
+    text: "The checkout page crashed, but it looks like my promotional coupon was used. Can you check if the coupon is still valid?",
+    answerIndex: 0,
+    difficulty: "complex",
+  },
+  {
+    sender: "Tina",
+    text: "My entire order history is missing after your system update. Please investigate this data loss.",
+    answerIndex: 1,
+    difficulty: "simple",
+  },
+  {
+    sender: "Ursula",
+    text: "Can you tell me my current member points balance?",
+    answerIndex: 0,
+    difficulty: "simple",
+  },
+  {
+    sender: "Victor",
+    text: "My account was locked after I tried to pay. I have several items in my cart I need to buy.",
+    answerIndex: 1,
+    difficulty: "complex",
+  },
+  {
+    sender: "Wendy",
+    text: "My browser is giving a security certificate warning for your site, but I need to check my invoice. Is it safe?",
+    answerIndex: 0,
+    difficulty: "complex",
+  },
+  {
+    sender: "Xena",
+    text: "The push notification I received about my delivery had the wrong address. Can you check the system's notification logic?",
+    answerIndex: 1,
+    difficulty: "complex",
+  },
+  {
+    sender: "Yale",
+    text: "When will my invoice for last week's purchase be sent out?",
+    answerIndex: 0,
+    difficulty: "simple",
+  },
+  {
+    sender: "Zoe",
+    text: "I am unable to download any attachment files from my account page.",
+    answerIndex: 1,
+    difficulty: "simple",
+  },
+  {
+    sender: "Allen",
+    text: "My member discount isn't being applied at checkout, it keeps showing the full price. Can you fix my cart?",
+    answerIndex: 1,
+    difficulty: "complex",
+  },
+  {
+    sender: "Betty",
+    text: "The system logged me out for inactivity, but I was in the middle of confirming my order details.",
+    answerIndex: 1,
+    difficulty: "simple",
+  },
+  {
+    sender: "Carl",
+    text: "I need to request a paper invoice for my records.",
+    answerIndex: 0,
+    difficulty: "simple",
+  },
+  {
+    sender: "Doris",
+    text: "The app won't open since the update. I need to access my saved shopping list.",
+    answerIndex: 1,
+    difficulty: "simple",
+  },
+  {
+    sender: "Ethan",
+    text: "I'm getting an 'insufficient permissions' error when I try to access my own billing history. Can you fix my account permissions?",
+    answerIndex: 1,
+    difficulty: "complex",
+  },
+  {
+    sender: "Fiona",
+    text: "I can't save changes to my personal info. I need to update my address for an upcoming delivery.",
+    answerIndex: 1,
+    difficulty: "complex",
+  },
+  {
+    sender: "Grace",
+    text: "Please tell me the payment status of my most recent order.",
+    answerIndex: 0,
+    difficulty: "simple",
+  },
+  {
+    sender: "Henry",
+    text: "I am getting a 'connection timed out' message when trying to access my account details. Is the server overloaded?",
+    answerIndex: 1,
+    difficulty: "simple",
+  },
 
-  // --- Correct Response: "The issue has been forwarded to the technical department..." ---
-  { sender: "Alice", text: "The website's password reset function isn't working.", answerIndex: 1 },
-  { sender: "Bob", text: "I can't log into my account.", answerIndex: 1 },
-  { sender: "Charles", text: "Your system keeps showing an error message 'Error 503'.", answerIndex: 1 },
-  { sender: "David", text: "The app crashes on the checkout page.", answerIndex: 1 },
-  { sender: "Eve", text: "I can't upload documents to your platform.", answerIndex: 1 },
-  { sender: "Frank", text: "Your API is returning incorrect data format.", answerIndex: 1 },
-  { sender: "Grace", text: "The system's data export function failed.", answerIndex: 1 },
-  { sender: "Henry", text: "I suspect there's a security vulnerability in my account.", answerIndex: 1 },
-  { sender: "Ivy", text: "After the system update, some old features are gone.", answerIndex: 1 },
-  { sender: "Jack", text: "I can't add items to my shopping cart.", answerIndex: 1 },
-  { sender: "Alice", text: "The website's search function isn't finding any results.", answerIndex: 1 },
-  { sender: "Bob", text: "Your payment page isn't loading.", answerIndex: 1 },
-  { sender: "Charles", text: "The system is unresponsive when processing my request.", answerIndex: 1 },
-  { sender: "David", text: "I received a notification of unusual account activity.", answerIndex: 1 },
-  { sender: "Eve", text: "Your system is incompatible with my browser.", answerIndex: 1 },
-  { sender: "Frank", text: "I can't save my personal information changes.", answerIndex: 1 },
-  { sender: "Grace", text: "The system shows my storage space is full, but I haven't put much in it.", answerIndex: 1 },
-  { sender: "Henry", text: "Your database connection seems very unstable.", answerIndex: 1 },
-  { sender: "Ivy", text: "I need urgent technical support, my service is interrupted.", answerIndex: 1 },
-  { sender: "Jack", text: "The buttons on the user interface are not responding when clicked.", answerIndex: 1 },
-  { sender: "Kelly", text: "My account is locked and I can't log in.", answerIndex: 1 },
-  { sender: "Leo", text: "The system shows a database error, please help resolve it.", answerIndex: 1 },
-  { sender: "Mandy", text: "I keep getting error messages when uploading files.", answerIndex: 1 },
-  { sender: "Nina", text: "The website loads very slowly, what should I do?", answerIndex: 1 },
-  { sender: "Oscar", text: "The app crashes and cannot be used normally.", answerIndex: 1 },
-  { sender: "Paul", text: "The link in the verification email I received is not clickable.", answerIndex: 1 },
-  { sender: "Queenie", text: "Data was lost after the system update.", answerIndex: 1 },
-  { sender: "Ryan", text: "It shows password incorrect when logging in, but I'm sure it's right.", answerIndex: 1 },
-  { sender: "Sandy", text: "Cannot reset password, please assist.", answerIndex: 1 },
-  { sender: "Tom", text: "The system shows service temporarily unavailable.", answerIndex: 1 },
-  { sender: "Una", text: "The content of the push notification I received is incorrect.", answerIndex: 1 },
-  { sender: "Vicky", text: "Website images are not displaying.", answerIndex: 1 },
-  { sender: "Will", text: "I cannot download attachment files.", answerIndex: 1 },
-  { sender: "Xavier", text: "The system automatically logs out, what's the reason?", answerIndex: 1 },
-  { sender: "Yvonne", text: "The SMS verification code I received is not working.", answerIndex: 1 },
-  { sender: "Zack", text: "The app won't launch after the update.", answerIndex: 1 },
-  { sender: "Amy", text: "The website form doesn't respond after submission.", answerIndex: 1 },
-  { sender: "Ben", text: "I can't modify my personal information.", answerIndex: 1 },
-  { sender: "Cathy", text: "The system shows a server error.", answerIndex: 1 },
-  { sender: "Derek", text: "I'm not receiving password reset emails.", answerIndex: 1 },
-  { sender: "Ella", text: "The website shows 404 page not found.", answerIndex: 1 },
-  { sender: "Fiona", text: "I can't add a new shipping address.", answerIndex: 1 },
-  { sender: "George", text: "The system shows an API error.", answerIndex: 1 },
-  { sender: "Helen", text: "I can't enable two-factor authentication.", answerIndex: 1 },
-  { sender: "Ian", text: "The website says 'Please try again later'.", answerIndex: 1 },
-  { sender: "Judy", text: "I'm not receiving notification emails.", answerIndex: 1 },
-  { sender: "Kevin", text: "The system shows 'Connection timed out'.", answerIndex: 1 },
-  { sender: "Linda", text: "I can't save my settings changes.", answerIndex: 1 },
-  { sender: "Maggie", text: "The website shows 'Insufficient permissions'.", answerIndex: 1 },
-  { sender: "Nick", text: "I can't upload large files.", answerIndex: 1 },
-  { sender: "Olivia", text: "Data was lost after the app crashed.", answerIndex: 1 },
-  { sender: "Peter", text: "The website shows 'System under maintenance'.", answerIndex: 1 },
-  { sender: "Queena", text: "I can't enable new features.", answerIndex: 1 },
-  { sender: "Rita", text: "The system shows 'Unknown error'.", answerIndex: 1 },
-  { sender: "Sam", text: "I'm not receiving verification SMS messages.", answerIndex: 1 },
-  { sender: "Tina", text: "The website says 'Please log in again'.", answerIndex: 1 },
-  { sender: "Ursula", text: "I can't enable push notifications.", answerIndex: 1 },
-  { sender: "Victor", text: "The system shows 'Data format error'.", answerIndex: 1 },
-  { sender: "Wendy", text: "I can't download invoices.", answerIndex: 1 },
-  { sender: "Xena", text: "The website shows 'Service abnormal'.", answerIndex: 1 },
-  { sender: "Yale", text: "I can't enable member features.", answerIndex: 1 },
-  { sender: "Zoe", text: "After the app crashes, I can't log in again.", answerIndex: 1 },
-  { sender: "Allen", text: "The system shows 'Data synchronization failed'.", answerIndex: 1 },
-  { sender: "Betty", text: "I can't enable coupons.", answerIndex: 1 },
-  { sender: "Carl", text: "The website shows 'Request failed'.", answerIndex: 1 },
-  { sender: "Doris", text: "I'm not receiving push notifications.", answerIndex: 1 },
-  { sender: "Ethan", text: "The system shows 'Please try again later'.", answerIndex: 1 },
+  // --- Block 3 (Items 61-90) ---
+  {
+    sender: "Ian",
+    text: "The quantity of items I received is incorrect for my last order.",
+    answerIndex: 0,
+    difficulty: "simple",
+  },
+  {
+    sender: "Judy",
+    text: "I'm locked out of my account and can't log in.",
+    answerIndex: 1,
+    difficulty: "simple",
+  },
+  {
+    sender: "Kevin",
+    text: "Your website is very slow. It took my payment but the order confirmation page is still loading. Can you check if the order was created?",
+    answerIndex: 0,
+    difficulty: "complex",
+  },
+  {
+    sender: "Linda",
+    text: "The checkout page crashes. I have an important order #E-54321 I need to complete.",
+    answerIndex: 1,
+    difficulty: "complex",
+  },
+  {
+    sender: "Maggie",
+    text: "I'd like to inquire about the details of a specific bill.",
+    answerIndex: 0,
+    difficulty: "simple",
+  },
+  {
+    sender: "Nick",
+    text: "The search function isn't working, so I can't find the product I want to order. Is this a known bug?",
+    answerIndex: 1,
+    difficulty: "simple",
+  },
+  {
+    sender: "Olivia",
+    text: "Has my order from last Tuesday been shipped yet?",
+    answerIndex: 0,
+    difficulty: "simple",
+  },
+  {
+    sender: "Peter",
+    text: "Your site isn't compatible with my browser, I can't even see my shopping cart to make a purchase.",
+    answerIndex: 1,
+    difficulty: "complex",
+  },
+  {
+    sender: "Queenie",
+    text: "I have a question about my last invoice amount.",
+    answerIndex: 0,
+    difficulty: "simple",
+  },
+  {
+    sender: "Rita",
+    text: "I can't save my new address in my profile. I need this fixed before my next scheduled delivery.",
+    answerIndex: 1,
+    difficulty: "complex",
+  },
+  {
+    sender: "Sam",
+    text: "I've paid, but the system still shows the order as 'awaiting payment'.",
+    answerIndex: 0,
+    difficulty: "simple",
+  },
+  {
+    sender: "Tina",
+    text: "The system says my cloud storage for invoices is full, but I only have a few saved. Can you check for a quota bug?",
+    answerIndex: 1,
+    difficulty: "complex",
+  },
+  {
+    sender: "Ursula",
+    text: "The app crashed and then showed a 'sync failed' message. Can you please verify my order details are still correct?",
+    answerIndex: 0,
+    difficulty: "complex",
+  },
+  {
+    sender: "Victor",
+    text: "I need urgent tech support. My subscription-based service access has been interrupted.",
+    answerIndex: 1,
+    difficulty: "simple",
+  },
+  {
+    sender: "Wendy",
+    text: "I need to change the official title on an invoice I already received.",
+    answerIndex: 0,
+    difficulty: "simple",
+  },
+  {
+    sender: "Xena",
+    text: "The user interface buttons are frozen. I was trying to confirm my return request and now I'm stuck.",
+    answerIndex: 1,
+    difficulty: "complex",
+  },
+  {
+    sender: "Yale",
+    text: "The page to check my repair status is giving a '500 server error'. Can you give me an update on the repair?",
+    answerIndex: 0,
+    difficulty: "complex",
+  },
+  {
+    sender: "Zoe",
+    text: "I'm unable to enable two-factor authentication on my account.",
+    answerIndex: 1,
+    difficulty: "simple",
+  },
+  {
+    sender: "Aaron",
+    text: "The software license I purchased hasn't been activated yet.",
+    answerIndex: 0,
+    difficulty: "simple",
+  },
+  {
+    sender: "Brianna",
+    text: "The website just says 'Please try again later' when I attempt to log in.",
+    answerIndex: 1,
+    difficulty: "simple",
+  },
+  {
+    sender: "Chris",
+    text: "My credit card was charged, but the app crashed before confirming my subscription renewal. Is my subscription active for next year?",
+    answerIndex: 0,
+    difficulty: "complex",
+  },
+  {
+    sender: "Diana",
+    text: "The SMS code for my payment verification isn't working. Is there an issue with your verification service?",
+    answerIndex: 1,
+    difficulty: "complex",
+  },
+  {
+    sender: "Edward",
+    text: "Please check the discount amount on my last order.",
+    answerIndex: 0,
+    difficulty: "simple",
+  },
+  {
+    sender: "Felicia",
+    text: "The website shows 'Insufficient permissions' when I click the 'My Orders' link.",
+    answerIndex: 1,
+    difficulty: "simple",
+  },
+  {
+    sender: "Gary",
+    text: "I'm getting a '403 Forbidden' error when I try to download my invoice. Can you please help me get a copy?",
+    answerIndex: 0,
+    difficulty: "complex",
+  },
+  {
+    sender: "Hannah",
+    text: "My order #F-67890 seems to have vanished from my history after the app crashed. Can you investigate?",
+    answerIndex: 1,
+    difficulty: "complex",
+  },
+  {
+    sender: "Ivan",
+    text: "I need to check my order's invoice number.",
+    answerIndex: 0,
+    difficulty: "simple",
+  },
+  {
+    sender: "Jenna",
+    text: "The system reports a 'Data format error' when I try to update my payment information. What should I do?",
+    answerIndex: 1,
+    difficulty: "complex",
+  },
+  {
+    sender: "Karl",
+    text: "A system error occurred during checkout, but my card was charged. I don't have an order number, can you find my purchase?",
+    answerIndex: 0,
+    difficulty: "complex",
+  },
+  {
+    sender: "Laura",
+    text: "I'm not receiving any notification emails from your system about my orders being shipped.",
+    answerIndex: 1,
+    difficulty: "simple",
+  },
 ];
 
 const customerServiceEvents = [];
@@ -1081,12 +1488,12 @@ for (const message of initialChatData) {
     contactName: message.sender,
     text: message.text,
     status: 'pending', // 'pending', 'handled'
-    timestamp: Date.now() - Math.random() * 100000, // Add some jitter for ordering
+    timestamp: Date.now() + eventIdCounter, // Add sequential value to maintain order
     chosenResponse: null,
     correctAnswerIndex: message.answerIndex,
   });
 }
-customerServiceEvents.sort((a, b) => a.timestamp - b.timestamp); // Ensure chronological order
+// customerServiceEvents are now in sequential order from initialChatData, so no sort is needed.
 
 const handledEventLog = []; // Log for primary task (customer service)
 const emailClassificationResponses = []; // Log for secondary task (email classification)
@@ -1145,7 +1552,7 @@ function createPrimaryTaskSet(sourceEvents, numTrials, numInterruptions, blockLa
 }
 
 const baseCsEventsForBlocks = [...customerServiceEvents]; // Use a copy
-shuffle(baseCsEventsForBlocks);
+// shuffle(baseCsEventsForBlocks); // No longer needed, we want sequential events
 
 // Create three blocks of primary tasks with different interruption frequencies
 const primaryTaskBlockConfigs = [
@@ -1162,18 +1569,9 @@ for (const [blockIndex, config] of primaryTaskBlockConfigs.entries()) {
   const numEventsForBlock = params.trialsPerBlock;
   let blockSpecificCsEvents;
 
-  if (csEventCursor + numEventsForBlock <= baseCsEventsForBlocks.length) {
-    blockSpecificCsEvents = baseCsEventsForBlocks.slice(csEventCursor, csEventCursor + numEventsForBlock);
-    csEventCursor += numEventsForBlock;
-  } else {
-    // Handle case where not enough unique events are left, recycle or warn
-    console.warn(`Recycling CS events for block ${config.label}`);
-    const remaining = baseCsEventsForBlocks.length - csEventCursor;
-    blockSpecificCsEvents = baseCsEventsForBlocks.slice(csEventCursor);
-    shuffle(baseCsEventsForBlocks); // Shuffle before recycling
-    blockSpecificCsEvents.push(...baseCsEventsForBlocks.slice(0, numEventsForBlock - remaining));
-    csEventCursor = numEventsForBlock - remaining;
-  }
+  // With 90 events for 3x30 trial blocks, we no longer need the recycling logic.
+  blockSpecificCsEvents = baseCsEventsForBlocks.slice(csEventCursor, csEventCursor + numEventsForBlock);
+  csEventCursor += numEventsForBlock;
 
   const currentBlockPrimaryTasks = createPrimaryTaskSet(blockSpecificCsEvents, params.trialsPerBlock, config.interruptCount, config.label);
 
