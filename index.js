@@ -2657,7 +2657,6 @@ const jsPsych = initJsPsych({
           delete e.plugin_version;
           return e;
         }),
-      handledCustomerServiceEvents: handledEventLog,
       emailClassificationResponses: emailClassificationResponses,
     };
 
